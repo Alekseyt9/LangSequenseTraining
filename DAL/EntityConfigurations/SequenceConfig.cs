@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LangSequenseTraining.DAL.EntityConfigurations
 {
-    internal class SequenseConfig : IEntityTypeConfiguration<Sequense>
+    internal class SequenceConfig : IEntityTypeConfiguration<Sequence>
     {
-        public void Configure(EntityTypeBuilder<Sequense> builder)
+        public void Configure(EntityTypeBuilder<Sequence> builder)
         {
             builder.Property(x => x.Id);
             builder.HasKey(x => x.Id);

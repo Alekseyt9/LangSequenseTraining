@@ -6,7 +6,7 @@ namespace LangSequenseTraining.DAL.EntityConfigurations
 {
     internal class UserConfig
     {
-        public void Configure(EntityTypeBuilder<SequenseGroup> builder)
+        public void Configure(EntityTypeBuilder<SequenceGroup> builder)
         {
             builder.Property(x => x.Id);
             builder.HasKey(x => x.Id);

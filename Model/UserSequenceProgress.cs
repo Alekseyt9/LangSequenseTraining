@@ -2,15 +2,19 @@
 
 namespace GptApiTest.Entity
 {
-    internal class UserSequenseProgress
+    internal class UserSequenceProgress
     {
         public Guid Id { get; set; }
 
         public Guid SequenseId { get; set; }
 
-        public Sequense Sequense { get; set; }
+        public Sequence Sequence { get; set; }
 
-        public DateTime AddTime { get; set; }
+        public Guid UserId { get; set; }
+
+        public User User { get; set; }
+
+        public DateTime StartTime { get; set; }
 
         public DateTime? LastUpdateTime { get; set; }
 

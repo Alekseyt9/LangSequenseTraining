@@ -2,7 +2,7 @@
 
 namespace GptApiTest.Entity
 {
-    internal class Sequense
+    internal class Sequence
     {
         public int Id { get; set; }
 

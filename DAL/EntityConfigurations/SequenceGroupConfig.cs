@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LangSequenseTraining.DAL.EntityConfigurations
 {
-    internal class UserSequenseProgressConfig
+    internal class SequenceGroupConfig
     {
-        public void Configure(EntityTypeBuilder<UserSequenseProgress> builder)
+        public void Configure(EntityTypeBuilder<SequenceGroup> builder)
         {
             builder.Property(x => x.Id);
             builder.HasKey(x => x.Id);
