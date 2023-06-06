@@ -4,9 +4,11 @@ namespace GptApiTest.Entity
 {
     internal class UserSequenseProgress
     {
-        public Sequense Sequense { get; set; }
+        public Guid Id { get; set; }
 
         public Guid SequenseId { get; set; }
+
+        public Sequense Sequense { get; set; }
 
         public DateTime AddTime { get; set; }
 
