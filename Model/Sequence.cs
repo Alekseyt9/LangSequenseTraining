@@ -4,7 +4,7 @@ namespace GptApiTest.Entity
 {
     internal class Sequence
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public string Text { get; set; }
 
