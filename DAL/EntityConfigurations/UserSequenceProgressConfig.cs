@@ -1,10 +1,11 @@
 ﻿
 using GptApiTest.Entity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LangSequenseTraining.DAL.EntityConfigurations
 {
-    internal class UserSequenceProgressConfig
+    internal class UserSequenceProgressConfig : IEntityTypeConfiguration<UserSequenceProgress>
     {
         public void Configure(EntityTypeBuilder<UserSequenceProgress> builder)
         {

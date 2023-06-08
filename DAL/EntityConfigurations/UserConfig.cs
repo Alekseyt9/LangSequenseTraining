@@ -1,12 +1,13 @@
 ﻿
 using GptApiTest.Entity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LangSequenseTraining.DAL.EntityConfigurations
 {
-    internal class UserConfig
+    internal class UserConfig : IEntityTypeConfiguration<User>
     {
-        public void Configure(EntityTypeBuilder<SequenceGroup> builder)
+        public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.Property(x => x.Id);
             builder.HasKey(x => x.Id);
