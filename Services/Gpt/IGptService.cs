@@ -1,9 +1,9 @@
 ﻿
 
-namespace LangSequenceTraining.Services.Gpt
+namespace LangSequenceTraining.Services
 {
     internal interface IGptService
     {
-
+        Task Init();
     }
 }

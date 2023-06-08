@@ -1,6 +1,6 @@
-﻿using GptApiTest.Services.Flow.Common;
+﻿
 
-namespace GptApiTest.Services.Flow.Processors
+namespace GptApiTest.Services
 {
     internal class Ex1Processor
     {

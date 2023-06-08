@@ -1,6 +1,6 @@
 ﻿using OpenAI_API;
 
-namespace GptApiTest.Services.Flow.Common
+namespace GptApiTest.Services
 {
     internal class Context
     {

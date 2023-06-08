@@ -1,8 +1,7 @@
 ﻿
-using GptApiTest.Services.Flow.Common;
-using GptApiTest.Services.Flow.Processors;
+using GptApiTest.Services;
 using LangSequenceTraining.DAL;
-using LangSequenceTraining.Services.Telegram;
+using LangSequenceTraining.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

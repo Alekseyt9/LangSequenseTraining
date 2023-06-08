@@ -6,7 +6,7 @@ using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 
-namespace LangSequenceTraining.Services.Telegram
+namespace LangSequenceTraining.Services
 {
     internal class TelegramBot : ITelegramBot
     {

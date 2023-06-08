@@ -1,6 +1,6 @@
 ﻿
 
-namespace LangSequenceTraining.Services.Telegram
+namespace LangSequenceTraining.Services
 {
     internal class TelegramMessageEventArgs
     {
