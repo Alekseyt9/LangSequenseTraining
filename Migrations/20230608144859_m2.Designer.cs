@@ -3,6 +3,7 @@ using System;
 using LangSequenceTraining.DAL.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LangSequenceTraining.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230608144859_m2")]
+    partial class m2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,17 +35,12 @@ namespace LangSequenceTraining.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("SequenceGroupId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Text")
                         .IsRequired()
                         .IsUnicode(true)
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SequenceGroupId");
 
                     b.ToTable("Sequences");
                 });
@@ -114,17 +112,6 @@ namespace LangSequenceTraining.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserSequenceProgress");
-                });
-
-            modelBuilder.Entity("GptApiTest.Entity.Sequence", b =>
-                {
-                    b.HasOne("GptApiTest.Entity.SequenceGroup", "SequenceGroup")
-                        .WithMany()
-                        .HasForeignKey("SequenceGroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SequenceGroup");
                 });
 
             modelBuilder.Entity("GptApiTest.Entity.UserSequenceProgress", b =>

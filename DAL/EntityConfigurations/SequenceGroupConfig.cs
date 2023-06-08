@@ -13,6 +13,7 @@ namespace LangSequenseTraining.DAL.EntityConfigurations
             builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Name).IsUnicode(true);
+            builder.Property(x => x.Description);
         }
     }
 }

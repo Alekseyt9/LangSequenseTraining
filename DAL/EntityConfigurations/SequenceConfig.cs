@@ -14,6 +14,9 @@ namespace LangSequenseTraining.DAL.EntityConfigurations
 
             builder.Property(x => x.Text).IsUnicode(true);
             builder.Property(x => x.Description);
+
+            builder.HasOne(x => x.SequenceGroup)
+                .WithMany().HasForeignKey(x => x.SequenceGroupId);
         }
     }
 }
