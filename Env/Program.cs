@@ -2,6 +2,7 @@
 using GptApiTest.Services;
 using LangSequenceTraining.DAL;
 using LangSequenceTraining.Services;
+using LangSequenceTraining.Services.TextToSpeech;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,7 +17,7 @@ namespace GptApiTest.Env
 
             if (Environment.UserInteractive)
             {
-                await StartInCons(host);
+                //await StartInCons(host);
             }
 
             await host.RunAsync();
@@ -58,6 +59,12 @@ namespace GptApiTest.Env
                 .AddJsonFile($"appsettings.json", false, true);
 
             var configuration = builder.Build();
+
+            // todo test
+            /*
+            var test = new TextToSpeech(configuration);
+            test.Init();
+            */
 
             return Host.CreateDefaultBuilder(args)
                 .UseWindowsService(options => { options.ServiceName = "LangSequenceTraining_Service"; })
