@@ -1,4 +1,5 @@
 ﻿
+using LangSequenceTraining.DAL.EntityConfigurations;
 using LangSequenceTraining.Model;
 using LangSequenseTraining.DAL.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,7 @@ namespace LangSequenceTraining.DAL.Services
             modelBuilder.ApplyConfiguration(new SequenceGroupConfig());
             modelBuilder.ApplyConfiguration(new UserConfig());
             modelBuilder.ApplyConfiguration(new UserSequenceProgressConfig());
+            modelBuilder.ApplyConfiguration(new UserStateConfig());
 
             base.OnModelCreating(modelBuilder);
         }

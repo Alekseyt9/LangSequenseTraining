@@ -43,7 +43,7 @@ namespace LangSequenceTraining.Services
                     var file = new FileData()
                     {
                         Stream = sound,
-                        Name = $"speech{j++}.mp3"
+                        Name = $"speech{j++}.mp4"
                     };
                     ctx.SendMessage($"\t {seq.Text}", file);
                 }
