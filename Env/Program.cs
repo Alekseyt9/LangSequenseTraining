@@ -15,7 +15,7 @@ namespace GptApiTest.Env
 
             if (Environment.UserInteractive)
             {
-                //await StartInCons(host);
+                await StartInCons(host);
             }
 
             await host.RunAsync();
@@ -23,29 +23,16 @@ namespace GptApiTest.Env
 
         static async Task StartInCons(IHost host)
         {
-            //var taskManager = host.Services.GetRequiredService<INotificationTaskManager>();
-            //await taskManager.Start();
-
             var bot = host.Services.GetRequiredService<ITelegramBot>();
             bot.ReceiveMessage += async (sender, args) =>
             {
-                /*
-                var factory = host.Services.GetRequiredService<ITelegramCommandFactory>();
-                var parser = host.Services.GetRequiredService<ITelegramCommandParser>();
-                var cmdInfo = parser.Parse(args.Message);
-                if (cmdInfo == null)
-                {
-                    return;
-                }
-
-                var cmd = (TelegramCommandBase)factory.Create(cmdInfo);
-                cmd.Context = new TelegramBotContext()
-                {
-                    TelegramChannelId = args.ChannelId
-                };
-                var mediator = host.Services.GetRequiredService<IMediator>();
-                await mediator.Send(cmd);
-                */
+                var servScopeFactory = host.Services.GetRequiredService<IServiceScopeFactory>();
+                using var scope = servScopeFactory.CreateScope();
+                var procMan = scope.ServiceProvider.GetRequiredService<IProcessorManager>();
+                var userName = args.UserId;
+                var repository = scope.ServiceProvider.GetRequiredService<IAppRepository>();
+                var user = repository.GetUser(userName);
+                procMan.Process(user.Id, args.Message);
             };
         }
 
@@ -57,12 +44,6 @@ namespace GptApiTest.Env
                 .AddJsonFile($"appsettings.json", false, true);
 
             var configuration = builder.Build();
-
-            // todo test
-            /*
-            var test = new TextToSpeech(configuration);
-            test.Init();
-            */
 
             return Host.CreateDefaultBuilder(args)
                 .UseWindowsService(options => { options.ServiceName = "LangSequenceTraining_Service"; })
@@ -78,21 +59,6 @@ namespace GptApiTest.Env
                     }
                 });
         }
-
-        /*
-        private async Task OpenAPI()
-        {
-            var ctx = new Context(api);
-            var proc = new Ex1Processor();
-            proc.Start(ctx);
-
-            while (true)
-            {
-                var str = Console.ReadLine();
-                await proc.ReceiveMessage(ctx, str);
-            }
-        }
-        */
 
     }
 }

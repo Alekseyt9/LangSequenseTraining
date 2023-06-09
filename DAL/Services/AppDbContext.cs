@@ -1,5 +1,5 @@
 ﻿
-using LangSequenceTraining.Model.Base;
+using LangSequenceTraining.Model;
 using LangSequenseTraining.DAL.EntityConfigurations;
 using Microsoft.EntityFrameworkCore;
 

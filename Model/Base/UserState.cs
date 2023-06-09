@@ -1,4 +1,6 @@
-﻿namespace LangSequenceTraining.Model.Base
+﻿
+
+namespace LangSequenceTraining.Model
 {
     internal class UserState
     {

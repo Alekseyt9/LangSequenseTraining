@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿
+using LangSequenceTraining.Model;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using LangSequenceTraining.Model.Base;
 
 namespace LangSequenseTraining.DAL.EntityConfigurations
 {

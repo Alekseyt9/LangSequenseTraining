@@ -1,4 +1,5 @@
-﻿using LangSequenceTraining.Model.Base;
+﻿
+using LangSequenceTraining.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
