@@ -10,7 +10,7 @@ namespace LangSequenceTraining.Services
 {
     internal class TelegramBot : ITelegramBot
     {
-        TelegramBotClient _botClient;
+        private readonly TelegramBotClient _botClient;
 
         public event EventHandler<TelegramMessageEventArgs>? ReceiveMessage;
 
@@ -50,13 +50,15 @@ namespace LangSequenceTraining.Services
             }
 
             var chatId = message.Chat.Id;
+            var userId = message.From.Username;
 
             if (ReceiveMessage != null)
             {
                 ReceiveMessage(this, new TelegramMessageEventArgs()
                 {
                     ChannelId = chatId,
-                    Message = messageText
+                    Message = messageText,
+                    UserId = userId
                 });
             }
         }

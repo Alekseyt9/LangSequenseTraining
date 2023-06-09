@@ -1,5 +1,4 @@
-﻿
-using GptApiTest.Entity;
+﻿using LangSequenceTraining.Model.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

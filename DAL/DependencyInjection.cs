@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using LangSequenceTraining.DAL.Services;
 using LangSequenceTraining.DAL.Services.Repository;
+using LangSequenceTraining.Services;
 
 namespace LangSequenceTraining.DAL
 {

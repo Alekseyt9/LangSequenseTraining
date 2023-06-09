@@ -1,7 +1,6 @@
-﻿
-using GptApiTest.Entity;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using LangSequenceTraining.Model.Base;
 
 namespace LangSequenseTraining.DAL.EntityConfigurations
 {

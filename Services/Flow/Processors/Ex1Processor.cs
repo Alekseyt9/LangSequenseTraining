@@ -1,10 +1,12 @@
 ﻿
+using LangSequenceTraining.Services;
 
-namespace GptApiTest.Services
+namespace LangSequenceTraining.Services
 {
-    internal class Ex1Processor
+    [Processor("ex1")]
+    internal class Ex1Processor : IProcessorT<Ex1ProcessorState>
     {
-
+        /*
         public void Start(Context ctx)
         {
             ctx.Send(
@@ -27,6 +29,17 @@ namespace GptApiTest.Services
             {
                 ctx.Send($"Ошибка: {ex.Message}");
             }
+        }
+        */
+
+        public void Process(Ex1ProcessorState state, string msg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Process(object state, string msg)
+        {
+            Process((Ex1ProcessorState)state, msg);
         }
 
     }

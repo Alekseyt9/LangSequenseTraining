@@ -1,6 +1,4 @@
-﻿
-
-namespace GptApiTest.Entity
+﻿namespace LangSequenceTraining.Model.Base
 {
     internal class SequenceGroup
     {

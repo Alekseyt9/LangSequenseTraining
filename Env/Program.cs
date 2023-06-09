@@ -1,8 +1,6 @@
 ﻿
-using GptApiTest.Services;
 using LangSequenceTraining.DAL;
 using LangSequenceTraining.Services;
-using LangSequenceTraining.Services.TextToSpeech;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -78,15 +76,12 @@ namespace GptApiTest.Env
                     {
                         //services.AddHostedService<Worker>();
                     }
-
                 });
         }
 
+        /*
         private async Task OpenAPI()
         {
-            var apiKey = "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";
-            var api = new OpenAI_API.OpenAIAPI(apiKey);
-
             var ctx = new Context(api);
             var proc = new Ex1Processor();
             proc.Start(ctx);
@@ -97,6 +92,7 @@ namespace GptApiTest.Env
                 await proc.ReceiveMessage(ctx, str);
             }
         }
+        */
 
     }
 }

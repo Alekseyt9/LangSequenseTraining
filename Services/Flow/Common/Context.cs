@@ -1,6 +1,7 @@
-﻿using OpenAI_API;
+﻿
+using OpenAI_API;
 
-namespace GptApiTest.Services
+namespace LangSequenceTraining.Services
 {
     internal class Context
     {
