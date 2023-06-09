@@ -51,6 +51,10 @@ namespace GptApiTest.Env
                 {
                     services
                         .AddSingleton<IConfiguration>(configuration)
+                        .AddSingleton<ITelegramBot, TelegramBot>()
+                        .AddScoped<IProcessorManager, ProcessorManager>()
+                        .AddScoped<IProcessorProvider, ProcessorProvider>()
+                        .AddScoped<IUserStateProvider, UserStateProvider>()
                         .RegisterPersistence(configuration);
 
                     if (!Environment.UserInteractive)

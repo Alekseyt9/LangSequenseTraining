@@ -1,9 +1,8 @@
 ﻿
-
 using LangSequenceTraining.Model;
 using LangSequenceTraining.Services;
 
-namespace LangSequenceTraining.DAL.Services.Repository
+namespace LangSequenceTraining.DAL.Services
 {
     internal class AppRepository : IAppRepository
     {

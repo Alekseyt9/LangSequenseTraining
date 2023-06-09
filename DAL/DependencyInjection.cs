@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using LangSequenceTraining.DAL.Services;
-using LangSequenceTraining.DAL.Services.Repository;
 using LangSequenceTraining.Services;
 
 namespace LangSequenceTraining.DAL
@@ -22,5 +21,6 @@ namespace LangSequenceTraining.DAL
             });
             return services;
         }
+
     }
 }

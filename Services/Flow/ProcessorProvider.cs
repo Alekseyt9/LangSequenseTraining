@@ -2,7 +2,7 @@
 
 namespace LangSequenceTraining.Services
 {
-    internal class ProcessorProvider
+    internal class ProcessorProvider : IProcessorProvider
     {
         public IProcessor GetProcessor(string processorName)
         {
