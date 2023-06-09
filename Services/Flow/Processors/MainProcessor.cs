@@ -1,12 +1,13 @@
 ﻿
 using System.Text;
+using LangSequenceTraining.Model;
 
 namespace LangSequenceTraining.Services
 {
     [Processor("main")]
     internal class MainProcessor : IProcessor
     {
-        public void Process(ProcessorContext ctx)
+        public void Process(ProcessorContext ctx, ProcessorStateBase state)
         {
             if (ctx.Message.StartsWith("/start"))
             {
@@ -16,13 +17,70 @@ namespace LangSequenceTraining.Services
 
             if (ctx.Message.StartsWith("/tr"))
             {
-                ctx.Services.ProcessorManager.DoTransition("tr1", new Ex1ProcessorState());
+                ProcessStartTr(ctx);
             }
 
             if (ctx.Message.StartsWith("/grinfo"))
             {
-
+                ProcessGrInfo(ctx);
             }
+        }
+
+        private async Task ProcessGrInfo(ProcessorContext ctx)
+        {
+            var groups = ctx.Services.Repository.GetGroups();
+            var i = 1;
+
+            foreach (var group in groups)
+            {
+                ctx.SendMessage($"[{i++}] {group.Name} ({group.Description})");
+                var seqs = ctx.Services.Repository.GetSequences(group.Name);
+                var j = 1;
+
+                foreach (var seq in seqs)
+                {
+                    var sound = await ctx.Services.TextToSpeech.SynthesizeSpeech(seq.Text);
+                    var file = new FileData()
+                    {
+                        Stream = sound,
+                        Name = $"speech{j++}.mp3"
+                    };
+                    ctx.SendMessage($"\t {seq.Text}", file);
+                }
+            }
+        }
+
+        private void ProcessStartTr(ProcessorContext ctx)
+        {
+            var grNum = GetParam<int>(ctx.Message);
+            var gr = GetGroupByNum(ctx, grNum);
+
+            ctx.Services.ProcessorManager.DoTransition("tr1", new Ex1ProcessorState()
+            {
+                Message = ctx.Message,
+                ChannelId = ctx.ChannelId
+            });
+        }
+
+        private IEnumerable<Sequence> GetSequencesForTr(SequenceGroup gr)
+        {
+            // todo учитывать освоенные и на созревании
+            return null;
+        }
+
+        private SequenceGroup GetGroupByNum(ProcessorContext ctx, int num)
+        {
+            return null;
+        }
+
+        private T GetParam<T>(string str)
+        {
+            var par = str.Split(' ')[1];
+            if (typeof(T) == typeof(int))
+            {
+                return (T)Convert.ChangeType(int.Parse(par), TypeCode.Int32);
+            }
+            throw new NotImplementedException();
         }
 
         private string CreateStartMessage(ProcessorContext ctx)

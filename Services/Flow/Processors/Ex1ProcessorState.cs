@@ -2,7 +2,7 @@
 
 namespace LangSequenceTraining.Services
 {
-    internal class Ex1ProcessorState
+    internal class Ex1ProcessorState : ProcessorStateBase
     {
     }
 }

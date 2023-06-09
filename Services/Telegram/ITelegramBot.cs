@@ -6,6 +6,6 @@ namespace LangSequenceTraining.Services
     {
         event EventHandler<TelegramMessageEventArgs> ReceiveMessage;
 
-        Task SendMessage(long channelId, string msg);
+        Task SendMessage(long channelId, string msg, FileData file = null);
     }
 }

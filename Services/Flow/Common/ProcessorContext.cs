@@ -10,6 +10,8 @@ namespace LangSequenceTraining.Services
 
         public string Message => _message;
 
+        public long ChannelId => _telegramChannelId;
+
         public ContextServices Services => _services;
 
         public ProcessorContext(ContextServices services, string message, long telegramChannelId)
@@ -19,9 +21,9 @@ namespace LangSequenceTraining.Services
             _services = services;
         }
 
-        public void SendMessage(string msg)
+        public void SendMessage(string msg, FileData file = null)
         {
-            _services.TelegramBot.SendMessage(_telegramChannelId, msg);
+            _services.TelegramBot.SendMessage(_telegramChannelId, msg, file);
         }
 
     }

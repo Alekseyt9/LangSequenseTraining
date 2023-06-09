@@ -35,5 +35,11 @@ namespace LangSequenceTraining.DAL.Services
             return _ctx.SequenceGroup.OrderBy(x => x.Name).ToList();
         }
 
+        public IEnumerable<Sequence> GetSequences(string groupName)
+        {
+            var gr = _ctx.SequenceGroup.First(x => x.Name == groupName);
+            return _ctx.Sequences.Where(x => x.SequenceGroupId == gr.Id).ToList();
+        }
+
     }
 }

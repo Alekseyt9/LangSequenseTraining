@@ -1,7 +1,9 @@
-﻿namespace LangSequenceTraining.Services
+﻿
+
+namespace LangSequenceTraining.Services
 {
     internal interface IProcessor
     {
-        void Process(ProcessorContext ctx);
+        void Process(ProcessorContext ctx, ProcessorStateBase state);
     }
 }

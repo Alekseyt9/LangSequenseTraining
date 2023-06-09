@@ -27,7 +27,7 @@ namespace LangSequenceTraining.Services.TextToSpeech
             var response = await _client.SynthesizeSpeechAsync(synthesizeSpeechRequest);
             var audioStream = response.AudioStream;
 
-            using var outputStream = new MemoryStream();
+            var outputStream = new MemoryStream();
             var buffer = new byte[2 * 1024];
             int readBytes;
             while ((readBytes = audioStream.Read(buffer, 0, 2 * 1024)) > 0)

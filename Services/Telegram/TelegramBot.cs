@@ -1,6 +1,7 @@
 ﻿
 using LangSequenceTraining.Helpers;
 using Microsoft.Extensions.Configuration;
+using System.IO;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -63,16 +64,25 @@ namespace LangSequenceTraining.Services
             }
         }
 
-        public async Task SendMessage(long channelId, string msg)
+        public async Task SendMessage(long channelId, string msg, FileData file = null)
         {
             using var cts = new CancellationTokenSource();
 
-            var msgArr = msg.SplitString(4096);  
-            foreach (var m in msgArr)
+            if (file != null)
             {
-                var sentMessage = await _botClient.SendTextMessageAsync(
-                    channelId, m, cancellationToken: cts.Token,
-                    parseMode: ParseMode.Html, disableWebPagePreview: true);
+                InputFile iof = InputFile.FromStream(file.Stream, file.Name);
+                var result = await _botClient.SendDocumentAsync(channelId, iof, caption: msg);
+                file.Stream.Close();
+            }
+            else
+            {
+                var msgArr = msg.SplitString(4096);
+                foreach (var m in msgArr)
+                {
+                    var sentMessage = await _botClient.SendTextMessageAsync(
+                        channelId, m, cancellationToken: cts.Token,
+                        parseMode: ParseMode.Html, disableWebPagePreview: true);
+                }
             }
         }
 

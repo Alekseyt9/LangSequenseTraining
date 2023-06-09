@@ -1,5 +1,4 @@
 ﻿
-using LangSequenceTraining.Services;
 
 namespace LangSequenceTraining.Services
 {
@@ -32,7 +31,7 @@ namespace LangSequenceTraining.Services
         }
         */
 
-        public void Process(ProcessorContext ctx)
+        public void Process(ProcessorContext ctx, ProcessorStateBase state)
         {
             throw new NotImplementedException();
         }

@@ -8,5 +8,7 @@ namespace LangSequenceTraining.Services
         User GetUser(string userName);
 
         IEnumerable<SequenceGroup> GetGroups();
+
+        IEnumerable<Sequence> GetSequences(string groupName);
     }
 }

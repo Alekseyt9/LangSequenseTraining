@@ -2,6 +2,7 @@
 using LangSequenceTraining.DAL;
 using LangSequenceTraining.DAL.Services;
 using LangSequenceTraining.Services;
+using LangSequenceTraining.Services.TextToSpeech;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -59,6 +60,7 @@ namespace GptApiTest.Env
                         .AddScoped<IGptService, GptService>()
                         .AddScoped<IAppRepository, AppRepository>()
                         .AddScoped<IProcessorManager, ProcessorManager>()
+                        .AddSingleton<ITextToSpeech, TextToSpeech>()
                         .RegisterPersistence(configuration);
 
                     if (!Environment.UserInteractive)

@@ -1,5 +1,6 @@
 ﻿
 using LangSequenceTraining.Model;
+using LangSequenceTraining.Services.TextToSpeech;
 
 namespace LangSequenceTraining.Services
 {
@@ -7,16 +8,15 @@ namespace LangSequenceTraining.Services
     {
         private readonly IProcessorProvider _processorProvider;
         private readonly IUserStateProvider _stateProvider;
-
         private readonly IGptService _gptService;
         private readonly ITelegramBot _telegramBot;
         private readonly IAppRepository _repository;
-        private readonly IProcessorManager _processorManager;
+        private readonly ITextToSpeech _textToSpeech;
 
         public ProcessorManager(
             IProcessorProvider processorProvider, IUserStateProvider stateProvider,
             IGptService gptService, ITelegramBot telegramBot, 
-            IAppRepository repository, IProcessorManager processorManager
+            IAppRepository repository, ITextToSpeech textToSpeech
             )
         {
             _processorProvider = processorProvider;
@@ -24,13 +24,12 @@ namespace LangSequenceTraining.Services
             _gptService = gptService;
             _telegramBot = telegramBot;
             _repository = repository;
-            _processorManager = processorManager;
+            _textToSpeech = textToSpeech;
         }
 
         public void Process(Guid userId, long channelId, string msg)
         {
             var state = _stateProvider.GetUserState(userId);
-
             if (state == null)
             {
                 state = new UserStateModel()
@@ -39,19 +38,27 @@ namespace LangSequenceTraining.Services
                     CurrentProcessorName = "main"
                 };
             }
-
-            var proc = _processorProvider.GetProcessor(state.CurrentProcessorName);
             var procState = state.State.ContainsKey(state.CurrentProcessorName)
-                ? state.State[state.CurrentProcessorName]
+                ? (ProcessorStateBase)state.State[state.CurrentProcessorName]
                 : null;
-            var services = new ContextServices(_gptService, _telegramBot, _repository, _processorManager);
-            var ctx = new ProcessorContext(services, msg, channelId);
-            proc.Process(ctx);
+            if (procState == null)
+            {
+                procState = new ProcessorStateBase()
+                {
+                    ChannelId = channelId,
+                    Message = msg
+                };
+            }
+
+            DoTransition(state.CurrentProcessorName, procState);
         }
 
-        public void DoTransition(string procName, object param)
+        public void DoTransition(string procName, ProcessorStateBase procState)
         {
-
+            var proc = _processorProvider.GetProcessor(procName);
+            var services = new ContextServices(_gptService, _telegramBot, _repository, this, _textToSpeech);
+            var ctx = new ProcessorContext(services, procState.Message, procState.ChannelId);
+            proc.Process(ctx, procState);
         }
 
     }
