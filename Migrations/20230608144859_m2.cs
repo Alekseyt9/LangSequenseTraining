@@ -36,7 +36,7 @@ namespace LangSequenceTraining.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "Description",
-                table: "SequenceGroup",
+                table: "SequenceGroups",
                 type: "text",
                 nullable: false,
                 defaultValue: "");
@@ -89,7 +89,7 @@ namespace LangSequenceTraining.Migrations
 
             migrationBuilder.DropColumn(
                 name: "Description",
-                table: "SequenceGroup");
+                table: "SequenceGroups");
 
             migrationBuilder.RenameTable(
                 name: "Users",

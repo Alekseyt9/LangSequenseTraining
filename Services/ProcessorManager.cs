@@ -1,6 +1,4 @@
 ﻿
-
-
 using LangSequenceTraining.Model;
 
 namespace LangSequenceTraining.Services
@@ -12,16 +10,18 @@ namespace LangSequenceTraining.Services
 
         private readonly IGptService _gptService;
         private readonly ITelegramBot _telegramBot;
+        private readonly IAppRepository _repository;
 
         public ProcessorManager(
             IProcessorProvider processorProvider, IUserStateProvider stateProvider,
-            IGptService gptService, ITelegramBot telegramBot
+            IGptService gptService, ITelegramBot telegramBot, IAppRepository repository
             )
         {
             _processorProvider = processorProvider;
             _stateProvider = stateProvider;
             _gptService = gptService;
             _telegramBot = telegramBot;
+            _repository = repository;
         }
 
         public void Process(Guid userId, long channelId, string msg)
@@ -41,7 +41,8 @@ namespace LangSequenceTraining.Services
             var procState = state.State.ContainsKey(state.CurrentProcessorName)
                 ? state.State[state.CurrentProcessorName]
                 : null;
-            var ctx = new ProcessorContext(_gptService, msg, _telegramBot, channelId);
+            var services = new ContextServices(_gptService, _telegramBot, _repository);
+            var ctx = new ProcessorContext(services, msg, channelId);
             proc.Process(ctx);
         }
 

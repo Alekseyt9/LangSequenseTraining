@@ -30,5 +30,10 @@ namespace LangSequenceTraining.DAL.Services
             return user;
         }
 
+        public IEnumerable<SequenceGroup> GetGroups()
+        {
+            return _ctx.SequenceGroup.OrderBy(x => x.Name).ToList();
+        }
+
     }
 }

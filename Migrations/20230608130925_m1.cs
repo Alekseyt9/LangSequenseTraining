@@ -25,7 +25,7 @@ namespace LangSequenceTraining.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SequenceGroup",
+                name: "SequenceGroups",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -92,7 +92,7 @@ namespace LangSequenceTraining.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "SequenceGroup");
+                name: "SequenceGroups");
 
             migrationBuilder.DropTable(
                 name: "UserSequenceProgress");

@@ -27,7 +27,7 @@ namespace LangSequenceTraining.Migrations
                 name: "FK_Sequences_SequenceGroup_SequenceGroupId",
                 table: "Sequences",
                 column: "SequenceGroupId",
-                principalTable: "SequenceGroup",
+                principalTable: "SequenceGroups",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }

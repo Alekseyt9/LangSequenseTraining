@@ -4,26 +4,24 @@ namespace LangSequenceTraining.Services
 {
     internal class ProcessorContext
     {
-        private IGptService _gptService;
         private string _message;
-        private ITelegramBot _telegramBot;
         private long _telegramChannelId;
-
-        public IGptService GptService => _gptService;
+        private ContextServices _services;
 
         public string Message => _message;
 
-        public ProcessorContext(IGptService gptService, string message, ITelegramBot telegramBot, long telegramChannelId)
+        public ContextServices Services => _services;
+
+        public ProcessorContext(ContextServices services, string message, long telegramChannelId)
         {
-            _gptService = gptService;
             _message = message;
-            _telegramBot = telegramBot;
             _telegramChannelId = telegramChannelId;
+            _services = services;
         }
 
         public void SendMessage(string msg)
         {
-            _telegramBot.SendMessage(_telegramChannelId, msg);
+            _services.TelegramBot.SendMessage(_telegramChannelId, msg);
         }
 
     }

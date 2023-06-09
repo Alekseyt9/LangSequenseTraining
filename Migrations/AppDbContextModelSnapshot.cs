@@ -47,7 +47,7 @@ namespace LangSequenceTraining.Migrations
                     b.ToTable("Sequences");
                 });
 
-            modelBuilder.Entity("GptApiTest.Entity.SequenceGroup", b =>
+            modelBuilder.Entity("GptApiTest.Entity.SequenceGroups", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -64,7 +64,7 @@ namespace LangSequenceTraining.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SequenceGroup");
+                    b.ToTable("SequenceGroups");
                 });
 
             modelBuilder.Entity("GptApiTest.Entity.User", b =>
@@ -118,13 +118,13 @@ namespace LangSequenceTraining.Migrations
 
             modelBuilder.Entity("GptApiTest.Entity.Sequence", b =>
                 {
-                    b.HasOne("GptApiTest.Entity.SequenceGroup", "SequenceGroup")
+                    b.HasOne("GptApiTest.Entity.SequenceGroups", "SequenceGroups")
                         .WithMany()
                         .HasForeignKey("SequenceGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("SequenceGroup");
+                    b.Navigation("SequenceGroups");
                 });
 
             modelBuilder.Entity("GptApiTest.Entity.UserSequenceProgress", b =>

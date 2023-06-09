@@ -1,5 +1,6 @@
 ﻿
 using LangSequenceTraining.DAL;
+using LangSequenceTraining.DAL.Services;
 using LangSequenceTraining.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -55,6 +56,8 @@ namespace GptApiTest.Env
                         .AddScoped<IProcessorManager, ProcessorManager>()
                         .AddScoped<IProcessorProvider, ProcessorProvider>()
                         .AddScoped<IUserStateProvider, UserStateProvider>()
+                        .AddScoped<IGptService, GptService>()
+                        .AddScoped<IAppRepository, AppRepository>()
                         .RegisterPersistence(configuration);
 
                     if (!Environment.UserInteractive)
