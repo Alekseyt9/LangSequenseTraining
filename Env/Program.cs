@@ -58,6 +58,7 @@ namespace GptApiTest.Env
                         .AddScoped<IUserStateProvider, UserStateProvider>()
                         .AddScoped<IGptService, GptService>()
                         .AddScoped<IAppRepository, AppRepository>()
+                        .AddScoped<IProcessorManager, ProcessorManager>()
                         .RegisterPersistence(configuration);
 
                     if (!Environment.UserInteractive)

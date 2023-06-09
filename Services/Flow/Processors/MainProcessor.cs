@@ -16,7 +16,7 @@ namespace LangSequenceTraining.Services
 
             if (ctx.Message.StartsWith("/tr"))
             {
-
+                ctx.Services.ProcessorManager.DoTransition("tr1", new Ex1ProcessorState());
             }
 
             if (ctx.Message.StartsWith("/grinfo"))
@@ -40,7 +40,7 @@ namespace LangSequenceTraining.Services
             }
 
             sb.AppendLine("Чтобы начать тренировку новых паттернов введите команду /tr номер_группы. Пример: /tr 1");
-            sb.AppendLine("Чтобы узнать описание каждой группы введите коменду /grinfo.");
+            sb.AppendLine("Чтобы узнать описание каждой группы введите коменду /grinfo");
 
             return sb.ToString();
         }

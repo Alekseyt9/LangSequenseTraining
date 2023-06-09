@@ -11,10 +11,12 @@ namespace LangSequenceTraining.Services
         private readonly IGptService _gptService;
         private readonly ITelegramBot _telegramBot;
         private readonly IAppRepository _repository;
+        private readonly IProcessorManager _processorManager;
 
         public ProcessorManager(
             IProcessorProvider processorProvider, IUserStateProvider stateProvider,
-            IGptService gptService, ITelegramBot telegramBot, IAppRepository repository
+            IGptService gptService, ITelegramBot telegramBot, 
+            IAppRepository repository, IProcessorManager processorManager
             )
         {
             _processorProvider = processorProvider;
@@ -22,6 +24,7 @@ namespace LangSequenceTraining.Services
             _gptService = gptService;
             _telegramBot = telegramBot;
             _repository = repository;
+            _processorManager = processorManager;
         }
 
         public void Process(Guid userId, long channelId, string msg)
@@ -41,9 +44,14 @@ namespace LangSequenceTraining.Services
             var procState = state.State.ContainsKey(state.CurrentProcessorName)
                 ? state.State[state.CurrentProcessorName]
                 : null;
-            var services = new ContextServices(_gptService, _telegramBot, _repository);
+            var services = new ContextServices(_gptService, _telegramBot, _repository, _processorManager);
             var ctx = new ProcessorContext(services, msg, channelId);
             proc.Process(ctx);
+        }
+
+        public void DoTransition(string procName, object param)
+        {
+
         }
 
     }
