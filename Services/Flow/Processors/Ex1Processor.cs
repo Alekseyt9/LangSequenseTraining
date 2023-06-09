@@ -4,10 +4,10 @@ using LangSequenceTraining.Services;
 namespace LangSequenceTraining.Services
 {
     [Processor("ex1")]
-    internal class Ex1Processor : IProcessorT<Ex1ProcessorState>
+    internal class Ex1Processor : IProcessor
     {
         /*
-        public void Start(Context ctx)
+        public void Start(ProcessorContext ctx)
         {
             ctx.Send(
 @"Упражнение 'Предложение' на тему 'Образование'.
@@ -16,7 +16,7 @@ namespace LangSequenceTraining.Services
 Для подробного описания упражнения введите /help.");
         }
 
-        public async Task ReceiveMessage(Context ctx, string msg)
+        public async Task ReceiveMessage(ProcessorContext ctx, string msg)
         {
             try
             {
@@ -32,14 +32,9 @@ namespace LangSequenceTraining.Services
         }
         */
 
-        public void Process(Ex1ProcessorState state, string msg)
+        public void Process(ProcessorContext ctx)
         {
             throw new NotImplementedException();
-        }
-
-        public void Process(object state, string msg)
-        {
-            Process((Ex1ProcessorState)state, msg);
         }
 
     }

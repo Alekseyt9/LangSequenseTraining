@@ -5,6 +5,6 @@ namespace LangSequenceTraining.Services
 {
     internal interface IAppRepository
     {
-        User GetUser(string userId);
+        User GetUser(string userName);
     }
 }

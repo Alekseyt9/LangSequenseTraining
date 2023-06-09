@@ -6,9 +6,28 @@ namespace LangSequenceTraining.DAL.Services
 {
     internal class AppRepository : IAppRepository
     {
-        public User GetUser(string userId)
+        private AppDbContext _ctx;
+
+        public AppRepository(AppDbContext ctx)
         {
-            throw new NotImplementedException();
+            _ctx = ctx;
+        }
+
+        public User GetUser(string userName)
+        {
+            var user = _ctx.Users.FirstOrDefault(x => x.Name == userName);
+            if (user == null)
+            {
+                user = new User()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = userName,
+                };
+                _ctx.Users.Add(user);
+                _ctx.SaveChanges();
+            }
+
+            return user;
         }
 
     }

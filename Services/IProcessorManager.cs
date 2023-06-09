@@ -3,6 +3,6 @@ namespace LangSequenceTraining.Services
 {
     internal interface IProcessorManager
     {
-        void Process(Guid userId, string msg);
+        void Process(Guid userId, long channelId, string msg);
     }
 }
