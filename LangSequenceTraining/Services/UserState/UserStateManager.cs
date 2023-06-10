@@ -1,6 +1,6 @@
 ﻿using LangSequenceTraining.Model;
 
-namespace LangSequenceTraining.Services.UserState
+namespace LangSequenceTraining.Services
 {
     internal class UserStateManager : IUserStateManager
     {
