@@ -1,7 +1,6 @@
 ﻿
 using LangSequenceTraining.Model;
 using LangSequenceTraining.Model.Base;
-using System.Text.RegularExpressions;
 
 namespace LangSequenceTraining.Services
 {

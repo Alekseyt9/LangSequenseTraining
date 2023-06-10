@@ -14,6 +14,7 @@ namespace LangSequenseTraining.DAL.EntityConfigurations
 
             builder.Property(x => x.Name).IsUnicode(true);
             builder.Property(x => x.Description);
+            builder.Property(x => x.IsHide);
         }
     }
 }
