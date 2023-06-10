@@ -19,4 +19,8 @@
     <ProjectReference Include="..\LangSequenceTraining\LangSequenceTraining.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Mock\" />
+  </ItemGroup>
+
 </Project>

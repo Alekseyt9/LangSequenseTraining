@@ -1,4 +1,5 @@
 ﻿
+using LangSequenceTraining.Model.Base;
 
 namespace LangSequenceTraining.Model
 {
@@ -20,7 +21,7 @@ namespace LangSequenceTraining.Model
 
         public DateTime? LastSuccessTime { get; set; }
 
-        public int Stage { get; set; }
+        public ProgressStage Stage { get; set; }
 
     }
 }

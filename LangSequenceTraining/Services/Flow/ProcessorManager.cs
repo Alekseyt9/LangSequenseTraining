@@ -11,12 +11,12 @@ namespace LangSequenceTraining.Services
         private readonly ITelegramBot _telegramBot;
         private readonly IAppRepository _repository;
         private readonly ITextToSpeech _textToSpeech;
-        private readonly UserStateManager _userStateManager;
+        private readonly IUserStateManager _userStateManager;
 
         public ProcessorManager(
             IProcessorProvider processorProvider, IUserStateManager stateManager,
             IGptService gptService, ITelegramBot telegramBot,
-            IAppRepository repository, ITextToSpeech textToSpeech, UserStateManager userStateManager
+            IAppRepository repository, ITextToSpeech textToSpeech, IUserStateManager userStateManager
             )
         {
             _processorProvider = processorProvider;

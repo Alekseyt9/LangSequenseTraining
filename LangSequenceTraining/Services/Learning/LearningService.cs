@@ -1,11 +1,13 @@
 ﻿
 using LangSequenceTraining.Model;
+using LangSequenceTraining.Model.Base;
+using System.Text.RegularExpressions;
 
 namespace LangSequenceTraining.Services
 {
     internal class LearningService : ILearningService
     {
-        private IAppRepository _repository;
+        private readonly IAppRepository _repository;
 
         public LearningService(IAppRepository repository)
         {
@@ -14,12 +16,16 @@ namespace LangSequenceTraining.Services
 
         public IEnumerable<Sequence> GetSequencesForRepeat(Guid userId)
         {
-            throw new NotImplementedException();
+            var progresses = _repository.GetProgressData(userId).Where(x => x.Stage != ProgressStage.Finish);
+            // todo второй фильтр - по времени
+
+            return progresses.Select(x => x.Sequence).ToList();
         }
 
         public IEnumerable<Sequence> GetSequencesNew(Guid userId, Guid groupId)
         {
-            
+            // todo из группы, за исключением тех, где есть прогресс 
+            return null;
         }
 
         public void SaveResult(IEnumerable<TrainingResult> resultInfos)

@@ -41,6 +41,11 @@ namespace LangSequenceTraining.DAL.Services
             return _ctx.Sequences.Where(x => x.SequenceGroupId == gr.Id).ToList();
         }
 
+        public IEnumerable<UserSequenceProgress> GetProgressData(Guid userId)
+        {
+            return _ctx.UserSequenceProgress.Where(x => x.UserId == userId /*&& x.Sequence.SequenceGroupId == groupId*/).ToList();
+        }
+
         public UserState GetUserState(Guid userId)
         {
             return _ctx.UserState.FirstOrDefault(x => x.UserId == userId);

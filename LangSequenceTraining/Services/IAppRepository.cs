@@ -11,6 +11,8 @@ namespace LangSequenceTraining.Services
 
         IEnumerable<Sequence> GetSequences(string groupName);
 
+        IEnumerable<UserSequenceProgress> GetProgressData(Guid userId);
+
         UserState GetUserState(Guid userId);
 
         void SetUserState(Guid userId, UserState state);

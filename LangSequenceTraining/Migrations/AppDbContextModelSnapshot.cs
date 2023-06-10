@@ -44,7 +44,7 @@ namespace LangSequenceTraining.Migrations
 
                     b.HasIndex("SequenceGroupId");
 
-                    b.ToTable("Sequences");
+                    b.ToTable("Sequences", (string)null);
                 });
 
             modelBuilder.Entity("LangSequenceTraining.Model.SequenceGroup", b =>
@@ -64,7 +64,7 @@ namespace LangSequenceTraining.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SequenceGroup");
+                    b.ToTable("SequenceGroup", (string)null);
                 });
 
             modelBuilder.Entity("LangSequenceTraining.Model.User", b =>
@@ -80,7 +80,7 @@ namespace LangSequenceTraining.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("LangSequenceTraining.Model.UserSequenceProgress", b =>
@@ -113,7 +113,7 @@ namespace LangSequenceTraining.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserSequenceProgress");
+                    b.ToTable("UserSequenceProgress", (string)null);
                 });
 
             modelBuilder.Entity("LangSequenceTraining.Model.UserState", b =>
@@ -122,7 +122,7 @@ namespace LangSequenceTraining.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("ProcessorStates")
+                    b.Property<string>("State")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -133,7 +133,7 @@ namespace LangSequenceTraining.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserState");
+                    b.ToTable("UserState", (string)null);
                 });
 
             modelBuilder.Entity("LangSequenceTraining.Model.Sequence", b =>
