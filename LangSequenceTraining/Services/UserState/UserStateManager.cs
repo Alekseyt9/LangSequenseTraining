@@ -1,7 +1,6 @@
-﻿
-using LangSequenceTraining.Model;
+﻿using LangSequenceTraining.Model;
 
-namespace LangSequenceTraining.Services
+namespace LangSequenceTraining.Services.UserState
 {
     internal class UserStateManager : IUserStateManager
     {
@@ -18,7 +17,7 @@ namespace LangSequenceTraining.Services
             var state = _repository.GetUserState(userId);
             if (state != null && !string.IsNullOrEmpty(state.State))
             {
-                
+
             }
 
             return res;

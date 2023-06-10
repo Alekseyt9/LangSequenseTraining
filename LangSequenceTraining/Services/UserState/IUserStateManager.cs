@@ -1,7 +1,6 @@
-﻿
-using LangSequenceTraining.Model;
+﻿using LangSequenceTraining.Model;
 
-namespace LangSequenceTraining.Services
+namespace LangSequenceTraining.Services.UserState
 {
     internal interface IUserStateManager
     {

@@ -1,5 +1,5 @@
-﻿
-using LangSequenceTraining.Model;
+﻿using LangSequenceTraining.Model;
+using LangSequenceTraining.Services.UserState;
 
 namespace LangSequenceTraining.Services
 {
@@ -15,7 +15,7 @@ namespace LangSequenceTraining.Services
 
         public ProcessorManager(
             IProcessorProvider processorProvider, IUserStateManager stateManager,
-            IGptService gptService, ITelegramBot telegramBot, 
+            IGptService gptService, ITelegramBot telegramBot,
             IAppRepository repository, ITextToSpeech textToSpeech, UserStateManager userStateManager
             )
         {
