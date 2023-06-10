@@ -1,10 +1,17 @@
 ﻿
 using LangSequenceTraining.Model;
 
-namespace LangSequenceTraining.Services.Learning
+namespace LangSequenceTraining.Services
 {
     internal class LearningService : ILearningService
     {
+        private IAppRepository _repository;
+
+        public LearningService(IAppRepository repository)
+        {
+            _repository = repository;
+        }
+
         public IEnumerable<Sequence> GetSequencesForRepeat(Guid userId)
         {
             throw new NotImplementedException();
@@ -12,7 +19,7 @@ namespace LangSequenceTraining.Services.Learning
 
         public IEnumerable<Sequence> GetSequencesNew(Guid userId, Guid groupId)
         {
-            throw new NotImplementedException();
+            
         }
 
         public void SaveResult(IEnumerable<TrainingResult> resultInfos)

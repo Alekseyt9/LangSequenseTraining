@@ -53,13 +53,14 @@ namespace GptApiTest.Env
                     services
                         .AddSingleton<IConfiguration>(configuration)
                         .AddSingleton<ITelegramBot, TelegramBot>()
+                        .AddSingleton<ITextToSpeech, TextToSpeech>()
+                        .AddSingleton<IGptService, GptService>()
                         .AddScoped<IProcessorManager, ProcessorManager>()
                         .AddScoped<IProcessorProvider, ProcessorProvider>()
                         .AddScoped<IUserStateManager, UserStateManager>()
-                        .AddScoped<IGptService, GptService>()
                         .AddScoped<IAppRepository, AppRepository>()
                         .AddScoped<IProcessorManager, ProcessorManager>()
-                        .AddSingleton<ITextToSpeech, TextToSpeech>()
+                        .AddScoped<ILearningService, LearningService>()
                         .RegisterPersistence(configuration);
 
                     if (!Environment.UserInteractive)

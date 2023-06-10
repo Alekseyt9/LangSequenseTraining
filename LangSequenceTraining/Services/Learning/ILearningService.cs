@@ -1,6 +1,7 @@
-﻿using LangSequenceTraining.Model;
+﻿
+using LangSequenceTraining.Model;
 
-namespace LangSequenceTraining.Services.Learning
+namespace LangSequenceTraining.Services
 {
     internal interface ILearningService
     {
