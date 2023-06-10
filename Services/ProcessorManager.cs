@@ -1,64 +1,63 @@
 ﻿
 using LangSequenceTraining.Model;
-using LangSequenceTraining.Services.TextToSpeech;
 
 namespace LangSequenceTraining.Services
 {
     internal class ProcessorManager : IProcessorManager
     {
         private readonly IProcessorProvider _processorProvider;
-        private readonly IUserStateProvider _stateProvider;
+        private readonly IUserStateManager _stateManager;
         private readonly IGptService _gptService;
         private readonly ITelegramBot _telegramBot;
         private readonly IAppRepository _repository;
         private readonly ITextToSpeech _textToSpeech;
+        private readonly UserStateManager _userStateManager;
 
         public ProcessorManager(
-            IProcessorProvider processorProvider, IUserStateProvider stateProvider,
+            IProcessorProvider processorProvider, IUserStateManager stateManager,
             IGptService gptService, ITelegramBot telegramBot, 
-            IAppRepository repository, ITextToSpeech textToSpeech
+            IAppRepository repository, ITextToSpeech textToSpeech, UserStateManager userStateManager
             )
         {
             _processorProvider = processorProvider;
-            _stateProvider = stateProvider;
+            _stateManager = stateManager;
             _gptService = gptService;
             _telegramBot = telegramBot;
             _repository = repository;
             _textToSpeech = textToSpeech;
+            _userStateManager = userStateManager;
         }
 
         public void Process(Guid userId, long channelId, string msg)
         {
-            var state = _stateProvider.GetUserState(userId);
+            var state = _stateManager.GetState(userId);
             if (state == null)
             {
                 state = new UserStateModel()
                 {
-                    State = new Dictionary<string, object>(),
+                    ProcessorStates = new Dictionary<string, object>(),
                     CurrentProcessorName = "main"
                 };
             }
-            var procState = state.State.ContainsKey(state.CurrentProcessorName)
-                ? (ProcessorStateBase)state.State[state.CurrentProcessorName]
-                : null;
-            if (procState == null)
-            {
-                procState = new ProcessorStateBase()
-                {
-                    ChannelId = channelId,
-                    Message = msg
-                };
-            }
+            /*var procState = state.ProcessorStates.ContainsKey(state.CurrentProcessorName)
+                ? (ProcessorStateBase)state.ProcessorStates[state.CurrentProcessorName]
+                : null;*/
 
-            DoTransition(state.CurrentProcessorName, procState);
+            var ctx = new ProcessorContext(
+                new ContextServices(_gptService, _telegramBot, _repository, this, _textToSpeech),
+                state.ContextState);
+
+            DoTransition(ctx, state.CurrentProcessorName, null);
         }
 
-        public void DoTransition(string procName, ProcessorStateBase procState)
+        public void DoTransition(ProcessorContext ctx, string procName, TransitionMessageBase trMsg)
         {
             var proc = _processorProvider.GetProcessor(procName);
-            var services = new ContextServices(_gptService, _telegramBot, _repository, this, _textToSpeech);
-            var ctx = new ProcessorContext(services, procState.Message, procState.ChannelId);
-            proc.Process(ctx, procState);
+            var userState = _userStateManager.GetState(ctx.State.UserId);
+            var procState = userState != null && userState.ProcessorStates.ContainsKey(procName)
+                ? (ProcessorStateBase)userState?.ProcessorStates[procName]
+                : null;
+            proc.Process(ctx, procState, trMsg);
         }
 
     }

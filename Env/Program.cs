@@ -2,7 +2,6 @@
 using LangSequenceTraining.DAL;
 using LangSequenceTraining.DAL.Services;
 using LangSequenceTraining.Services;
-using LangSequenceTraining.Services.TextToSpeech;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -56,7 +55,7 @@ namespace GptApiTest.Env
                         .AddSingleton<ITelegramBot, TelegramBot>()
                         .AddScoped<IProcessorManager, ProcessorManager>()
                         .AddScoped<IProcessorProvider, ProcessorProvider>()
-                        .AddScoped<IUserStateProvider, UserStateProvider>()
+                        .AddScoped<IUserStateManager, UserStateManager>()
                         .AddScoped<IGptService, GptService>()
                         .AddScoped<IAppRepository, AppRepository>()
                         .AddScoped<IProcessorManager, ProcessorManager>()

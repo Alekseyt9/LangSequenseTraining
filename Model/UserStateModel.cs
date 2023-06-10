@@ -1,4 +1,5 @@
 ﻿
+using LangSequenceTraining.Services;
 
 namespace LangSequenceTraining.Model
 {
@@ -6,7 +7,9 @@ namespace LangSequenceTraining.Model
     {
         public string CurrentProcessorName { get; set; }
 
-        public IDictionary<string, object> State { get; set; }
+        public ContextState ContextState { get; set; }
+
+        public IDictionary<string, object> ProcessorStates { get; set; }
 
     }
 }

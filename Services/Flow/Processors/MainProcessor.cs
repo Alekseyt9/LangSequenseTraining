@@ -7,20 +7,23 @@ namespace LangSequenceTraining.Services
     [Processor("main")]
     internal class MainProcessor : IProcessor
     {
-        public void Process(ProcessorContext ctx, ProcessorStateBase state)
+        public void Process(ProcessorContext ctx, ProcessorStateBase procState, TransitionMessageBase trMsg)
         {
-            if (ctx.Message.StartsWith("/start"))
+            var state = (MainProcessorState)procState;
+
+
+            if (ctx.State.Message.StartsWith("/start"))
             {
                 var msg = CreateStartMessage(ctx);
                 ctx.SendMessage(msg);
             }
 
-            if (ctx.Message.StartsWith("/tr"))
+            if (ctx.State.Message.StartsWith("/tr"))
             {
                 ProcessStartTr(ctx);
             }
 
-            if (ctx.Message.StartsWith("/grinfo"))
+            if (ctx.State.Message.StartsWith("/grinfo"))
             {
                 ProcessGrInfo(ctx);
             }
@@ -40,26 +43,22 @@ namespace LangSequenceTraining.Services
                 foreach (var seq in seqs)
                 {
                     var sound = await ctx.Services.TextToSpeech.SynthesizeSpeech(seq.Text);
-                    var file = new FileData()
+                    /*var file = new FileData()
                     {
                         Stream = sound,
                         Name = $"speech{j++}.mp4"
-                    };
-                    ctx.SendMessage($"\t {seq.Text}", file);
+                    };*/
+                    ctx.SendMessage($"\t {seq.Text}"/*, file*/);
                 }
             }
         }
 
         private void ProcessStartTr(ProcessorContext ctx)
         {
-            var grNum = GetParam<int>(ctx.Message);
+            var grNum = GetParam<int>(ctx.State.Message);
             var gr = GetGroupByNum(ctx, grNum);
 
-            ctx.Services.ProcessorManager.DoTransition("tr1", new Ex1ProcessorState()
-            {
-                Message = ctx.Message,
-                ChannelId = ctx.ChannelId
-            });
+            ctx.Services.ProcessorManager.DoTransition(ctx, "tr1", new ExtTransitionMessage());
         }
 
         private IEnumerable<Sequence> GetSequencesForTr(SequenceGroup gr)

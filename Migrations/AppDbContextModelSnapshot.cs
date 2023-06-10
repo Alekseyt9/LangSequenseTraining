@@ -122,7 +122,7 @@ namespace LangSequenceTraining.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("State")
+                    b.Property<string>("ProcessorStates")
                         .IsRequired()
                         .HasColumnType("text");
 

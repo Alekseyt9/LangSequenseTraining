@@ -31,7 +31,7 @@ namespace LangSequenceTraining.Services
         }
         */
 
-        public void Process(ProcessorContext ctx, ProcessorStateBase state)
+        public void Process(ProcessorContext ctx, ProcessorStateBase procState, TransitionMessageBase trMsg)
         {
             throw new NotImplementedException();
         }

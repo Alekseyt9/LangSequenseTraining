@@ -17,6 +17,8 @@ namespace LangSequenceTraining.DAL.Services
 
         public DbSet<UserSequenceProgress> UserSequenceProgress { get; set; }
 
+        public DbSet<UserState> UserState { get; set; }
+
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {

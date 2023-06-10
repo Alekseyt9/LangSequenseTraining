@@ -1,6 +1,6 @@
 ﻿
 
-namespace LangSequenceTraining.Services.TextToSpeech
+namespace LangSequenceTraining.Services
 {
     internal interface ITextToSpeech
     {

@@ -4,7 +4,7 @@ using Amazon.Polly;
 using Amazon.Polly.Model;
 using Microsoft.Extensions.Configuration;
 
-namespace LangSequenceTraining.Services.TextToSpeech
+namespace LangSequenceTraining.Services
 {
     internal class TextToSpeech : ITextToSpeech
     {

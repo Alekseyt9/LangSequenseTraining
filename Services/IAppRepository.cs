@@ -10,5 +10,10 @@ namespace LangSequenceTraining.Services
         IEnumerable<SequenceGroup> GetGroups();
 
         IEnumerable<Sequence> GetSequences(string groupName);
+
+        UserState GetUserState(Guid userId);
+
+        void SetUserState(Guid userId, UserState state);
+
     }
 }

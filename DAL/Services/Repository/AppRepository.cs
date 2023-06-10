@@ -41,5 +41,16 @@ namespace LangSequenceTraining.DAL.Services
             return _ctx.Sequences.Where(x => x.SequenceGroupId == gr.Id).ToList();
         }
 
+        public UserState GetUserState(Guid userId)
+        {
+            return _ctx.UserState.FirstOrDefault(x => x.UserId == userId);
+        }
+
+        public void SetUserState(Guid userId, UserState state)
+        {
+            _ctx.UserState.Update(state);
+            _ctx.SaveChanges();
+        }
+
     }
 }
