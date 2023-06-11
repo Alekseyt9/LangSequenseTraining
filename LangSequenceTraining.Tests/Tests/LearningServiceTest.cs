@@ -3,6 +3,7 @@ using LangSequenceTraining.DAL.Services;
 using LangSequenceTraining.Model;
 using LangSequenceTraining.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Xunit;
 
 namespace LangSequenceTrainingTests.Tests
@@ -12,17 +13,24 @@ namespace LangSequenceTrainingTests.Tests
         private const string s_ConnectString =
             "Server=localhost;Port=5433;Database=LangSequenceTraining;User Id=postgres;Password=postgres;";
 
-        private readonly LearningService _lService;
+        private readonly LearningService _learningServ;
         private readonly AppRepository _repository;
+        private readonly AppRepositoryA _repositoryA;
         private readonly AppDbContext _dbContext;
         private SequenceGroup _gr;
+        private IConfiguration _configuration;
 
         public LearningServiceTest()
         {
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile(@"appsettings.json");
+            _configuration = builder.Build();
+
             var dbOption = new DbContextOptionsBuilder<AppDbContext>().UseNpgsql(s_ConnectString).Options;
             _dbContext = new AppDbContext(dbOption);
             _repository = new AppRepository(_dbContext);
-            _lService = new LearningService(_repository);
+            _repositoryA = new AppRepositoryA(_configuration);
+            _learningServ = new LearningService(_repository, _repositoryA);
         }
 
         [Fact]
@@ -30,7 +38,7 @@ namespace LangSequenceTrainingTests.Tests
         {
             var user = GetUser();
             var groups = _repository.GetGroups();
-            var res = _lService.GetSequencesNew(user.Id, groups.First().Id);
+            var res = _learningServ.GetSequencesNew(user.Id, groups.First().Id);
         }
 
         private User GetUser()
@@ -86,7 +94,7 @@ namespace LangSequenceTrainingTests.Tests
         {
             _gr = CreateTestGroup();
             var user = GetUser();
-            var res = _lService.GetSequencesNew(user.Id, _gr.Id);
+            var res = _learningServ.GetSequencesNew(user.Id, _gr.Id);
         }
 
         public void Dispose()

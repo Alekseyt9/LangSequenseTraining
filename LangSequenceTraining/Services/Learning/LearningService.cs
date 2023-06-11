@@ -6,10 +6,12 @@ namespace LangSequenceTraining.Services
     internal class LearningService : ILearningService
     {
         private readonly IAppRepository _repository;
+        private readonly IAppRepositoryA _repositoryA;
 
-        public LearningService(IAppRepository repository)
+        public LearningService(IAppRepository repository, IAppRepositoryA repositoryA)
         {
             _repository = repository;
+            _repositoryA = repositoryA;
         }
 
         public IEnumerable<Sequence> GetSequencesForRepeat(Guid userId)
@@ -22,8 +24,8 @@ namespace LangSequenceTraining.Services
 
         public IEnumerable<Sequence> GetSequencesNew(Guid userId, Guid groupId)
         {
-            // todo из группы, за исключением тех, где есть прогресс 
-            return null;
+            var res = _repositoryA.GetNewSequences(userId, groupId);
+            return res;
         }
 
         public void SaveResult(IEnumerable<TrainingResult> resultInfos)

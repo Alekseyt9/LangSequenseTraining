@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangSequenceTraining.DAL.EF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangSequenceTraining.Tests", "LangSequenceTraining.Tests\LangSequenceTraining.Tests.csproj", "{70D3D877-7465-4987-A4F9-E6430BB2618D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangSequenceTraining.Model", "LangSequenceTraining.Model\LangSequenceTraining.Model.csproj", "{6C2764EE-55D4-4070-A923-0EC4CD307FF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangSequenceTraining.Model", "LangSequenceTraining.Model\LangSequenceTraining.Model.csproj", "{6C2764EE-55D4-4070-A923-0EC4CD307FF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangSequenceTraining.DAL.Pg", "LangSequenceTraining.DAL.Pg\LangSequenceTraining.DAL.Pg.csproj", "{C8114C53-FF0E-4CE4-9A86-D069F2BAB2E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{6C2764EE-55D4-4070-A923-0EC4CD307FF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C2764EE-55D4-4070-A923-0EC4CD307FF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C2764EE-55D4-4070-A923-0EC4CD307FF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8114C53-FF0E-4CE4-9A86-D069F2BAB2E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8114C53-FF0E-4CE4-9A86-D069F2BAB2E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8114C53-FF0E-4CE4-9A86-D069F2BAB2E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8114C53-FF0E-4CE4-9A86-D069F2BAB2E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

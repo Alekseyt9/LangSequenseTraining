@@ -1,6 +1,7 @@
 ﻿
 using LangSequenceTraining.Model;
 using LangSequenceTraining.Services;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace LangSequenceTraining.DAL.Services
 {
@@ -39,6 +40,17 @@ namespace LangSequenceTraining.DAL.Services
         {
             var gr = _ctx.SequenceGroup.First(x => x.Name == groupName);
             return _ctx.Sequences.Where(x => x.SequenceGroupId == gr.Id).ToList();
+        }
+
+        public IEnumerable<Sequence> GetNewSequences(Guid userId, Guid groupId)
+        {
+            throw new NotImplementedException();
+            /*
+            _ctx.Sequences.Where(x => x.SequenceGroupId == groupId)
+                .LeftJoin(_ctx.UserSequenceProgress, s => s.Id, p => p.SequenseId)
+                .Select(x => )
+                .Where(x => x.)
+            */
         }
 
         public IEnumerable<UserSequenceProgress> GetProgressData(Guid userId)

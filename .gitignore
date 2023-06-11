@@ -11,3 +11,7 @@
 /LangSequenceTraining.DAL.EF/obj
 /LangSequenceTraining.DAL.EF/bin/Debug/net7.0
 /.vs/ProjectEvaluation
+/LangSequenceTraining.DAL.Pg/obj/Debug/net7.0/refint
+/LangSequenceTraining.DAL.Pg/obj
+/LangSequenceTraining.DAL.Pg/bin/Debug/net7.0
+/.vs/LangSequenceTraining/config

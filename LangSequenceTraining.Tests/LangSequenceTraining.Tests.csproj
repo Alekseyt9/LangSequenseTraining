@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -17,8 +17,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LangSequenceTraining.DAL.EF\LangSequenceTraining.DAL.EF.csproj" />
+    <ProjectReference Include="..\LangSequenceTraining.DAL.Pg\LangSequenceTraining.DAL.Pg.csproj" />
     <ProjectReference Include="..\LangSequenceTraining.Model\LangSequenceTraining.Model.csproj" />
     <ProjectReference Include="..\LangSequenceTraining\LangSequenceTraining.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
