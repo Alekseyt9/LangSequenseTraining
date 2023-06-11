@@ -10,18 +10,15 @@ namespace LangSequenceTraining.Tests.Tests
 {
     public class FlowTest
     {
-        private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
+        private readonly TelegramBotMock _telegramBot;
+        private readonly ProcessorManager _procMan;
 
         public FlowTest()
         {
-            var builder = new ConfigurationBuilder()
-                .AddJsonFile(@"appsettings.json");
+            var builder = new ConfigurationBuilder().AddJsonFile(@"appsettings.json");
             _configuration = builder.Build();
-        }
 
-        [Fact]
-        public void Test()
-        {
             var connectString = _configuration["DbConnection"];
             var dbOption = new DbContextOptionsBuilder<AppDbContext>().UseNpgsql(connectString).Options;
             var dbContext = new AppDbContext(dbOption);
@@ -30,22 +27,25 @@ namespace LangSequenceTraining.Tests.Tests
             var processorProvider = new ProcessorProvider();
             var stateManager = new UserStateManagerMock();
             var gptService = new GptCheckService(_configuration);
-            var telegramBot = new TelegramBotMock();
+            _telegramBot = new TelegramBotMock();
             var textToSpeech = new TextToSpeech(_configuration);
 
-            var procMan = new ProcessorManager(
-                processorProvider, stateManager, gptService, telegramBot, repository, textToSpeech, stateManager);
-
-            telegramBot.ReceiveMessage += async (sender, args) =>
+            _procMan = new ProcessorManager(
+                processorProvider, stateManager, gptService, _telegramBot, repository, textToSpeech, stateManager);
+            _telegramBot.ReceiveMessage += async (sender, args) =>
             {
-                procMan.Process(Guid.Empty, args.ChannelId, args.Message);
+                _procMan.Process(Guid.Empty, args.ChannelId, args.Message);
             };
+        }
 
-            telegramBot.UserMessageTest("/start");
-            var msg = telegramBot.GetLastBotMsg();
+        [Fact]
+        public void Test()
+        {
+            _telegramBot.UserMessageTest("/start");
+            var msg = _telegramBot.GetLastBotMsg();
 
-            telegramBot.UserMessageTest("/tr 1");
-            msg = telegramBot.GetLastBotMsg();
+            _telegramBot.UserMessageTest("/tr 1");
+            msg = _telegramBot.GetLastBotMsg();
         }
 
     }
