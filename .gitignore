@@ -15,3 +15,4 @@
 /LangSequenceTraining.DAL.Pg/obj
 /LangSequenceTraining.DAL.Pg/bin/Debug/net7.0
 /.vs/LangSequenceTraining/config
+/LangSequenceTraining.Tests/appsettings.json
