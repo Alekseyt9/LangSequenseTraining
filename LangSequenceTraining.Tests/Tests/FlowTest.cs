@@ -29,7 +29,7 @@ namespace LangSequenceTraining.Tests.Tests
 
             var processorProvider = new ProcessorProvider();
             var stateManager = new UserStateManagerMock();
-            var gptService = new GptService(_configuration);
+            var gptService = new GptCheckService(_configuration);
             var telegramBot = new TelegramBotMock();
             var textToSpeech = new TextToSpeech(_configuration);
 

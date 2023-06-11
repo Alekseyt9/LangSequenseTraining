@@ -5,11 +5,11 @@ using Xunit;
 
 namespace LangSequenceTrainingTests.Tests
 {
-    public class GptServiceTest
+    public class GptCheckServiceTest
     {
         private IConfiguration _configuration;
 
-        public GptServiceTest()
+        public GptCheckServiceTest()
         {
             var builder = new ConfigurationBuilder()
                 .AddJsonFile(@"appsettings.json");
@@ -19,8 +19,15 @@ namespace LangSequenceTrainingTests.Tests
         [Fact]
         public async Task Test()
         {
-            var serv = new GptService(_configuration);
+            var serv = new GptCheckService(_configuration);
             await serv.Init();
+
+            var res1 = await serv.Check("I have money");
+            var res2 = await serv.Check("I has money");
+
+            Assert.True(res1.IsCorrect);
+            Assert.False(res2.IsCorrect);
+            Assert.True(!string.IsNullOrEmpty(res2.Message));
         }
 
     }

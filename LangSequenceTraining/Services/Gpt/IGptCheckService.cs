@@ -2,7 +2,7 @@
 
 namespace LangSequenceTraining.Services
 {
-    internal interface IGptService
+    internal interface IGptCheckService
     {
         Task Init();
     }

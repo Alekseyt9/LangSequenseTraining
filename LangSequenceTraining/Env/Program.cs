@@ -54,7 +54,7 @@ namespace GptApiTest.Env
                         .AddSingleton<IConfiguration>(configuration)
                         .AddSingleton<ITelegramBot, TelegramBot>()
                         .AddSingleton<ITextToSpeech, TextToSpeech>()
-                        .AddSingleton<IGptService, GptService>()
+                        .AddSingleton<IGptCheckService, GptCheckService>()
                         .AddScoped<IProcessorManager, ProcessorManager>()
                         .AddScoped<IProcessorProvider, ProcessorProvider>()
                         .AddScoped<IUserStateManager, UserStateManager>()
