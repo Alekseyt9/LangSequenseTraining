@@ -1,8 +1,8 @@
 ﻿
 
-namespace LangSequenceTraining.Model.Base
+namespace LangSequenceTraining.Model
 {
-    internal enum ProgressStage
+    public enum ProgressStage
     {
         Start = 0,
         OneDay = 1,

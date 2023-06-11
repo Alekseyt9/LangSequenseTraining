@@ -3,7 +3,7 @@ using LangSequenceTraining.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace LangSequenseTraining.DAL.EntityConfigurations
+namespace LangSequenseTraining.DAL
 {
     internal class UserSequenceProgressConfig : IEntityTypeConfiguration<UserSequenceProgress>
     {

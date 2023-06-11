@@ -1,12 +1,11 @@
 ﻿
-using LangSequenceTraining.DAL.EntityConfigurations;
 using LangSequenceTraining.Model;
-using LangSequenseTraining.DAL.EntityConfigurations;
+using LangSequenseTraining.DAL;
 using Microsoft.EntityFrameworkCore;
 
 namespace LangSequenceTraining.DAL.Services
 {
-    internal class AppDbContext : DbContext
+    public class AppDbContext : DbContext
     {
 
         public DbSet<User> Users { get; set; }

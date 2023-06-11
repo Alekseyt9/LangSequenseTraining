@@ -4,7 +4,7 @@ using LangSequenceTraining.Services;
 
 namespace LangSequenceTraining.DAL.Services
 {
-    internal class AppRepository : IAppRepository
+    public class AppRepository : IAppRepository
     {
         private AppDbContext _ctx;
 

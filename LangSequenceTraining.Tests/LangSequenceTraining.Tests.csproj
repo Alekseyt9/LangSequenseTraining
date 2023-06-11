@@ -16,6 +16,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LangSequenceTraining.DAL.EF\LangSequenceTraining.DAL.EF.csproj" />
+    <ProjectReference Include="..\LangSequenceTraining.Model\LangSequenceTraining.Model.csproj" />
     <ProjectReference Include="..\LangSequenceTraining\LangSequenceTraining.csproj" />
   </ItemGroup>
 

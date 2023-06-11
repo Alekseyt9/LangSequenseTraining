@@ -5,7 +5,10 @@ namespace LangSequenceTrainingTests.Tests
 {
     public class GptServiceTest
     {
-        public GptServiceTest() { }
+        public GptServiceTest()
+        {
+
+        }
 
         [Fact]
         public void Test()

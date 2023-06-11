@@ -3,7 +3,7 @@ using LangSequenceTraining.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace LangSequenceTraining.DAL.EntityConfigurations
+namespace LangSequenceTraining.DAL
 {
     internal class UserStateConfig : IEntityTypeConfiguration<UserState>
     {

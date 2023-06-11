@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangSequenceTrainingTests", "LangSequenceTrainingTests\LangSequenceTrainingTests.csproj", "{303DE68C-E787-4EDF-915C-F7BB3657C7CC}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangSequenceTraining", "LangSequenceTraining\LangSequenceTraining.csproj", "{7F01E9B9-F7F4-41A6-9B7B-C80EA0596DAA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangSequenceTraining.DAL.EF", "LangSequenceTraining.DAL.EF\LangSequenceTraining.DAL.EF.csproj", "{9BE126AC-7AF8-408F-8D47-46E601D0270E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LangSequenceTraining.Tests", "LangSequenceTraining.Tests\LangSequenceTraining.Tests.csproj", "{70D3D877-7465-4987-A4F9-E6430BB2618D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LangSequenceTraining.Model", "LangSequenceTraining.Model\LangSequenceTraining.Model.csproj", "{6C2764EE-55D4-4070-A923-0EC4CD307FF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +17,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{303DE68C-E787-4EDF-915C-F7BB3657C7CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{303DE68C-E787-4EDF-915C-F7BB3657C7CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{303DE68C-E787-4EDF-915C-F7BB3657C7CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{303DE68C-E787-4EDF-915C-F7BB3657C7CC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7F01E9B9-F7F4-41A6-9B7B-C80EA0596DAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7F01E9B9-F7F4-41A6-9B7B-C80EA0596DAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F01E9B9-F7F4-41A6-9B7B-C80EA0596DAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F01E9B9-F7F4-41A6-9B7B-C80EA0596DAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BE126AC-7AF8-408F-8D47-46E601D0270E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BE126AC-7AF8-408F-8D47-46E601D0270E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BE126AC-7AF8-408F-8D47-46E601D0270E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BE126AC-7AF8-408F-8D47-46E601D0270E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70D3D877-7465-4987-A4F9-E6430BB2618D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70D3D877-7465-4987-A4F9-E6430BB2618D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70D3D877-7465-4987-A4F9-E6430BB2618D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70D3D877-7465-4987-A4F9-E6430BB2618D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C2764EE-55D4-4070-A923-0EC4CD307FF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C2764EE-55D4-4070-A923-0EC4CD307FF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C2764EE-55D4-4070-A923-0EC4CD307FF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C2764EE-55D4-4070-A923-0EC4CD307FF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

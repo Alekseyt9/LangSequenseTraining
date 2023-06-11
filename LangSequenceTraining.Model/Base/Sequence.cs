@@ -2,7 +2,7 @@
 
 namespace LangSequenceTraining.Model
 {
-    internal class Sequence
+    public class Sequence
     {
         public Guid Id { get; set; }
 

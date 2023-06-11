@@ -3,7 +3,7 @@ using LangSequenceTraining.Model;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 
-namespace LangSequenseTraining.DAL.EntityConfigurations
+namespace LangSequenseTraining.DAL
 {
     internal class SequenceConfig : IEntityTypeConfiguration<Sequence>
     {

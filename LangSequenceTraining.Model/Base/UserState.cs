@@ -2,7 +2,7 @@
 
 namespace LangSequenceTraining.Model
 {
-    internal class UserState
+    public class UserState
     {
         public Guid Id { get; set; }
 

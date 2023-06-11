@@ -1,6 +1,5 @@
 ﻿
 using LangSequenceTraining.Model;
-using LangSequenceTraining.Model.Base;
 
 namespace LangSequenceTraining.Services
 {

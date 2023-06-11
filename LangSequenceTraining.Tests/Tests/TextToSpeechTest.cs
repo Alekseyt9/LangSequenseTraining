@@ -5,11 +5,11 @@ using Xunit;
 
 namespace LangSequenceTrainingTests.Tests
 {
-    public class AwsPollyTest
+    public class TextToSpeechTest
     {
         private IConfiguration _configuration;
 
-        public AwsPollyTest()
+        public TextToSpeechTest()
         {
             // создание и инициализация _configuration
         }

@@ -3,7 +3,7 @@ using LangSequenceTraining.Model;
 
 namespace LangSequenceTraining.Services
 {
-    internal interface IAppRepository
+    public interface IAppRepository
     {
         User GetUser(string userName);
 

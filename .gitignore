@@ -4,3 +4,10 @@
 /.vs/LangSequenceTraining/v17
 /.vs/LangSequenceTraining/DesignTimeBuild
 /*.user
+/LangSequenceTraining.Tests/bin/Debug/net7.0
+/LangSequenceTraining.Tests/obj
+/LangSequenceTraining.Model/obj
+/LangSequenceTraining.Model/bin/Debug/net7.0
+/LangSequenceTraining.DAL.EF/obj
+/LangSequenceTraining.DAL.EF/bin/Debug/net7.0
+/.vs/ProjectEvaluation

@@ -1,9 +1,8 @@
 ﻿
-using LangSequenceTraining.Model.Base;
 
 namespace LangSequenceTraining.Model
 {
-    internal class UserSequenceProgress
+    public class UserSequenceProgress
     {
         public Guid Id { get; set; }
 
