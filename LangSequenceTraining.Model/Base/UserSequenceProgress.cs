@@ -6,7 +6,7 @@ namespace LangSequenceTraining.Model
     {
         public Guid Id { get; set; }
 
-        public Guid SequenseId { get; set; }
+        public Guid SequenceId { get; set; }
 
         public Sequence Sequence { get; set; }
 

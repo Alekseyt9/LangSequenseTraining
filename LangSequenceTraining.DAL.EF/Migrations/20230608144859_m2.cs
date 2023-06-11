@@ -54,7 +54,7 @@ namespace LangSequenceTraining.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_UserSequenceProgress_Sequences_SequenseId",
                 table: "UserSequenceProgress",
-                column: "SequenseId",
+                column: "SequenceId",
                 principalTable: "Sequences",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -112,7 +112,7 @@ namespace LangSequenceTraining.Migrations
             migrationBuilder.AddForeignKey(
                 name: "FK_UserSequenceProgress_Sequence_SequenseId",
                 table: "UserSequenceProgress",
-                column: "SequenseId",
+                column: "SequenceId",
                 principalTable: "Sequence",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);

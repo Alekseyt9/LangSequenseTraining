@@ -13,5 +13,7 @@ namespace LangSequenceTraining.Model
         public Guid SequenceGroupId { get; set; }
 
         public SequenceGroup SequenceGroup { get; set; }
+
+        public int Order { get; set; }
     }
 }

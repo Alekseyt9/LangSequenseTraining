@@ -80,7 +80,7 @@ namespace LangSequenceTraining.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_UserSequenceProgress_SequenseId",
                 table: "UserSequenceProgress",
-                column: "SequenseId");
+                column: "SequenceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserSequenceProgress_UserId",

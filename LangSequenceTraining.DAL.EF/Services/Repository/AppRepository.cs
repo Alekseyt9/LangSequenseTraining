@@ -47,7 +47,7 @@ namespace LangSequenceTraining.DAL.Services
             throw new NotImplementedException();
             /*
             _ctx.Sequences.Where(x => x.SequenceGroupId == groupId)
-                .LeftJoin(_ctx.UserSequenceProgress, s => s.Id, p => p.SequenseId)
+                .LeftJoin(_ctx.UserSequenceProgress, s => s.Id, p => p.SequenceId)
                 .Select(x => )
                 .Where(x => x.)
             */

@@ -3,6 +3,7 @@ using System;
 using LangSequenceTraining.DAL.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LangSequenceTraining.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230611130812_m6")]
+    partial class m6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,7 +104,7 @@ namespace LangSequenceTraining.Migrations
                     b.Property<DateTime?>("LastUpdateTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("SequenceId")
+                    b.Property<Guid>("SequenseId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Stage")
@@ -115,7 +118,7 @@ namespace LangSequenceTraining.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SequenceId");
+                    b.HasIndex("SequenseId");
 
                     b.HasIndex("UserId");
 
@@ -157,7 +160,7 @@ namespace LangSequenceTraining.Migrations
                 {
                     b.HasOne("LangSequenceTraining.Model.Sequence", "Sequence")
                         .WithMany()
-                        .HasForeignKey("SequenceId")
+                        .HasForeignKey("SequenseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

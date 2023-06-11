@@ -44,12 +44,13 @@ namespace LangSequenceTraining.DAL.Services
 select s.*
 from ""Sequences"" s
 left join ""UserSequenceProgress"" p
-	on p.""SequenseId"" = s.""Id""
+	on p.""SequenceId"" = s.""Id""
 join ""SequenceGroup"" g
 	on g.""Id"" = s.""SequenceGroupId""
 where 
 	p.""Id"" is null
 	and g.""IsHide"" != true
+order by s.""Order""
 limit 3
 "
                 );

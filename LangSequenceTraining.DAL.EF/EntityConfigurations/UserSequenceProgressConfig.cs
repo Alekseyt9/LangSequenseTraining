@@ -15,7 +15,7 @@ namespace LangSequenseTraining.DAL
             builder.HasOne(x => x.User)
                 .WithMany().HasForeignKey(x => x.UserId);
             builder.HasOne(x => x.Sequence)
-                .WithMany().HasForeignKey(x => x.SequenseId);
+                .WithMany().HasForeignKey(x => x.SequenceId);
 
             builder.Property(x => x.StartTime).IsRequired();
             builder.Property(x => x.LastUpdateTime);

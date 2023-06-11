@@ -14,6 +14,7 @@ namespace LangSequenseTraining.DAL
 
             builder.Property(x => x.Text).IsUnicode(true);
             builder.Property(x => x.Description);
+            builder.Property(x => x.Order);
 
             builder.HasOne(x => x.SequenceGroup)
                 .WithMany().HasForeignKey(x => x.SequenceGroupId);
