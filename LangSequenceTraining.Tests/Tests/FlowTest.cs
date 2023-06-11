@@ -1,12 +1,11 @@
 ﻿
 using LangSequenceTraining.DAL.Services;
 using LangSequenceTraining.Services;
-using LangSequenceTraining.Tests.Mock;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 
-namespace LangSequenceTraining.Tests.Tests
+namespace LangSequenceTraining.Tests
 {
     public class FlowTest
     {

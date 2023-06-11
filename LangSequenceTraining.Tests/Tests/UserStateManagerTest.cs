@@ -6,14 +6,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 
-namespace LangSequenceTraining.Tests.Tests
+namespace LangSequenceTraining.Tests
 {
     public class UserStateManagerTest : IDisposable
     {
         private readonly IConfiguration _configuration;
-        private UserStateManager _stateServ;
-        private User _user;
-        private AppDbContext _dbContext;
+        private readonly UserStateManager _stateServ;
+        private readonly User _user;
+        private readonly AppDbContext _dbContext;
 
         public UserStateManagerTest()
         {

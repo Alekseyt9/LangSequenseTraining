@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 
-namespace LangSequenceTrainingTests.Tests
+namespace LangSequenceTraining.Tests
 {
     public class LearningServiceTest : IDisposable
     {

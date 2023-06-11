@@ -2,7 +2,7 @@
 using LangSequenceTraining.Model;
 using LangSequenceTraining.Services;
 
-namespace LangSequenceTraining.Tests.Mock
+namespace LangSequenceTraining.Tests
 {
     internal class UserStateManagerMock : IUserStateManager
     {

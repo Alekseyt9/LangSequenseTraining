@@ -1,7 +1,7 @@
 ﻿
 using LangSequenceTraining.Services;
 
-namespace LangSequenceTraining.Tests.Mock
+namespace LangSequenceTraining.Tests
 {
     internal class TelegramBotMock : ITelegramBot
     {

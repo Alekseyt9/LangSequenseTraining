@@ -3,11 +3,11 @@ using LangSequenceTraining.Services;
 using Microsoft.Extensions.Configuration;
 using Xunit;
 
-namespace LangSequenceTrainingTests.Tests
+namespace LangSequenceTraining.Tests
 {
     public class TextToSpeechTest
     {
-        private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
         public TextToSpeechTest()
         {
