@@ -3,8 +3,8 @@
 
 namespace LangSequenceTraining.Services
 {
-    internal class ProcessorStateBase
+    public class ProcessorStateBase
     {
-
+        public string TestField1 { get; set; }
     }
 }

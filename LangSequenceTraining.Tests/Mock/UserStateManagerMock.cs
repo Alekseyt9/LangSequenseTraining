@@ -19,7 +19,7 @@ namespace LangSequenceTraining.Tests.Mock
             {
                 ContextState = new ContextState(),
                 CurrentProcessorName = "main",
-                ProcessorStates = new Dictionary<string, object>()
+                ProcessorStates = new Dictionary<string, ProcessorStateBase>()
             };
             return state;
         }

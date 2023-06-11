@@ -2,7 +2,9 @@
 
 namespace LangSequenceTraining.Services
 {
-    internal class MainProcessorState : ProcessorStateBase
+    public class MainProcessorState : ProcessorStateBase
     {
+        public string TestField2 { get; set; }
     }
+    
 }

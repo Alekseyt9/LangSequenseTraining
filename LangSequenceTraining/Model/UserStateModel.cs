@@ -9,7 +9,7 @@ namespace LangSequenceTraining.Model
 
         public ContextState ContextState { get; set; }
 
-        public IDictionary<string, object> ProcessorStates { get; set; }
+        public IDictionary<string, ProcessorStateBase> ProcessorStates { get; set; }
 
     }
 }

@@ -31,6 +31,11 @@ namespace LangSequenceTraining.DAL.Services
             return user;
         }
 
+        public User GetUser(Guid id)
+        {
+            return _ctx.Users.FirstOrDefault(x => x.Id == id);
+        }
+
         public IEnumerable<SequenceGroup> GetGroups()
         {
             return _ctx.SequenceGroup.OrderBy(x => x.Name).ToList();
@@ -65,7 +70,15 @@ namespace LangSequenceTraining.DAL.Services
 
         public void SetUserState(Guid userId, UserState state)
         {
-            _ctx.UserState.Update(state);
+            if (state.Id == Guid.Empty)
+            {
+                _ctx.UserState.Add(state);
+            }
+            else
+            {
+                _ctx.UserState.Update(state);
+            }
+            
             _ctx.SaveChanges();
         }
 

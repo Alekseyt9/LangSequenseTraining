@@ -36,7 +36,7 @@ namespace LangSequenceTraining.Services
             {
                 state = new UserStateModel()
                 {
-                    ProcessorStates = new Dictionary<string, object>(),
+                    ProcessorStates = new Dictionary<string, ProcessorStateBase>(),
                     CurrentProcessorName = "main",
                 };
             }
