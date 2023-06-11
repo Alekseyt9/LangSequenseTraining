@@ -11,7 +11,9 @@ namespace LangSequenceTrainingTests.Tests
 
         public TextToSpeechTest()
         {
-            // создание и инициализация _configuration
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile(@"appsettings.json");
+            _configuration = builder.Build();
         }
 
         [Fact]

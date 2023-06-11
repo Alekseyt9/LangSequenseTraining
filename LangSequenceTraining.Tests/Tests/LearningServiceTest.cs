@@ -33,14 +33,6 @@ namespace LangSequenceTrainingTests.Tests
             _learningServ = new LearningService(_repository, _repositoryA);
         }
 
-        [Fact]
-        public void Test1()
-        {
-            var user = GetUser();
-            var groups = _repository.GetGroups();
-            var res = _learningServ.GetSequencesNew(user.Id, groups.First().Id);
-        }
-
         private User GetUser()
         {
             return _repository.GetUser("alekseyt9");
@@ -90,11 +82,13 @@ namespace LangSequenceTrainingTests.Tests
         /// Проверить результат.
         /// </summary>
         [Fact]
-        public void Test2()
+        public void Test1()
         {
             _gr = CreateTestGroup();
             var user = GetUser();
             var res = _learningServ.GetSequencesNew(user.Id, _gr.Id);
+            Assert.NotNull(res);
+            Assert.True(res.Any());
         }
 
         public void Dispose()
