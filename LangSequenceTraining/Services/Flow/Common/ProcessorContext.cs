@@ -19,7 +19,7 @@ namespace LangSequenceTraining.Services
 
         public void SendMessage(string msg, FileData file = null)
         {
-            _services.TelegramBot.SendMessage(_state.ChannelId, _state.Message, file);
+            _services.TelegramBot.SendMessage(_state.ChannelId, msg, file);
         }
 
     }

@@ -16,7 +16,8 @@ namespace LangSequenceTraining.Services
         public ProcessorManager(
             IProcessorProvider processorProvider, IUserStateManager stateManager,
             IGptService gptService, ITelegramBot telegramBot,
-            IAppRepository repository, ITextToSpeech textToSpeech, IUserStateManager userStateManager
+            IAppRepository repository, ITextToSpeech textToSpeech, 
+            IUserStateManager userStateManager
             )
         {
             _processorProvider = processorProvider;
@@ -36,12 +37,14 @@ namespace LangSequenceTraining.Services
                 state = new UserStateModel()
                 {
                     ProcessorStates = new Dictionary<string, object>(),
-                    CurrentProcessorName = "main"
+                    CurrentProcessorName = "main",
                 };
             }
-            /*var procState = state.ProcessorStates.ContainsKey(state.CurrentProcessorName)
-                ? (ProcessorStateBase)state.ProcessorStates[state.CurrentProcessorName]
-                : null;*/
+
+            state.ContextState = new ContextState()
+            {
+                Message = msg
+            };
 
             var ctx = new ProcessorContext(
                 new ContextServices(_gptService, _telegramBot, _repository, this, _textToSpeech),

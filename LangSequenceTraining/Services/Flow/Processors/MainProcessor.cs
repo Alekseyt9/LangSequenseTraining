@@ -11,7 +11,6 @@ namespace LangSequenceTraining.Services
         {
             var state = (MainProcessorState)procState;
 
-
             if (ctx.State.Message.StartsWith("/start"))
             {
                 var msg = CreateStartMessage(ctx);
@@ -58,7 +57,7 @@ namespace LangSequenceTraining.Services
             var grNum = GetParam<int>(ctx.State.Message);
             var gr = GetGroupByNum(ctx, grNum);
 
-            ctx.Services.ProcessorManager.DoTransition(ctx, "tr1", new ExtTransitionMessage());
+            ctx.Services.ProcessorManager.DoTransition(ctx, "ex1", new ExtTransitionMessage());
         }
 
         private IEnumerable<Sequence> GetSequencesForTr(SequenceGroup gr)
