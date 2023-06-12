@@ -9,9 +9,57 @@ namespace LangSequenceTraining.Helpers
         public static ExChoiceItem GetNextEx(List<MainExState> exStateHistory, List<Sequence> seqList, List<string> exList)
         {
             var ratingMap = CreateRatingMap(seqList, exList);
-
+            AcceptRating(ratingMap, exStateHistory);
             var res =  GetRatingResult(ratingMap, seqList);
             return res;
+        }
+
+        private static void AcceptRating(Dictionary<string, int> ratingMap, List<MainExState> exStateHistory)
+        {
+            var exCountMap = new Dictionary<string, int>();
+            var seqCountMap = new Dictionary<Guid, int>();
+            foreach (var h in exStateHistory)
+            {
+                seqCountMap[h.Sequence.Id]++;
+                exCountMap[h.ExName]++;
+            }
+
+            var seqMax = seqCountMap.Max(x => x.Value);
+            var exMax = exCountMap.Max(x => x.Value);
+
+            // + 1 если менее часто, чем максимальная частота по паттерну
+            foreach (var seqPair in seqCountMap.Where(x => x.Value < seqMax))
+            {
+                foreach (var h in exStateHistory.Where(x => x.Sequence.Id == seqPair.Key))
+                {
+                    ratingMap[GetKey(h)]++;
+                }
+            }
+
+            // + 1 если менее часто, чем максимальная частота по упражнению
+            foreach (var exPair in exCountMap.Where(x => x.Value < exMax))
+            {
+                foreach (var h in exStateHistory.Where(x => x.ExName == exPair.Key))
+                {
+                    ratingMap[GetKey(h)]++;
+                }
+            }
+
+            // сбрасываем до -1, если пара уже имела успех
+            foreach (var h in exStateHistory.Where(x => x.IsCorrect))
+            {
+                ratingMap[GetKey(h)] = -1;
+            }
+
+            // сбрасываем до -1, если больше или равно 3 неудачных попыток для пары паттерн-упражнение
+            foreach (var hGroup in exStateHistory.Where(x => !x.IsCorrect).GroupBy(GetKey))
+            {
+                if (hGroup.Count() >= 3)
+                {
+                    ratingMap[hGroup.Key] = -1;
+                }
+            }
+
         }
 
         private static ExChoiceItem GetRatingResult(Dictionary<string, int> ratingMap, List<Sequence> seqList)
@@ -57,7 +105,12 @@ namespace LangSequenceTraining.Helpers
 
         private static string GetKey(Sequence s, string ex)
         {
-            return $"{ex}${s.Id.ToString()}";
+            return $"{ex}${s.Id}";
+        }
+
+        private static string GetKey(MainExState h)
+        {
+            return $"{h.ExName}${h.Sequence.Id}";
         }
 
     }
