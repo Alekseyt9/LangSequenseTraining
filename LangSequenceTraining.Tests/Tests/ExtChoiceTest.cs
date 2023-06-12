@@ -13,8 +13,40 @@ namespace LangSequenceTraining.Tests
         {
             var hist = new List<MainExState>();
             var exNames = new List<string>() { "ex1", "ex2" };
+            var seqList = GetTestSeqs();
 
-            var seqList = new List<Sequence>()
+            var res = ExChoiceHelper.GetNextEx(hist, seqList, exNames);
+            if (!res.IsFinish)
+            {
+                hist.Add(new MainExState()
+                {
+                    Sequence = res.Sequence,
+                    ExName = res.ExName,
+                    IsCorrect = true
+                });
+            }
+
+            var i = 0;
+            while (!res.IsFinish || i < 100)
+            {
+                res = ExChoiceHelper.GetNextEx(hist, seqList, exNames);
+                if (!res.IsFinish)
+                {
+                    hist.Add(new MainExState()
+                    {
+                        Sequence = res.Sequence,
+                        ExName = res.ExName,
+                        IsCorrect = true
+                    });
+                }
+                i++;
+            }
+            Assert.True(res.IsFinish);
+        }
+
+        private List<Sequence> GetTestSeqs()
+        {
+            return new List<Sequence>()
             {
                 new Sequence()
                 {
@@ -32,9 +64,6 @@ namespace LangSequenceTraining.Tests
                     Text = "seq3"
                 },
             };
-
-            var res = ExChoiceHelper.GetNextEx(hist, seqList, exNames);
-
         }
 
     }

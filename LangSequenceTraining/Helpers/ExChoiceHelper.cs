@@ -20,12 +20,15 @@ namespace LangSequenceTraining.Helpers
             var seqCountMap = new Dictionary<Guid, int>();
             foreach (var h in exStateHistory)
             {
+                seqCountMap.TryAdd(h.Sequence.Id, 0);
+                exCountMap.TryAdd(h.ExName, 0);
+
                 seqCountMap[h.Sequence.Id]++;
                 exCountMap[h.ExName]++;
             }
 
-            var seqMax = seqCountMap.Max(x => x.Value);
-            var exMax = exCountMap.Max(x => x.Value);
+            var seqMax = seqCountMap.Any() ? seqCountMap.Max(x => x.Value) : 0;
+            var exMax = exCountMap.Any() ? exCountMap.Max(x => x.Value) : 0;
 
             // + 1 если менее часто, чем максимальная частота по паттерну
             foreach (var seqPair in seqCountMap.Where(x => x.Value < seqMax))
@@ -66,7 +69,8 @@ namespace LangSequenceTraining.Helpers
         {
             if (ratingMap.Any(x => x.Value >= 0))
             {
-                var r = ratingMap.Where(x => x.Value > 0).Max();
+                var rMax = ratingMap.Where(x => x.Value >= 0).Max(x => x.Value);
+                var r = ratingMap.First(x => x.Value == rMax);
                 var pKey = ParseKey(r.Key, seqList);
                 return new ExChoiceItem()
                 {
