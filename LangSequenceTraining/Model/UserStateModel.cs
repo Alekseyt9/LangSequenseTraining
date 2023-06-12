@@ -3,7 +3,7 @@ using LangSequenceTraining.Services;
 
 namespace LangSequenceTraining.Model
 {
-    internal class UserStateModel
+    public class UserStateModel
     {
         public string CurrentProcessorName { get; set; }
 

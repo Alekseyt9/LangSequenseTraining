@@ -24,33 +24,9 @@ namespace LangSequenceTraining.DAL.Services
             return _ctx.Sequences.Where(x => x.SequenceGroupId == gr.Id).ToList();
         }
 
-        public IEnumerable<Sequence> GetNewSequences(Guid userId, Guid groupId)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<UserSequenceProgress> GetProgressData(Guid userId)
         {
             return _ctx.UserSequenceProgress.Where(x => x.UserId == userId).ToList();
-        }
-
-        public UserState GetUserState(Guid userId)
-        {
-            return _ctx.UserState.FirstOrDefault(x => x.UserId == userId);
-        }
-
-        public void SetUserState(Guid userId, UserState state)
-        {
-            if (state.Id == Guid.Empty)
-            {
-                _ctx.UserState.Add(state);
-            }
-            else
-            {
-                _ctx.UserState.Update(state);
-            }
-            
-            _ctx.SaveChanges();
         }
 
         public void SaveUserProgress(IEnumerable<UserSequenceProgress> prs)

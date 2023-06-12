@@ -2,7 +2,7 @@
 
 namespace LangSequenceTraining.Services
 {
-    internal interface IUserStateManager
+    public interface IUserStateProvider
     {
         UserStateModel GetState(Guid userId);
 

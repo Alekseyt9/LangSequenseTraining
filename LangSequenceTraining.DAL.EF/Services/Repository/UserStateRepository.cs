@@ -17,12 +17,21 @@ namespace LangSequenceTraining.Services
 
         public UserState GetUserState(Guid userId)
         {
-            throw new NotImplementedException();
+            return _ctx.UserState.FirstOrDefault(x => x.UserId == userId);
         }
 
         public void SetUserState(Guid userId, UserState state)
         {
-            throw new NotImplementedException();
+            if (state.Id == Guid.Empty)
+            {
+                _ctx.UserState.Add(state);
+            }
+            else
+            {
+                _ctx.UserState.Update(state);
+            }
+
+            _ctx.SaveChanges();
         }
 
     }

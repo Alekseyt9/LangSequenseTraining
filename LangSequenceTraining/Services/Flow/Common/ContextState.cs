@@ -2,7 +2,7 @@
 
 namespace LangSequenceTraining.Services
 {
-    internal class ContextState
+    public class ContextState
     {
         public string Message { get; set; }
 

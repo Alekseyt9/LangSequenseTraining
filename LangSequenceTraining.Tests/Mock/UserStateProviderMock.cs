@@ -5,7 +5,7 @@ using LangSequenceTraining.Services;
 
 namespace LangSequenceTraining.Tests
 {
-    internal class UserStateManagerMock : IUserStateManager
+    internal class UserStateProviderMock : IUserStateProvider
     {
         private readonly IDictionary<Guid, UserStateModel> _modelMap = new ConcurrentDictionary<Guid, UserStateModel>();
 

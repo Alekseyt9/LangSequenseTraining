@@ -15,7 +15,7 @@ namespace LangSequenceTraining.Tests
         private readonly IUserStateProvider _stateServ;
         private readonly User _user;
         private readonly AppDbContext _dbContext;
-        private IUserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
         public UserStateManagerTest()
         {
@@ -28,7 +28,7 @@ namespace LangSequenceTraining.Tests
             var repository = new AppRepository(_dbContext);
             _userRepository = new UserRepository(_dbContext);
             var userStateRep = new UserStateRepository(_dbContext);
-            _stateServ = new UserStateProvider(repository, _userRepository, userStateRep);
+            _stateServ = new UserStateProvider(_userRepository, userStateRep);
 
             _user = new User()
             {
