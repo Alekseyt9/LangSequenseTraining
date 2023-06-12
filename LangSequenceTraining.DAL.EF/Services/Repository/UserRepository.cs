@@ -4,12 +4,11 @@ using LangSequenceTraining.Model;
 using LangSequenceTraining.Model.Services;
 using LangSequenceTraining.Services;
 
-namespace LangSequenceTraining.DAL.EF.Services.Repository
+namespace LangSequenceTraining.Services
 {
     internal class UserRepository : IUserRepository
     {
         private readonly AppDbContext _ctx;
-
         private MemCache<string, User> _usersNameCache;
         private MemCache<string, User> _usersIdCache;
 

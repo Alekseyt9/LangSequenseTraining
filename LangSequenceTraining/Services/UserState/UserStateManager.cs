@@ -9,16 +9,18 @@ namespace LangSequenceTraining.Services
     {
         private readonly IAppRepository _repository;
         private IUserRepository _userRepository;
+        private IUserStateRepository _userStateRepository;
 
-        public UserStateManager(IAppRepository repository, IUserRepository userRepository)
+        public UserStateManager(IAppRepository repository, IUserRepository userRepository, IUserStateRepository userStateRepository)
         {
             _repository = repository;
             _userRepository = userRepository;
+            _userStateRepository = userStateRepository;
         }
 
         public UserStateModel GetState(Guid userId)
         {
-            var state = _repository.GetUserState(userId);
+            var state = _userStateRepository.GetUserState(userId);
             if (state != null && !string.IsNullOrEmpty(state.State))
             {
                 var jsonSerializerSettings = new JsonSerializerSettings()
@@ -46,7 +48,7 @@ namespace LangSequenceTraining.Services
                 TypeNameHandling = TypeNameHandling.All
             };
             var dataStr = JsonConvert.SerializeObject(state, jsonSerializerSettings);
-            var st = _repository.GetUserState(userId);
+            var st = _userStateRepository.GetUserState(userId);
 
             if (st == null)
             {
@@ -59,7 +61,7 @@ namespace LangSequenceTraining.Services
             }
 
             st.State = dataStr;
-            _repository.SetUserState(userId, st);
+            _userStateRepository.SetUserState(userId, st);
         }
 
     }

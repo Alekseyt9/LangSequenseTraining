@@ -1,5 +1,4 @@
 ﻿
-using LangSequenceTraining.DAL.EF.Services.Repository;
 using LangSequenceTraining.DAL.Services;
 using LangSequenceTraining.Model;
 using LangSequenceTraining.Model.Services;
@@ -28,7 +27,8 @@ namespace LangSequenceTraining.Tests
             _dbContext = new AppDbContext(dbOption);
             var repository = new AppRepository(_dbContext);
             _userRepository = new UserRepository(_dbContext);
-            _stateServ = new UserStateManager(repository, _userRepository);
+            var userStateRep = new UserStateRepository(_dbContext);
+            _stateServ = new UserStateManager(repository, _userRepository, userStateRep);
 
             _user = new User()
             {

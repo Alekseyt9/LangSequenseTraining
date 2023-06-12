@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using LangSequenceTraining.DAL.Services;
+using LangSequenceTraining.Model.Services;
 using LangSequenceTraining.Services;
 
 namespace LangSequenceTraining.DAL
@@ -15,6 +16,9 @@ namespace LangSequenceTraining.DAL
             var connStr = conf["DbConnection"];
 
             services.AddScoped<IAppRepository, AppRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserStateRepository, UserStateRepository>();
+
             services.AddDbContext<AppDbContext>(opt =>
             {
                 opt.UseNpgsql(connStr);
