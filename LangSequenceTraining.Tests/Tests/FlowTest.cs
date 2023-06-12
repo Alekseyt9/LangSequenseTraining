@@ -12,9 +12,9 @@ namespace LangSequenceTraining.Tests
         private readonly IConfiguration _configuration;
         private readonly TelegramBotMock _telegramBot;
         private readonly ProcessorManager _procMan;
-        private AppDbContext _dbContext;
-        private AppRepository _repository;
-        private AppRepositoryA _repositoryA;
+        private readonly AppDbContext _dbContext;
+        private readonly AppRepository _repository;
+        private readonly AppRepositoryA _repositoryA;
 
         public FlowTest()
         {
@@ -36,23 +36,24 @@ namespace LangSequenceTraining.Tests
 
             _procMan = new ProcessorManager(processorProvider, stateManager, gptService, 
                 _telegramBot, _repository, textToSpeech, stateManager, learningService);
-            _telegramBot.ReceiveMessage += async (sender, args) =>
+            _telegramBot.ReceiveMessage += async (s, args) =>
             {
                 var user = _repository.GetUser(args.UserName);
                 await _procMan.Process(user.Id, args.ChannelId, args.Message);
             };
+
         }
 
         [Fact]
-        public void Test()
+        public async Task Test()
         {
-            _telegramBot.UserMessageTest("/start", "testUser1");
+            await _telegramBot.UserMessageTest("/start", "testUser1");
             var msg = _telegramBot.GetLastBotMsg();
 
-            _telegramBot.UserMessageTest("/tr 1", "testUser1");
+            await _telegramBot.UserMessageTest("/tr 1", "testUser1");
             msg = _telegramBot.GetLastBotMsg();
 
-            _telegramBot.UserMessageTest("Thank you for dinner", "testUser1");
+            await _telegramBot.UserMessageTest("Thank you for dinner", "testUser1");
             msg = _telegramBot.GetLastBotMsg();
         }
 

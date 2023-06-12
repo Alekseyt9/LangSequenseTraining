@@ -8,7 +8,7 @@ namespace LangSequenceTraining.Tests
         private string _lastSendedMsg;
         private string _lastReceivedMsg;
 
-        public event EventHandler<TelegramMessageEventArgs>? ReceiveMessage;
+        public event ITelegramBot.AsyncEventHandler? ReceiveMessage;
 
         public Task SendMessage(long channelId, string msg, FileData file = null)
         {
@@ -16,14 +16,17 @@ namespace LangSequenceTraining.Tests
             return Task.CompletedTask;
         }
 
-        public void UserMessageTest(string msg, string userName)
+        public async Task UserMessageTest(string msg, string userName)
         {
             _lastReceivedMsg = msg;
-            ReceiveMessage?.Invoke(this, new TelegramMessageEventArgs()
+            if (ReceiveMessage != null)
             {
-                Message = msg,
-                UserName = userName
-            });
+                await ReceiveMessage(this, new TelegramMessageEventArgs()
+                {
+                    Message = msg,
+                    UserName = userName
+                });
+            }
         }
 
         public string GetLastBotMsg()

@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Concurrent;
 using LangSequenceTraining.Model;
 using LangSequenceTraining.Services;
 
@@ -6,7 +7,7 @@ namespace LangSequenceTraining.Tests
 {
     internal class UserStateManagerMock : IUserStateManager
     {
-        private readonly Dictionary<Guid, UserStateModel> _modelMap = new Dictionary<Guid, UserStateModel>();
+        private readonly IDictionary<Guid, UserStateModel> _modelMap = new ConcurrentDictionary<Guid, UserStateModel>();
 
         public UserStateModel GetState(Guid userId)
         {

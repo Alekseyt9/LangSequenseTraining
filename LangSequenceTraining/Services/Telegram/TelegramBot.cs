@@ -1,7 +1,6 @@
 ﻿
 using LangSequenceTraining.Helpers;
 using Microsoft.Extensions.Configuration;
-using System.IO;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
@@ -13,7 +12,7 @@ namespace LangSequenceTraining.Services
     {
         private readonly TelegramBotClient _botClient;
 
-        public event EventHandler<TelegramMessageEventArgs>? ReceiveMessage;
+        public event ITelegramBot.AsyncEventHandler? ReceiveMessage;
 
         public TelegramBot(IConfiguration config)
         {
