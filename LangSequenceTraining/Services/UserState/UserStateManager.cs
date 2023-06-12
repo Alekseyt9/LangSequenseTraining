@@ -26,7 +26,14 @@ namespace LangSequenceTraining.Services
                 return obj;
             }
 
-            return null;
+            var stateModel = new UserStateModel()
+            {
+                ContextState = new ContextState(),
+                CurrentProcessorName = "main",
+                ProcessorStates = new Dictionary<string, ProcessorStateBase>()
+            };
+
+            return stateModel;
         }
 
         public void SetState(Guid userId, UserStateModel state)

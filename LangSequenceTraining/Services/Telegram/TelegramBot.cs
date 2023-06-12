@@ -37,7 +37,7 @@ namespace LangSequenceTraining.Services
             return Task.CompletedTask;
         }
 
-        async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
             if (update.Message is not { } message)
             {
@@ -54,7 +54,7 @@ namespace LangSequenceTraining.Services
 
             if (ReceiveMessage != null)
             {
-                ReceiveMessage(this, new TelegramMessageEventArgs()
+                await ReceiveMessage(this, new TelegramMessageEventArgs()
                 {
                     ChannelId = chatId,
                     Message = messageText,

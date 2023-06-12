@@ -33,7 +33,7 @@ namespace GptApiTest.Env
                 var userName = args.UserName;
                 var repository = scope.ServiceProvider.GetRequiredService<IAppRepository>();
                 var user = repository.GetUser(userName);
-                procMan.Process(user.Id, args.ChannelId, args.Message);
+                await procMan.Process(user.Id, args.ChannelId, args.Message);
             };
         }
 
