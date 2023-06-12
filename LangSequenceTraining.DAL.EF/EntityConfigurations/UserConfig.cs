@@ -11,7 +11,9 @@ namespace LangSequenseTraining.DAL
         {
             builder.Property(x => x.Id);
             builder.HasKey(x => x.Id);
-            builder.Property(x => x.Name).IsUnicode(true);
+
+            builder.Property(x => x.Name);
+            builder.HasIndex(u => u.Name).IsUnique();
         }
     }
 }

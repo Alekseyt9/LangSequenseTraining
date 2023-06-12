@@ -14,6 +14,9 @@ namespace LangSequenceTraining.DAL
             builder.HasOne(x => x.User)
                 .WithMany().HasForeignKey(x => x.UserId);
             builder.Property(x => x.State);
+
+            builder.HasIndex(u => u.UserId).IsUnique();
+
         }
     }
 }

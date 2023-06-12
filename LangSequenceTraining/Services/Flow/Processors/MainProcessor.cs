@@ -1,4 +1,5 @@
 ﻿
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using LangSequenceTraining.Helpers;
 using LangSequenceTraining.Model;
@@ -8,7 +9,7 @@ namespace LangSequenceTraining.Services
     [Processor("main")]
     internal class MainProcessor : IProcessor
     {
-        public Task Process(ProcessorContext ctx, TransitionMessageBase trMsg)
+        public async Task Process(ProcessorContext ctx, TransitionMessageBase trMsg)
         {
             var state = (MainProcessorState)ctx.State.CurProcState;
             if (state == null)
@@ -18,6 +19,7 @@ namespace LangSequenceTraining.Services
                     ExStates = new List<MainExState>(),
                     StateKind = MainStateKind.Start
                 };
+                ctx.State.CurProcState = state;
             }
 
             if (state.StateKind == MainStateKind.Start)
@@ -30,15 +32,15 @@ namespace LangSequenceTraining.Services
 
                 if (ctx.State.Message.StartsWith("/tr"))
                 {
-                    ProcessStartTr(ctx);
+                    await ProcessStartTr(ctx);
                 }
 
                 if (ctx.State.Message.StartsWith("/grinfo"))
                 {
-                    ProcessGrInfo(ctx);
+                    await ProcessGrInfo(ctx);
                 }
 
-                return Task.CompletedTask;
+                
             }
 
             if (state.StateKind == MainStateKind.InExercise)
@@ -70,7 +72,6 @@ namespace LangSequenceTraining.Services
                 }
             }
 
-            return Task.CompletedTask;
         }
 
         private void SaveExResult(ProcessorContext ctx, List<MainExState> hist)
@@ -135,7 +136,7 @@ namespace LangSequenceTraining.Services
             }
         }
 
-        private void ProcessStartTr(ProcessorContext ctx)
+        private async Task ProcessStartTr(ProcessorContext ctx)
         {
             var grNum = GetParam<int>(ctx.State.Message);
             var gr = GetGroupByNum(ctx, grNum - 1);
@@ -145,18 +146,18 @@ namespace LangSequenceTraining.Services
             }
 
             var state = (MainProcessorState)ctx.State.CurProcState;
-            state.CurSequences = new List<Sequence>(GetSequencesForTr(gr));
+            state.CurSequences = new List<Sequence>(GetSequencesForTrNew(ctx, gr));
             var nextCh = ExChoiceHelper.GetNextEx(state.ExStates, state.CurSequences, new List<string>() { "ex1" });
 
-            ctx.Services.ProcessorManager.DoTransition(ctx, nextCh.ExName, new ExtTransitionMessage()
+            await ctx.DoTransition(nextCh.ExName, new ExtTransitionMessage()
             {
                 Sequence = nextCh.Sequence
             });
         }
 
-        private IEnumerable<Sequence> GetSequencesForTr(SequenceGroup gr)
+        private IEnumerable<Sequence> GetSequencesForTrNew(ProcessorContext ctx, SequenceGroup gr)
         {
-            throw new NotImplementedException();
+            return ctx.Services.LearningService.GetSequencesNew(ctx.State.UserId, gr.Id);
         }
 
         private SequenceGroup GetGroupByNum(ProcessorContext ctx, int num)

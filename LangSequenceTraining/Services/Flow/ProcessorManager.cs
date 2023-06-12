@@ -31,7 +31,7 @@ namespace LangSequenceTraining.Services
             _learningService = learningService;
         }
 
-        public void Process(Guid userId, long channelId, string msg)
+        public async Task Process(Guid userId, long channelId, string msg)
         {
             var state = _stateManager.GetState(userId);
             if (state == null)
@@ -45,28 +45,36 @@ namespace LangSequenceTraining.Services
 
             state.ContextState = new ContextState()
             {
-                Message = msg
+                Message = msg,
+                UserId = userId,
+                ChannelId = channelId,
             };
 
             var ctx = new ProcessorContext(new ContextServices(_gptCheckService, _telegramBot, _repository,
                     this, _textToSpeech, _learningService), state.ContextState);
 
-            DoTransition(ctx, state.CurrentProcessorName, null);
+            await DoTransition(ctx, state.CurrentProcessorName, null);
         }
 
-        public void DoTransition(ProcessorContext ctx, string nextProcName, TransitionMessageBase trMsg)
+        public async Task DoTransition(ProcessorContext ctx, string nextProcName, TransitionMessageBase trMsg)
         {
             var userState = _userStateManager.GetState(ctx.State.UserId);
-            userState.ProcessorStates[userState.CurrentProcessorName] = ctx.State.CurProcState;
+            userState.CurrentProcessorName = nextProcName;
             _userStateManager.SetState(ctx.State.UserId, userState);
 
             var proc = _processorProvider.GetProcessor(nextProcName);
-            
             var nextProcState = userState != null && userState.ProcessorStates.ContainsKey(nextProcName)
                 ? (ProcessorStateBase)userState?.ProcessorStates[nextProcName]
                 : null;
             ctx.State.CurProcState = nextProcState;
-            proc.Process(ctx, trMsg);
+            await proc.Process(ctx, trMsg);
+        }
+
+        public void SaveProcState(ProcessorContext ctx)
+        {
+            var userState = _userStateManager.GetState(ctx.State.UserId);
+            userState.ProcessorStates[userState.CurrentProcessorName] = ctx.State.CurProcState;
+            _userStateManager.SetState(ctx.State.UserId, userState);
         }
 
     }

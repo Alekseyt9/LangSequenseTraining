@@ -34,6 +34,8 @@ namespace LangSequenceTraining.Services
                 var msg = $"Начало упражнения с паттерном '{tr.Sequence.Text}'. Напишите предложение, используя этот паттерн.";
                 ctx.SendMessage(msg);
                 state.StateKind = ExStateKind.Check;
+                ctx.State.CurProcState = state;
+                ctx.End();
                 return;
             }
 
