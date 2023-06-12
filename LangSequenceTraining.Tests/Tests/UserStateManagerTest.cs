@@ -52,8 +52,7 @@ namespace LangSequenceTraining.Tests
                     {
                         "main", new MainProcessorState()
                         {
-                            TestField1 = "11",
-                            TestField2 = "22"
+                            StateKind = MainStateKind.Start
                         }
                     }
                 }

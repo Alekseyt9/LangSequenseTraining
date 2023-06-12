@@ -19,6 +19,7 @@ namespace LangSequenceTraining.Tests
         private readonly AppDbContext _dbContext;
         private SequenceGroup _gr;
         private IConfiguration _configuration;
+        private User _userNew;
 
         public LearningServiceTest()
         {
@@ -36,6 +37,18 @@ namespace LangSequenceTraining.Tests
         private User GetUser()
         {
             return _repository.GetUser("alekseyt9");
+        }
+
+        private User NewUser()
+        {
+            _userNew = new User()
+            {
+                Id = Guid.NewGuid(),
+                Name = "test user",
+            };
+            _dbContext.Users.Add(_userNew);
+            _dbContext.SaveChanges();
+            return _userNew;
         }
 
         private SequenceGroup CreateTestGroup()
@@ -76,19 +89,42 @@ namespace LangSequenceTraining.Tests
             return gr;
         }
 
-        /// <summary>
-        /// Для пользователя получить для этой группы паттерны для тренировки.
-        /// Сохранить через сервис результат.
-        /// Проверить результат.
-        /// </summary>
         [Fact]
-        public void Test1()
+        public void TestGetNew()
         {
             _gr = CreateTestGroup();
-            var user = GetUser();
-            var res = _learningServ.GetSequencesNew(user.Id, _gr.Id);
+            _userNew = NewUser();
+            var res = _learningServ.GetSequencesNew(_userNew.Id, _gr.Id);
             Assert.NotNull(res);
             Assert.True(res.Any());
+        }
+
+        [Fact]
+        public void TestSaveNew()
+        {
+            _gr = CreateTestGroup();
+            _userNew = NewUser();
+            var res = _learningServ.GetSequencesNew(_userNew.Id, _gr.Id).ToList();
+
+            var trRes = new TrainingResult[]
+            {
+                new TrainingResult()
+                {
+                    Sequence = res[0],
+                    IsSuccess = true
+                },
+                new TrainingResult()
+                {
+                    Sequence = res[1],
+                    IsSuccess = true
+                },
+                new TrainingResult()
+                {
+                    Sequence = res[2],
+                    IsSuccess = false
+                },
+            };
+            _learningServ.SaveResult(_userNew.Id, trRes);
         }
 
         public void Dispose()
@@ -100,6 +136,13 @@ namespace LangSequenceTraining.Tests
                 _dbContext.Remove(_gr);
                 _dbContext.SaveChanges();
             }
+
+            if (_userNew != null)
+            {
+                _dbContext.Remove(_userNew);
+                _dbContext.SaveChanges();
+            }
+
             _dbContext.Dispose();
         }
 

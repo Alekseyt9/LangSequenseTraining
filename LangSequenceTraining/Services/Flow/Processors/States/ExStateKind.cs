@@ -2,8 +2,10 @@
 
 namespace LangSequenceTraining.Services
 {
-    public class ProcessorStateBase
+    internal enum ExStateKind
     {
-
+        Start,
+        Check
     }
+
 }

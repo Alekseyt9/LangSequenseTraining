@@ -28,9 +28,65 @@ namespace LangSequenceTraining.Services
             return res;
         }
 
-        public void SaveResult(IEnumerable<TrainingResult> resultInfos)
+        public void SaveResult(Guid userId, IEnumerable<TrainingResult> resultInfos)
         {
-            throw new NotImplementedException();
+            var idsList = resultInfos.Select(x => x.Sequence.Id);
+            var prs = _repository.GetExistedProgress(userId, idsList);
+
+            AddNewProgress(userId, prs, resultInfos);
+            ApplyProgress(prs, resultInfos);
+
+            _repository.SaveUserProgress(prs);
+        }
+
+        private void AddNewProgress(Guid userId, 
+            IEnumerable<UserSequenceProgress> prInfos, IEnumerable<TrainingResult> resultInfos)
+        {
+            var res = new List<UserSequenceProgress>();
+            var map = prInfos.ToDictionary(x => x.Sequence.Id, y => y);
+            var user = _repository.GetUser(userId);
+
+            foreach (var pr in resultInfos)
+            {
+                if (!map.ContainsKey(pr.Sequence.Id))
+                {
+                    res.Add(new UserSequenceProgress()
+                    {
+                        Sequence = pr.Sequence,
+                        Stage = ProgressStage.Start,
+                        User = user
+                    });
+                }
+            }
+        }
+
+        private void ApplyProgress(IEnumerable<UserSequenceProgress> prInfos, IEnumerable<TrainingResult> resultInfos)
+        {
+            var map = resultInfos.ToDictionary(x => x.Sequence.Id, y => y);
+            foreach (var pr in prInfos)
+            {
+                var resInfo = map[pr.Id];
+                if (resInfo.IsSuccess)
+                {
+                    pr.LastSuccessTime = DateTime.Now;
+                    pr.LastUpdateTime = DateTime.Now;
+                    pr.Stage = GetNextStage(pr.Stage);
+                }
+                else
+                {
+                    pr.LastUpdateTime = DateTime.Now;
+                }
+            }
+        }
+
+        private ProgressStage GetNextStage(ProgressStage stage)
+        {
+            if (stage != ProgressStage.Finish)
+            {
+                stage = (ProgressStage)((int)stage + 1);
+            }
+
+            return stage;
         }
 
     }

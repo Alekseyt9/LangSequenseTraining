@@ -21,5 +21,9 @@ namespace LangSequenceTraining.Services
 
         void SetUserState(Guid userId, UserState state);
 
+        void SaveUserProgress(IEnumerable<UserSequenceProgress> prs);
+
+        IEnumerable<UserSequenceProgress> GetExistedProgress(Guid userId, IEnumerable<Guid> idsList);
+
     }
 }

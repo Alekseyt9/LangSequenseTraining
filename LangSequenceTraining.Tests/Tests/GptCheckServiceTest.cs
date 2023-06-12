@@ -20,7 +20,6 @@ namespace LangSequenceTraining.Tests
         public async Task Test()
         {
             var serv = new GptCheckService(_configuration);
-            await serv.Init();
 
             var res1 = await serv.Check("I have money");
             var res2 = await serv.Check("I has money");

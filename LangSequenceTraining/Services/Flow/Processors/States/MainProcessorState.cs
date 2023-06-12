@@ -4,7 +4,9 @@ namespace LangSequenceTraining.Services
 {
     public class MainProcessorState : ProcessorStateBase
     {
-        public string TestField2 { get; set; }
+        public MainStateKind StateKind { get; set; }
+
+        public List<MainExState> ExStates { get; set; }
     }
     
 }

@@ -7,7 +7,7 @@ namespace LangSequenceTraining.Services
     [Processor("main")]
     internal class MainProcessor : IProcessor
     {
-        public void Process(ProcessorContext ctx, ProcessorStateBase procState, TransitionMessageBase trMsg)
+        public Task Process(ProcessorContext ctx, ProcessorStateBase procState, TransitionMessageBase trMsg)
         {
             var state = (MainProcessorState)procState;
 
@@ -26,6 +26,8 @@ namespace LangSequenceTraining.Services
             {
                 ProcessGrInfo(ctx);
             }
+
+            return Task.CompletedTask;
         }
 
         private async Task ProcessGrInfo(ProcessorContext ctx)
@@ -41,13 +43,8 @@ namespace LangSequenceTraining.Services
 
                 foreach (var seq in seqs)
                 {
-                    var sound = await ctx.Services.TextToSpeech.SynthesizeSpeech(seq.Text);
-                    /*var file = new FileData()
-                    {
-                        Stream = sound,
-                        Name = $"speech{j++}.mp4"
-                    };*/
-                    ctx.SendMessage($"\t {seq.Text}"/*, file*/);
+                    //var sound = await ctx.Services.TextToSpeech.SynthesizeSpeech(seq.Text);
+                    ctx.SendMessage($"\t {seq.Text}");
                 }
             }
         }

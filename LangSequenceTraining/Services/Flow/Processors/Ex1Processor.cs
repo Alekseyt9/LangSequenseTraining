@@ -14,26 +14,47 @@ namespace LangSequenceTraining.Services
 Составьте предложение с данной фразой (1 из 3). 
 Для подробного описания упражнения введите /help.");
         }
-
-        public async Task ReceiveMessage(ProcessorContext ctx, string msg)
-        {
-            try
-            {
-                var result = await ctx.Api.Completions.CreateCompletionAsync(
-                    $"Проверь правильность предложения: \"{msg}\". Если верно - напиши 'y'. Если нет - напиши почему.",
-                    max_tokens: 500);
-                ctx.Send(result.Completions.First().Text);
-            }
-            catch (Exception ex)
-            {
-                ctx.Send($"Ошибка: {ex.Message}");
-            }
-        }
         */
 
-        public void Process(ProcessorContext ctx, ProcessorStateBase procState, TransitionMessageBase trMsg)
+        public async Task Process(ProcessorContext ctx, ProcessorStateBase procState, TransitionMessageBase trMsg)
         {
-            throw new NotImplementedException();
+            var state = (Ex1ProcessorState)procState;
+            var tr = (ExtTransitionMessage)trMsg;
+
+            if (state.StateKind == ExStateKind.Start)
+            {
+                var msg = $"Начало упражнения с паттерном '{tr.Sequence.Text}'. Напишите предложение, используя этот паттерн.";
+                ctx.SendMessage(msg);
+                state.StateKind = ExStateKind.Check;
+                return;
+            }
+
+            if (state.StateKind == ExStateKind.Check)
+            {
+                var msg = ctx.State.Message;
+                var checkResult = await ctx.Services.GptCheckService.Check(msg);
+                if (checkResult.IsCorrect)
+                {
+                    ctx.SendMessage("Предложение написано верно!");
+                    var sound = await ctx.Services.TextToSpeech.SynthesizeSpeech(msg);
+                    ctx.SendMessage("Озвучка предложения", new FileData()
+                    {
+                        Name = "speech.mp4",
+                        Stream = sound
+                    });
+                }
+                else
+                {
+                    ctx.SendMessage($"Предложение написано c ошибками. {checkResult.Message}");
+                }
+                ctx.Services.ProcessorManager.DoTransition(ctx, "main", new MainTransitionMessage()
+                {
+                    ExName = "ex1",
+                    CheckResult = checkResult.IsCorrect
+                });
+
+            }
+
         }
 
     }

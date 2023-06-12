@@ -9,7 +9,6 @@ namespace LangSequenceTraining.Services
 
         IEnumerable<Sequence> GetSequencesNew(Guid userId, Guid groupId);
 
-        void SaveResult(IEnumerable<TrainingResult> resultInfos);
-
+        void SaveResult(Guid userId, IEnumerable<TrainingResult> resultInfos);
     }
 }

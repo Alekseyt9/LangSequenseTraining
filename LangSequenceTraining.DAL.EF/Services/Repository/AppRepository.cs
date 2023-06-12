@@ -1,7 +1,6 @@
 ﻿
 using LangSequenceTraining.Model;
 using LangSequenceTraining.Services;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace LangSequenceTraining.DAL.Services
 {
@@ -50,17 +49,11 @@ namespace LangSequenceTraining.DAL.Services
         public IEnumerable<Sequence> GetNewSequences(Guid userId, Guid groupId)
         {
             throw new NotImplementedException();
-            /*
-            _ctx.Sequences.Where(x => x.SequenceGroupId == groupId)
-                .LeftJoin(_ctx.UserSequenceProgress, s => s.Id, p => p.SequenceId)
-                .Select(x => )
-                .Where(x => x.)
-            */
         }
 
         public IEnumerable<UserSequenceProgress> GetProgressData(Guid userId)
         {
-            return _ctx.UserSequenceProgress.Where(x => x.UserId == userId /*&& x.Sequence.SequenceGroupId == groupId*/).ToList();
+            return _ctx.UserSequenceProgress.Where(x => x.UserId == userId).ToList();
         }
 
         public UserState GetUserState(Guid userId)
@@ -80,6 +73,27 @@ namespace LangSequenceTraining.DAL.Services
             }
             
             _ctx.SaveChanges();
+        }
+
+        public void SaveUserProgress(IEnumerable<UserSequenceProgress> prs)
+        {
+            foreach (var pr in prs)
+            {
+                if (pr.Id == Guid.Empty)
+                {
+                    _ctx.UserSequenceProgress.Add(pr);
+                }
+                else
+                {
+                    _ctx.UserSequenceProgress.Update(pr);
+                }
+            }
+        }
+
+        public IEnumerable<UserSequenceProgress> GetExistedProgress(Guid userId, IEnumerable<Guid> idsList)
+        {
+            var idsHs = new HashSet<Guid>(idsList);
+            return _ctx.UserSequenceProgress.Where(x => x.UserId == userId && idsHs.Contains(x.Sequence.Id)).ToList();
         }
 
     }

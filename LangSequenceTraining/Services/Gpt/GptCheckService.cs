@@ -19,7 +19,7 @@ namespace LangSequenceTraining.Services
             _config = config;
         }
 
-        public async Task Init()
+        private async Task Init()
         {
             var firstPhrase = _config["firstPhrase"];
             _conversation = _api.Chat.CreateConversation();
@@ -29,6 +29,11 @@ namespace LangSequenceTraining.Services
 
         public async Task<CheckResult> Check(string msg)
         {
+            if (_conversation == null)
+            {
+                await Init();
+            }
+
             _conversation.AppendMessage(new ChatMessage(ChatMessageRole.Assistant, msg));
             var ans = await _conversation.GetResponseFromChatbotAsync();
             var res = new CheckResult();

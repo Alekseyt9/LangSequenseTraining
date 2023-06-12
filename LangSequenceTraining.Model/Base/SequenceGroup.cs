@@ -11,5 +11,7 @@ namespace LangSequenceTraining.Model
         public string Description { get; set; }
 
         public bool IsHide { get; set; }
+
+        public int Order { get; set; }
     }
 }
