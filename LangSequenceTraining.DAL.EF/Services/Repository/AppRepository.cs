@@ -13,28 +13,6 @@ namespace LangSequenceTraining.DAL.Services
             _ctx = ctx;
         }
 
-        public User GetUser(string userName)
-        {
-            var user = _ctx.Users.FirstOrDefault(x => x.Name == userName);
-            if (user == null)
-            {
-                user = new User()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = userName,
-                };
-                _ctx.Users.Add(user);
-                _ctx.SaveChanges();
-            }
-
-            return user;
-        }
-
-        public User GetUser(Guid id)
-        {
-            return _ctx.Users.FirstOrDefault(x => x.Id == id);
-        }
-
         public IEnumerable<SequenceGroup> GetGroups()
         {
             return _ctx.SequenceGroup.OrderBy(x => x.Name).ToList();

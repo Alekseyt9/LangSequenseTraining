@@ -1,6 +1,7 @@
 ﻿
 using LangSequenceTraining.DAL;
 using LangSequenceTraining.DAL.Services;
+using LangSequenceTraining.Model.Services;
 using LangSequenceTraining.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,8 +32,8 @@ namespace GptApiTest.Env
                 using var scope = servScopeFactory.CreateScope();
                 var procMan = scope.ServiceProvider.GetRequiredService<IProcessorManager>();
                 var userName = args.UserName;
-                var repository = scope.ServiceProvider.GetRequiredService<IAppRepository>();
-                var user = repository.GetUser(userName);
+                var userRep = scope.ServiceProvider.GetRequiredService<IUserRepository>();
+                var user = userRep.GetUser(userName);
                 await procMan.Process(user.Id, args.ChannelId, args.Message);
             };
         }

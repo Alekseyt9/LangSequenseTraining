@@ -1,6 +1,8 @@
 ﻿
+using LangSequenceTraining.DAL.EF.Services.Repository;
 using LangSequenceTraining.DAL.Services;
 using LangSequenceTraining.Model;
+using LangSequenceTraining.Model.Services;
 using LangSequenceTraining.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,9 +13,10 @@ namespace LangSequenceTraining.Tests
     public class UserStateManagerTest : IDisposable
     {
         private readonly IConfiguration _configuration;
-        private readonly UserStateManager _stateServ;
+        private readonly IUserStateManager _stateServ;
         private readonly User _user;
         private readonly AppDbContext _dbContext;
+        private IUserRepository _userRepository;
 
         public UserStateManagerTest()
         {
@@ -24,7 +27,8 @@ namespace LangSequenceTraining.Tests
             var dbOption = new DbContextOptionsBuilder<AppDbContext>().UseNpgsql(connectString).Options;
             _dbContext = new AppDbContext(dbOption);
             var repository = new AppRepository(_dbContext);
-            _stateServ = new UserStateManager(repository);
+            _userRepository = new UserRepository(_dbContext);
+            _stateServ = new UserStateManager(repository, _userRepository);
 
             _user = new User()
             {

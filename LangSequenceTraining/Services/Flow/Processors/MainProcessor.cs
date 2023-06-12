@@ -1,5 +1,4 @@
 ﻿
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using LangSequenceTraining.Helpers;
 using LangSequenceTraining.Model;
@@ -99,7 +98,7 @@ namespace LangSequenceTraining.Services
         private void SendExResult(ProcessorContext ctx, List<MainExState> hist)
         {
             var sb = new StringBuilder();
-            sb.AppendLine("Результат упражнений");
+            sb.AppendLine("Результат");
 
             var errMap = new Dictionary<Guid, int>();
             var seqMap = new Dictionary<Guid, Sequence>();

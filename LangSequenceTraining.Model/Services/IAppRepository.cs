@@ -5,9 +5,7 @@ namespace LangSequenceTraining.Services
 {
     public interface IAppRepository
     {
-        User GetUser(string userName);
 
-        User GetUser(Guid id);
 
         IEnumerable<SequenceGroup> GetGroups();
 

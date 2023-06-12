@@ -1,5 +1,6 @@
 ﻿
 using LangSequenceTraining.Model;
+using LangSequenceTraining.Model.Services;
 using Newtonsoft.Json;
 
 namespace LangSequenceTraining.Services
@@ -7,10 +8,12 @@ namespace LangSequenceTraining.Services
     internal class UserStateManager : IUserStateManager
     {
         private readonly IAppRepository _repository;
+        private IUserRepository _userRepository;
 
-        public UserStateManager(IAppRepository repository)
+        public UserStateManager(IAppRepository repository, IUserRepository userRepository)
         {
             _repository = repository;
+            _userRepository = userRepository;
         }
 
         public UserStateModel GetState(Guid userId)
@@ -47,7 +50,7 @@ namespace LangSequenceTraining.Services
 
             if (st == null)
             {
-                var user = _repository.GetUser(userId);
+                var user = _userRepository.GetUser(userId);
                 st = new UserState()
                 {
                     Id = Guid.Empty,
