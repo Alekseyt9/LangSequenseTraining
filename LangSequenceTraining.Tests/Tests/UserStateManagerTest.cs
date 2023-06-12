@@ -12,7 +12,7 @@ namespace LangSequenceTraining.Tests
     public class UserStateManagerTest : IDisposable
     {
         private readonly IConfiguration _configuration;
-        private readonly IUserStateManager _stateServ;
+        private readonly IUserStateProvider _stateServ;
         private readonly User _user;
         private readonly AppDbContext _dbContext;
         private IUserRepository _userRepository;
@@ -28,7 +28,7 @@ namespace LangSequenceTraining.Tests
             var repository = new AppRepository(_dbContext);
             _userRepository = new UserRepository(_dbContext);
             var userStateRep = new UserStateRepository(_dbContext);
-            _stateServ = new UserStateManager(repository, _userRepository, userStateRep);
+            _stateServ = new UserStateProvider(repository, _userRepository, userStateRep);
 
             _user = new User()
             {

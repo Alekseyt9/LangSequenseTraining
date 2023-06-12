@@ -58,7 +58,7 @@ namespace GptApiTest.Env
                         .AddSingleton<IGptCheckService, GptCheckService>()
                         .AddScoped<IProcessorManager, ProcessorManager>()
                         .AddScoped<IProcessorProvider, ProcessorProvider>()
-                        .AddScoped<IUserStateManager, UserStateManager>()
+                        .AddScoped<IUserStateProvider, UserStateProvider>()
                         .AddScoped<IAppRepository, AppRepository>()
                         .AddScoped<IProcessorManager, ProcessorManager>()
                         .AddScoped<ILearningService, LearningService>()

@@ -5,15 +5,16 @@ using Newtonsoft.Json;
 
 namespace LangSequenceTraining.Services
 {
-    internal class UserStateManager : IUserStateManager
+    /// <summary>
+    /// todo   кэш на этом уровне, а не IUserStateRepository 
+    /// </summary>
+    internal class UserStateProvider : IUserStateProvider
     {
-        private readonly IAppRepository _repository;
-        private IUserRepository _userRepository;
-        private IUserStateRepository _userStateRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserStateRepository _userStateRepository;
 
-        public UserStateManager(IAppRepository repository, IUserRepository userRepository, IUserStateRepository userStateRepository)
+        public UserStateProvider(IUserRepository userRepository, IUserStateRepository userStateRepository)
         {
-            _repository = repository;
             _userRepository = userRepository;
             _userStateRepository = userStateRepository;
         }

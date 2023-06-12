@@ -18,10 +18,11 @@ namespace LangSequenceTraining.Tests
         private readonly IAppRepository _repository;
         private readonly IAppRepositoryA _repositoryA;
         private readonly AppDbContext _dbContext;
-        private SequenceGroup _gr;
         private readonly IConfiguration _configuration;
+        private readonly IUserRepository _userRepository;
+
+        private SequenceGroup _gr;
         private User _userNew;
-        private IUserRepository _userRepository;
 
         public LearningServiceTest()
         {

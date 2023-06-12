@@ -31,7 +31,7 @@ namespace LangSequenceTraining.Tests
             _userRepository = new UserRepository(_dbContext);
 
             var processorProvider = new ProcessorProvider();
-            var stateManager = new UserStateManagerMock();
+            var stateManager = new UserStateProviderMock();
             var gptService = new GptCheckService(_configuration);
             _telegramBot = new TelegramBotMock();
             var textToSpeech = new TextToSpeech(_configuration);
