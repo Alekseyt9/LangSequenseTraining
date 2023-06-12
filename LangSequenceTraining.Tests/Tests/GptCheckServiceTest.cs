@@ -7,12 +7,11 @@ namespace LangSequenceTraining.Tests
 {
     public class GptCheckServiceTest
     {
-        private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
         public GptCheckServiceTest()
         {
-            var builder = new ConfigurationBuilder()
-                .AddJsonFile(@"appsettings.json");
+            var builder = new ConfigurationBuilder().AddJsonFile(@"appsettings.json");
             _configuration = builder.Build();
         }
 

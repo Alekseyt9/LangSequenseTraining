@@ -52,11 +52,11 @@ namespace LangSequenceTraining.Services
                 {
                     Id = Guid.Empty,
                     User = user,
-                    State = dataStr
                 };
-                _repository.SetUserState(userId, st);
             }
 
+            st.State = dataStr;
+            _repository.SetUserState(userId, st);
         }
 
     }

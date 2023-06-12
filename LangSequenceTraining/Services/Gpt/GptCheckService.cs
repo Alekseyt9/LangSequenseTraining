@@ -8,8 +8,8 @@ namespace LangSequenceTraining.Services
 {
     internal class GptCheckService : IGptCheckService
     {
-        private OpenAIAPI _api;
-        private IConfiguration _config;
+        private readonly OpenAIAPI _api;
+        private readonly IConfiguration _config;
         private Conversation _conversation;
 
         public GptCheckService(IConfiguration config)

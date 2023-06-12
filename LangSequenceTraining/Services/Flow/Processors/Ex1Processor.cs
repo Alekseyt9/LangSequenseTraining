@@ -57,7 +57,9 @@ namespace LangSequenceTraining.Services
                 {
                     ctx.SendMessage($"Предложение написано c ошибками. {checkResult.Message}");
                 }
-                ctx.DoTransition("main", new MainTransitionMessage()
+
+                ctx.State.CurProcState = null;
+                await ctx.DoTransition("main", new MainTransitionMessage()
                 {
                     ExName = "ex1",
                     CheckResult = checkResult.IsCorrect

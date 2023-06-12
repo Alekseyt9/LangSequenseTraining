@@ -28,19 +28,24 @@ namespace LangSequenceTraining.Services
                 {
                     var msg = CreateStartMessage(ctx);
                     ctx.SendMessage(msg);
+                    ctx.State.Message = null;
+                    return;
                 }
 
                 if (ctx.State.Message.StartsWith("/tr"))
                 {
                     await ProcessStartTr(ctx);
+                    ctx.State.Message = null;
+                    return;
                 }
 
                 if (ctx.State.Message.StartsWith("/grinfo"))
                 {
                     await ProcessGrInfo(ctx);
+                    ctx.State.Message = null;
+                    return;
                 }
 
-                
             }
 
             if (state.StateKind == MainStateKind.InExercise)
@@ -61,11 +66,11 @@ namespace LangSequenceTraining.Services
                     SendExResult(ctx, hist);
                     SaveExResult(ctx, hist);
                     state.StateKind = MainStateKind.Start;
-                    ctx.DoTransition("main", null);
+                    await ctx.DoTransition("main", null);
                 }
                 else
                 {
-                    ctx.DoTransition(nextCh.ExName, new ExtTransitionMessage()
+                    await ctx.DoTransition(nextCh.ExName, new ExtTransitionMessage()
                     {
                         Sequence = nextCh.Sequence
                     });
@@ -139,6 +144,7 @@ namespace LangSequenceTraining.Services
         private async Task ProcessStartTr(ProcessorContext ctx)
         {
             var grNum = GetParam<int>(ctx.State.Message);
+            ctx.State.Message = null;
             var gr = GetGroupByNum(ctx, grNum - 1);
             if (gr == null)
             {

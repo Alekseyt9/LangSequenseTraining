@@ -9,7 +9,7 @@ namespace LangSequenceTraining.Services
         private readonly IAppRepository _repository;
         private readonly IProcessorManager _processorManager;
         private readonly ITextToSpeech _textToSpeech;
-        private ILearningService _learningService;
+        private readonly ILearningService _learningService;
 
         public IGptCheckService GptCheckService => _gptCheckService;
 

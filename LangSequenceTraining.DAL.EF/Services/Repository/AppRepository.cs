@@ -6,7 +6,7 @@ namespace LangSequenceTraining.DAL.Services
 {
     public class AppRepository : IAppRepository
     {
-        private AppDbContext _ctx;
+        private readonly AppDbContext _ctx;
 
         public AppRepository(AppDbContext ctx)
         {
