@@ -66,7 +66,19 @@ namespace LangSequenceTraining.Services
 
         private void SaveExResult(ProcessorContext ctx, List<MainExState> hist)
         {
-            
+            var resultInfos = new List<TrainingResult>();
+            var seqMap = new Dictionary<Guid, bool>();
+
+            foreach (var h in hist)
+            {
+                seqMap.TryAdd(h.Sequence.Id, true);
+                if (!h.IsCorrect)
+                {
+                    seqMap[h.Sequence.Id] = false;
+                }
+            }
+
+            ctx.Services.LearningService.SaveResult(ctx.State.UserId, resultInfos);
         }
 
         private void SendExResult(ProcessorContext ctx, List<MainExState> hist)
@@ -109,7 +121,6 @@ namespace LangSequenceTraining.Services
 
                 foreach (var seq in seqs)
                 {
-                    //var sound = await ctx.Services.TextToSpeech.SynthesizeSpeech(seq.Text);
                     ctx.SendMessage($"\t {seq.Text}");
                 }
             }
@@ -125,13 +136,12 @@ namespace LangSequenceTraining.Services
 
         private IEnumerable<Sequence> GetSequencesForTr(SequenceGroup gr)
         {
-            // todo учитывать освоенные и на созревании
-            return null;
+            throw new NotImplementedException();
         }
 
         private SequenceGroup GetGroupByNum(ProcessorContext ctx, int num)
         {
-            return null;
+            throw new NotImplementedException();
         }
 
         private T GetParam<T>(string str)

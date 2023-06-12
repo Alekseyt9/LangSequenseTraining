@@ -22,15 +22,17 @@ namespace LangSequenceTraining.Tests
             var dbOption = new DbContextOptionsBuilder<AppDbContext>().UseNpgsql(connectString).Options;
             var dbContext = new AppDbContext(dbOption);
             var repository = new AppRepository(dbContext);
+            var repositoryA = new AppRepositoryA(_configuration);
 
             var processorProvider = new ProcessorProvider();
             var stateManager = new UserStateManagerMock();
             var gptService = new GptCheckService(_configuration);
             _telegramBot = new TelegramBotMock();
             var textToSpeech = new TextToSpeech(_configuration);
+            var learningService = new LearningService(repository, repositoryA);
 
-            _procMan = new ProcessorManager(
-                processorProvider, stateManager, gptService, _telegramBot, repository, textToSpeech, stateManager);
+            _procMan = new ProcessorManager(processorProvider, stateManager, gptService, 
+                _telegramBot, repository, textToSpeech, stateManager, learningService);
             _telegramBot.ReceiveMessage += async (sender, args) =>
             {
                 _procMan.Process(Guid.Empty, args.ChannelId, args.Message);

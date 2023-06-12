@@ -4,11 +4,12 @@ namespace LangSequenceTraining.Services
 {
     internal class ContextServices
     {
-        private IGptCheckService _gptCheckService;
-        private ITelegramBot _telegramBot;
-        private IAppRepository _repository;
-        private IProcessorManager _processorManager;
-        private ITextToSpeech _textToSpeech;
+        private readonly IGptCheckService _gptCheckService;
+        private readonly ITelegramBot _telegramBot;
+        private readonly IAppRepository _repository;
+        private readonly IProcessorManager _processorManager;
+        private readonly ITextToSpeech _textToSpeech;
+        private ILearningService _learningService;
 
         public IGptCheckService GptCheckService => _gptCheckService;
 
@@ -20,16 +21,19 @@ namespace LangSequenceTraining.Services
 
         public ITextToSpeech TextToSpeech => _textToSpeech;
 
+        public ILearningService LearningService  => _learningService;
+
         public ContextServices(
             IGptCheckService gptCheckService, ITelegramBot telegramBot, 
             IAppRepository repository, IProcessorManager processorManager, 
-            ITextToSpeech textToSpeech)
+            ITextToSpeech textToSpeech, ILearningService learningService)
         {
             _gptCheckService = gptCheckService;
             _telegramBot = telegramBot;
             _repository = repository;
             _processorManager = processorManager;
             _textToSpeech = textToSpeech;
+            _learningService = learningService;
         }
 
     }
