@@ -42,10 +42,10 @@ namespace LangSequenceTraining.Tests
         [Fact]
         public void Test()
         {
-            _telegramBot.UserMessageTest("/start");
+            _telegramBot.UserMessageTest("/start", "testUser1");
             var msg = _telegramBot.GetLastBotMsg();
 
-            _telegramBot.UserMessageTest("/tr 1");
+            _telegramBot.UserMessageTest("/tr 1", "testUser1");
             msg = _telegramBot.GetLastBotMsg();
         }
 

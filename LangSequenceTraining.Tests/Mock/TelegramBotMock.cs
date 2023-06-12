@@ -16,12 +16,13 @@ namespace LangSequenceTraining.Tests
             return Task.CompletedTask;
         }
 
-        public void UserMessageTest(string msg)
+        public void UserMessageTest(string msg, string userName)
         {
             _lastReceivedMsg = msg;
             ReceiveMessage?.Invoke(this, new TelegramMessageEventArgs()
             {
-                Message = msg
+                Message = msg,
+                UserName = userName
             });
         }
 

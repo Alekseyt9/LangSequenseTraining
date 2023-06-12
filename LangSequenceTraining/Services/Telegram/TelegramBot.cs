@@ -59,7 +59,7 @@ namespace LangSequenceTraining.Services
                 {
                     ChannelId = chatId,
                     Message = messageText,
-                    UserId = userId
+                    UserName = userId
                 });
             }
         }

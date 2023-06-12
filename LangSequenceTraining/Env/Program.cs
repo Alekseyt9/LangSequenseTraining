@@ -30,7 +30,7 @@ namespace GptApiTest.Env
                 var servScopeFactory = host.Services.GetRequiredService<IServiceScopeFactory>();
                 using var scope = servScopeFactory.CreateScope();
                 var procMan = scope.ServiceProvider.GetRequiredService<IProcessorManager>();
-                var userName = args.UserId;
+                var userName = args.UserName;
                 var repository = scope.ServiceProvider.GetRequiredService<IAppRepository>();
                 var user = repository.GetUser(userName);
                 procMan.Process(user.Id, args.ChannelId, args.Message);

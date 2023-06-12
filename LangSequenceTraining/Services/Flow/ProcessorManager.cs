@@ -12,14 +12,14 @@ namespace LangSequenceTraining.Services
         private readonly IAppRepository _repository;
         private readonly ITextToSpeech _textToSpeech;
         private readonly IUserStateManager _userStateManager;
-        private ILearningService _learningService;
+        private readonly ILearningService _learningService;
 
         public ProcessorManager(
             IProcessorProvider processorProvider, IUserStateManager stateManager,
             IGptCheckService gptCheckService, ITelegramBot telegramBot,
-            IAppRepository repository, ITextToSpeech textToSpeech, 
+            IAppRepository repository, ITextToSpeech textToSpeech,
             IUserStateManager userStateManager, ILearningService learningService
-            )
+        )
         {
             _processorProvider = processorProvider;
             _stateManager = stateManager;
@@ -48,21 +48,25 @@ namespace LangSequenceTraining.Services
                 Message = msg
             };
 
-            var ctx = new ProcessorContext(
-                new ContextServices(_gptCheckService, _telegramBot, _repository, this, _textToSpeech, _learningService),
-                state.ContextState);
+            var ctx = new ProcessorContext(new ContextServices(_gptCheckService, _telegramBot, _repository,
+                    this, _textToSpeech, _learningService), state.ContextState);
 
             DoTransition(ctx, state.CurrentProcessorName, null);
         }
 
-        public void DoTransition(ProcessorContext ctx, string procName, TransitionMessageBase trMsg)
+        public void DoTransition(ProcessorContext ctx, string nextProcName, TransitionMessageBase trMsg)
         {
-            var proc = _processorProvider.GetProcessor(procName);
             var userState = _userStateManager.GetState(ctx.State.UserId);
-            var procState = userState != null && userState.ProcessorStates.ContainsKey(procName)
-                ? (ProcessorStateBase)userState?.ProcessorStates[procName]
+            userState.ProcessorStates[userState.CurrentProcessorName] = ctx.State.CurProcState;
+            _userStateManager.SetState(ctx.State.UserId, userState);
+
+            var proc = _processorProvider.GetProcessor(nextProcName);
+            
+            var nextProcState = userState != null && userState.ProcessorStates.ContainsKey(nextProcName)
+                ? (ProcessorStateBase)userState?.ProcessorStates[nextProcName]
                 : null;
-            proc.Process(ctx, procState, trMsg);
+            ctx.State.CurProcState = nextProcState;
+            proc.Process(ctx, trMsg);
         }
 
     }

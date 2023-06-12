@@ -22,5 +22,10 @@ namespace LangSequenceTraining.Services
             _services.TelegramBot.SendMessage(_state.ChannelId, msg, file);
         }
 
+        public void DoTransition(string procName, TransitionMessageBase trMsg)
+        {
+            _services.ProcessorManager.DoTransition(this, procName, trMsg);
+        }
+
     }
 }

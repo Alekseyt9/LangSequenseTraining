@@ -8,9 +8,18 @@ namespace LangSequenceTraining.Services
     [Processor("main")]
     internal class MainProcessor : IProcessor
     {
-        public Task Process(ProcessorContext ctx, ProcessorStateBase procState, TransitionMessageBase trMsg)
+        public Task Process(ProcessorContext ctx, TransitionMessageBase trMsg)
         {
-            var state = (MainProcessorState)procState;
+            var state = (MainProcessorState)ctx.State.CurProcState;
+            if (state == null)
+            {
+                state = new MainProcessorState()
+                {
+                    ExStates = new List<MainExState>(),
+                    StateKind = MainStateKind.Start
+                };
+            }
+
             if (state.StateKind == MainStateKind.Start)
             {
                 if (ctx.State.Message.StartsWith("/start"))
@@ -50,11 +59,11 @@ namespace LangSequenceTraining.Services
                     SendExResult(ctx, hist);
                     SaveExResult(ctx, hist);
                     state.StateKind = MainStateKind.Start;
-                    ctx.Services.ProcessorManager.DoTransition(ctx, "main", null);
+                    ctx.DoTransition("main", null);
                 }
                 else
                 {
-                    ctx.Services.ProcessorManager.DoTransition(ctx, nextCh.ExName, new ExtTransitionMessage()
+                    ctx.DoTransition(nextCh.ExName, new ExtTransitionMessage()
                     {
                         Sequence = nextCh.Sequence
                     });
@@ -129,9 +138,20 @@ namespace LangSequenceTraining.Services
         private void ProcessStartTr(ProcessorContext ctx)
         {
             var grNum = GetParam<int>(ctx.State.Message);
-            var gr = GetGroupByNum(ctx, grNum);
+            var gr = GetGroupByNum(ctx, grNum - 1);
+            if (gr == null)
+            {
+                return;
+            }
 
-            ctx.Services.ProcessorManager.DoTransition(ctx, "ex1", new ExtTransitionMessage());
+            var state = (MainProcessorState)ctx.State.CurProcState;
+            state.CurSequences = new List<Sequence>(GetSequencesForTr(gr));
+            var nextCh = ExChoiceHelper.GetNextEx(state.ExStates, state.CurSequences, new List<string>() { "ex1" });
+
+            ctx.Services.ProcessorManager.DoTransition(ctx, nextCh.ExName, new ExtTransitionMessage()
+            {
+                Sequence = nextCh.Sequence
+            });
         }
 
         private IEnumerable<Sequence> GetSequencesForTr(SequenceGroup gr)
@@ -141,7 +161,14 @@ namespace LangSequenceTraining.Services
 
         private SequenceGroup GetGroupByNum(ProcessorContext ctx, int num)
         {
-            throw new NotImplementedException();
+            var groups = ctx.Services.Repository.GetGroups()
+                .Where(x => !x.IsHide).OrderBy(x => x.Order).ToList();
+            if (num > groups.Count - 1)
+            {
+                ctx.SendMessage($"Ошибка: не существует группы с номером {num}");
+                return null;
+            }
+            return groups.ElementAt(num);
         }
 
         private T GetParam<T>(string str)

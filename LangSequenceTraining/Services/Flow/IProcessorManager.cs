@@ -6,7 +6,7 @@ namespace LangSequenceTraining.Services
     {
         void Process(Guid userId, long channelId, string msg);
 
-        void DoTransition(ProcessorContext ctx, string procName, TransitionMessageBase trMsg);
+        void DoTransition(ProcessorContext ctx, string nextProcName, TransitionMessageBase trMsg);
 
     }
 }

@@ -16,10 +16,18 @@ namespace LangSequenceTraining.Services
         }
         */
 
-        public async Task Process(ProcessorContext ctx, ProcessorStateBase procState, TransitionMessageBase trMsg)
+        public async Task Process(ProcessorContext ctx, TransitionMessageBase trMsg)
         {
-            var state = (Ex1ProcessorState)procState;
+            var state = (Ex1ProcessorState)ctx.State.CurProcState;
             var tr = (ExtTransitionMessage)trMsg;
+
+            if (state == null)
+            {
+                state = new Ex1ProcessorState()
+                {
+                    StateKind = ExStateKind.Start
+                };
+            }
 
             if (state.StateKind == ExStateKind.Start)
             {
@@ -47,7 +55,7 @@ namespace LangSequenceTraining.Services
                 {
                     ctx.SendMessage($"Предложение написано c ошибками. {checkResult.Message}");
                 }
-                ctx.Services.ProcessorManager.DoTransition(ctx, "main", new MainTransitionMessage()
+                ctx.DoTransition("main", new MainTransitionMessage()
                 {
                     ExName = "ex1",
                     CheckResult = checkResult.IsCorrect
