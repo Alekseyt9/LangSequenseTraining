@@ -1,5 +1,6 @@
 ﻿
 using System.Text;
+using LangSequenceTraining.Helpers;
 using LangSequenceTraining.Model;
 
 namespace LangSequenceTraining.Services
@@ -10,24 +11,89 @@ namespace LangSequenceTraining.Services
         public Task Process(ProcessorContext ctx, ProcessorStateBase procState, TransitionMessageBase trMsg)
         {
             var state = (MainProcessorState)procState;
-
-            if (ctx.State.Message.StartsWith("/start"))
+            if (state.StateKind == MainStateKind.Start)
             {
-                var msg = CreateStartMessage(ctx);
-                ctx.SendMessage(msg);
+                if (ctx.State.Message.StartsWith("/start"))
+                {
+                    var msg = CreateStartMessage(ctx);
+                    ctx.SendMessage(msg);
+                }
+
+                if (ctx.State.Message.StartsWith("/tr"))
+                {
+                    ProcessStartTr(ctx);
+                }
+
+                if (ctx.State.Message.StartsWith("/grinfo"))
+                {
+                    ProcessGrInfo(ctx);
+                }
+
+                return Task.CompletedTask;
             }
 
-            if (ctx.State.Message.StartsWith("/tr"))
+            if (state.StateKind == MainStateKind.InExercise)
             {
-                ProcessStartTr(ctx);
-            }
+                var tr = (MainTransitionMessage)trMsg;
+                var hist = state.ExStates;
+                hist.Add(new MainExState()
+                {
+                    ExName = tr.ExName,
+                    IsCorrect = tr.CheckResult,
+                    Sequence = tr.Sequence
+                });
 
-            if (ctx.State.Message.StartsWith("/grinfo"))
-            {
-                ProcessGrInfo(ctx);
+                var seqs = state.CurSequences;
+                var nextCh = ExChoiceHelper.GetNextEx(hist, seqs, new List<string>() { "ex1" });
+                if (nextCh.IsFinish)
+                {
+                    SendExResult(ctx, hist);
+                    SaveExResult(ctx, hist);
+                    state.StateKind = MainStateKind.Start;
+                    ctx.Services.ProcessorManager.DoTransition(ctx, "main", null);
+                }
+                else
+                {
+                    ctx.Services.ProcessorManager.DoTransition(ctx, nextCh.ExName, new ExtTransitionMessage()
+                    {
+                        Sequence = nextCh.Sequence
+                    });
+                }
             }
 
             return Task.CompletedTask;
+        }
+
+        private void SaveExResult(ProcessorContext ctx, List<MainExState> hist)
+        {
+            
+        }
+
+        private void SendExResult(ProcessorContext ctx, List<MainExState> hist)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("Результат упражнений");
+
+            var errMap = new Dictionary<Guid, int>();
+            var seqMap = new Dictionary<Guid, Sequence>();
+            foreach (var state in hist)
+            {
+                errMap.TryAdd(state.Sequence.Id, 0);
+                if (!state.IsCorrect)
+                {
+                    errMap[state.Sequence.Id]++;
+                }
+
+                seqMap.TryAdd(state.Sequence.Id, state.Sequence);
+            }
+
+            foreach (var pair in errMap)
+            {
+                var errStr = pair.Value > 0 ? $"{pair.Value} ошибки" : "верно";
+                sb.AppendLine($"   {seqMap[pair.Key].Text}: {errStr}");
+            }
+
+            ctx.SendMessage(sb.ToString());
         }
 
         private async Task ProcessGrInfo(ProcessorContext ctx)
@@ -102,7 +168,7 @@ namespace LangSequenceTraining.Services
         {
             sb.AppendLine("=Ваша статистика=");
             sb.AppendLine($"паттернов выучено: {0}");
-            sb.AppendLine($"паттернов на созревании: {0}");
+            sb.AppendLine($"паттернов в ожидании: {0}");
         }
 
     }

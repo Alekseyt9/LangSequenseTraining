@@ -1,5 +1,7 @@
 ﻿
 
+using LangSequenceTraining.Model;
+
 namespace LangSequenceTraining.Services
 {
     internal class MainTransitionMessage : TransitionMessageBase
@@ -7,5 +9,8 @@ namespace LangSequenceTraining.Services
         public string ExName { get; set; }
 
         public bool CheckResult { get; set; }
+
+        public Sequence Sequence { get; set; }
+
     }
 }
