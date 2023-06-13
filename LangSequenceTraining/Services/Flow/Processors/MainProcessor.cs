@@ -15,7 +15,7 @@ namespace LangSequenceTraining.Services
             {
                 state = new MainProcessorState()
                 {
-                    ExStates = new List<MainExState>(),
+                    ExStatesHistoryItems = new List<MainExHistoryItem>(),
                     StateKind = MainStateKind.Start
                 };
                 ctx.State.CurProcState = state;
@@ -26,7 +26,7 @@ namespace LangSequenceTraining.Services
             {
                 state.StateKind = MainStateKind.Start;
                 state.CurSequences = null;
-                state.ExStates = null;
+                state.ExStatesHistoryItems = new List<MainExHistoryItem>();
             }
 
             if (state.StateKind == MainStateKind.Start)
@@ -34,7 +34,7 @@ namespace LangSequenceTraining.Services
                 if (ctx.State.Message == null || ctx.State.Message.StartsWith("/start"))
                 {
                     var msg = CreateStartMessage(ctx);
-                    ctx.SendMessage(msg);
+                    await ctx.SendMessage(msg);
                     ctx.State.Message = null;
                     return;
                 }
@@ -57,17 +57,17 @@ namespace LangSequenceTraining.Services
 
             if (state.StateKind == MainStateKind.InExercise)
             {
-                var hist = state.ExStates;
+                var hist = state.ExStatesHistoryItems;
 
                 if (tr == null)
                 {
-                    ctx.SendMessage("Неверное состояние сессии");
+                    await ctx.SendMessage("Неверное состояние сессии");
                     state.StateKind = MainStateKind.Start;
                     await ctx.DoTransition("main", null);
                     return;
                 }
 
-                hist.Add(new MainExState()
+                hist.Add(new MainExHistoryItem()
                 {
                     ExName = tr.ExName,
                     IsCorrect = tr.CheckResult,
@@ -78,11 +78,11 @@ namespace LangSequenceTraining.Services
                 var nextCh = ExChoiceHelper.GetNextEx(hist, seqs, new List<string>() { "ex1" });
                 if (nextCh.IsFinish)
                 {
-                    SendExResult(ctx, hist);
+                    await SendExResult(ctx, hist);
                     SaveExResult(ctx, hist);
                     state.StateKind = MainStateKind.Start;
                     state.CurSequences = null;
-                    state.ExStates = null;
+                    state.ExStatesHistoryItems = new List<MainExHistoryItem>();
                     await ctx.DoTransition("main", null);
                 }
                 else
@@ -96,7 +96,7 @@ namespace LangSequenceTraining.Services
 
         }
 
-        private void SaveExResult(ProcessorContext ctx, List<MainExState> hist)
+        private void SaveExResult(ProcessorContext ctx, List<MainExHistoryItem> hist)
         {
             var resultInfos = new List<TrainingResult>();
             var seqMap = new Dictionary<Guid, bool>();
@@ -113,7 +113,7 @@ namespace LangSequenceTraining.Services
             ctx.Services.LearningService.SaveResult(ctx.State.UserId, resultInfos);
         }
 
-        private void SendExResult(ProcessorContext ctx, List<MainExState> hist)
+        private async Task SendExResult(ProcessorContext ctx, List<MainExHistoryItem> hist)
         {
             var sb = new StringBuilder();
             sb.AppendLine("Результат");
@@ -137,7 +137,7 @@ namespace LangSequenceTraining.Services
                 sb.AppendLine($"   {seqMap[pair.Key].Text}: {errStr}");
             }
 
-            ctx.SendMessage(sb.ToString());
+            await ctx.SendMessage(sb.ToString());
         }
 
         private async Task ProcessGrInfo(ProcessorContext ctx)
@@ -147,13 +147,13 @@ namespace LangSequenceTraining.Services
 
             foreach (var group in groups)
             {
-                ctx.SendMessage($"[{i++}] {group.Name} ({group.Description})");
+                await ctx.SendMessage($"[{i++}] {group.Name} ({group.Description})");
                 var seqs = ctx.Services.Repository.GetSequences(group.Name);
                 var j = 1;
 
                 foreach (var seq in seqs)
                 {
-                    ctx.SendMessage($"\t {seq.Text}");
+                    await ctx.SendMessage($"\t {seq.Text}");
                 }
             }
         }
@@ -162,7 +162,7 @@ namespace LangSequenceTraining.Services
         {
             var grNum = GetParam<int>(ctx.State.Message);
             ctx.State.Message = null;
-            var gr = GetGroupByNum(ctx, grNum - 1);
+            var gr = await GetGroupByNum(ctx, grNum - 1);
             if (gr == null)
             {
                 return;
@@ -170,7 +170,7 @@ namespace LangSequenceTraining.Services
 
             var state = (MainProcessorState)ctx.State.CurProcState;
             state.CurSequences = new List<Sequence>(GetSequencesForTrNew(ctx, gr));
-            var nextCh = ExChoiceHelper.GetNextEx(state.ExStates, state.CurSequences, new List<string>() { "ex1" });
+            var nextCh = ExChoiceHelper.GetNextEx(state.ExStatesHistoryItems, state.CurSequences, new List<string>() { "ex1" });
             state.StateKind = MainStateKind.InExercise;
 
             await ctx.DoTransition(nextCh.ExName, new ExtTransitionMessage()
@@ -184,13 +184,13 @@ namespace LangSequenceTraining.Services
             return ctx.Services.LearningService.GetSequencesNew(ctx.State.UserId, gr.Id);
         }
 
-        private SequenceGroup GetGroupByNum(ProcessorContext ctx, int num)
+        private async Task<SequenceGroup> GetGroupByNum(ProcessorContext ctx, int num)
         {
             var groups = ctx.Services.Repository.GetGroups()
                 .Where(x => !x.IsHide).OrderBy(x => x.Order).ToList();
             if (num > groups.Count - 1)
             {
-                ctx.SendMessage($"Ошибка: не существует группы с номером {num}");
+                await ctx.SendMessage($"Ошибка: не существует группы с номером {num}");
                 return null;
             }
             return groups.ElementAt(num);

@@ -3,7 +3,7 @@ using LangSequenceTraining.Model;
 
 namespace LangSequenceTraining.Services
 {
-    public class MainExState
+    public class MainExHistoryItem
     {
         public string ExName { get; set; }
 

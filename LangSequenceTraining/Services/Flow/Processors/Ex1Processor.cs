@@ -44,14 +44,16 @@ namespace LangSequenceTraining.Services
 
             if (ctx.State.Message != null && (ctx.State.Message.StartsWith("/")))
             {
-                ctx.SendMessage($"Команда {ctx.State.Message} не найдена");
+                await ctx.SendMessage($"Команда {ctx.State.Message} не найдена");
                 return;
             }
 
             if (state.StateKind == ExStateKind.Start)
             {
                 var msg = $"Начало упражнения с паттерном '{tr.Sequence.Text}'. Напишите предложение, используя этот паттерн.";
-                ctx.SendMessage(msg);
+                await ctx.SendMessage(msg);
+                await ctx.SendMessage(tr.Sequence.Description);
+
                 state.StateKind = ExStateKind.Check;
                 ctx.State.CurProcState = state;
                 ctx.End();
@@ -64,9 +66,9 @@ namespace LangSequenceTraining.Services
                 var checkResult = await ctx.Services.GptCheckService.Check(msg);
                 if (checkResult.IsCorrect)
                 {
-                    ctx.SendMessage("Предложение написано верно!");
+                    await ctx.SendMessage("Предложение написано верно!");
                     var sound = await ctx.Services.TextToSpeech.SynthesizeSpeech(msg);
-                    ctx.SendMessage("Озвучка предложения", new FileData()
+                    await ctx.SendMessage("Озвучка предложения", new FileData()
                     {
                         Name = "speech.mp4",
                         Stream = sound
@@ -74,7 +76,7 @@ namespace LangSequenceTraining.Services
                 }
                 else
                 {
-                    ctx.SendMessage($"Предложение написано c ошибками. {checkResult.Message}");
+                    await ctx.SendMessage($"Предложение написано c ошибками. {checkResult.Message}");
                 }
 
                 ctx.State.CurProcState = null;

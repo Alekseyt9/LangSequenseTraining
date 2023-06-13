@@ -11,14 +11,14 @@ namespace LangSequenceTraining.Tests
         [Fact]
         public void Test()
         {
-            var hist = new List<MainExState>();
+            var hist = new List<MainExHistoryItem>();
             var exNames = new List<string>() { "ex1", "ex2" };
             var seqList = GetTestSeqs();
 
             var res = ExChoiceHelper.GetNextEx(hist, seqList, exNames);
             if (!res.IsFinish)
             {
-                hist.Add(new MainExState()
+                hist.Add(new MainExHistoryItem()
                 {
                     Sequence = res.Sequence,
                     ExName = res.ExName,
@@ -32,7 +32,7 @@ namespace LangSequenceTraining.Tests
                 res = ExChoiceHelper.GetNextEx(hist, seqList, exNames);
                 if (!res.IsFinish)
                 {
-                    hist.Add(new MainExState()
+                    hist.Add(new MainExHistoryItem()
                     {
                         Sequence = res.Sequence,
                         ExName = res.ExName,

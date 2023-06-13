@@ -6,7 +6,7 @@ namespace LangSequenceTraining.Helpers
 {
     internal static class ExChoiceHelper
     {
-        public static ExChoiceItem GetNextEx(List<MainExState> exStateHistory, List<Sequence> seqList, List<string> exList)
+        public static ExChoiceItem GetNextEx(List<MainExHistoryItem> exStateHistory, List<Sequence> seqList, List<string> exList)
         {
             var ratingMap = CreateRatingMap(seqList, exList);
             AcceptRating(ratingMap, exStateHistory, seqList, exList);
@@ -14,7 +14,7 @@ namespace LangSequenceTraining.Helpers
             return res;
         }
 
-        private static void AcceptRating(Dictionary<string, int> ratingMap, List<MainExState> exStateHistory, 
+        private static void AcceptRating(Dictionary<string, int> ratingMap, List<MainExHistoryItem> exStateHistory, 
             List<Sequence> seqList, List<string> exList)
         {
             var exCountMap = new Dictionary<string, int>();
@@ -121,7 +121,7 @@ namespace LangSequenceTraining.Helpers
             return $"{ex}${sId}";
         }
 
-        private static string GetKey(MainExState h)
+        private static string GetKey(MainExHistoryItem h)
         {
             return $"{h.ExName}${h.Sequence.Id}";
         }
