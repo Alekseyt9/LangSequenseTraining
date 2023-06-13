@@ -9,20 +9,29 @@ namespace LangSequenceTraining.Helpers
         public static ExChoiceItem GetNextEx(List<MainExState> exStateHistory, List<Sequence> seqList, List<string> exList)
         {
             var ratingMap = CreateRatingMap(seqList, exList);
-            AcceptRating(ratingMap, exStateHistory);
+            AcceptRating(ratingMap, exStateHistory, seqList, exList);
             var res =  GetRatingResult(ratingMap, seqList);
             return res;
         }
 
-        private static void AcceptRating(Dictionary<string, int> ratingMap, List<MainExState> exStateHistory)
+        private static void AcceptRating(Dictionary<string, int> ratingMap, List<MainExState> exStateHistory, 
+            List<Sequence> seqList, List<string> exList)
         {
             var exCountMap = new Dictionary<string, int>();
             var seqCountMap = new Dictionary<Guid, int>();
+
+            foreach (var seq in seqList)
+            {
+                seqCountMap.TryAdd(seq.Id, 0);
+            }
+
+            foreach (var ex in exList)
+            {
+                exCountMap.TryAdd(ex, 0);
+            }
+
             foreach (var h in exStateHistory)
             {
-                seqCountMap.TryAdd(h.Sequence.Id, 0);
-                exCountMap.TryAdd(h.ExName, 0);
-
                 seqCountMap[h.Sequence.Id]++;
                 exCountMap[h.ExName]++;
             }
@@ -33,18 +42,18 @@ namespace LangSequenceTraining.Helpers
             // + 1 если менее часто, чем максимальная частота по паттерну
             foreach (var seqPair in seqCountMap.Where(x => x.Value < seqMax))
             {
-                foreach (var h in exStateHistory.Where(x => x.Sequence.Id == seqPair.Key))
+                foreach (var ex in exList)
                 {
-                    ratingMap[GetKey(h)]++;
+                    ratingMap[GetKey(seqPair.Key, ex)]++;
                 }
             }
 
             // + 1 если менее часто, чем максимальная частота по упражнению
             foreach (var exPair in exCountMap.Where(x => x.Value < exMax))
             {
-                foreach (var h in exStateHistory.Where(x => x.ExName == exPair.Key))
+                foreach (var seq in seqList)
                 {
-                    ratingMap[GetKey(h)]++;
+                    ratingMap[GetKey(seq.Id, exPair.Key)]++;
                 }
             }
 
@@ -92,7 +101,7 @@ namespace LangSequenceTraining.Helpers
             {
                 foreach (var s in seqList)
                 {
-                    ratingMap[GetKey(s, e)] = 0;
+                    ratingMap[GetKey(s.Id, e)] = 0;
                 }
             }
 
@@ -107,9 +116,9 @@ namespace LangSequenceTraining.Helpers
             return new Tuple<string, Sequence>(k1, k2);
         }
 
-        private static string GetKey(Sequence s, string ex)
+        private static string GetKey(Guid sId, string ex)
         {
-            return $"{ex}${s.Id}";
+            return $"{ex}${sId}";
         }
 
         private static string GetKey(MainExState h)

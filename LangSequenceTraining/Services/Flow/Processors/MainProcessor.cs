@@ -25,6 +25,8 @@ namespace LangSequenceTraining.Services
             if (tr != null && tr.IsReset)
             {
                 state.StateKind = MainStateKind.Start;
+                state.CurSequences = null;
+                state.ExStates = null;
             }
 
             if (state.StateKind == MainStateKind.Start)
@@ -79,6 +81,8 @@ namespace LangSequenceTraining.Services
                     SendExResult(ctx, hist);
                     SaveExResult(ctx, hist);
                     state.StateKind = MainStateKind.Start;
+                    state.CurSequences = null;
+                    state.ExStates = null;
                     await ctx.DoTransition("main", null);
                 }
                 else
