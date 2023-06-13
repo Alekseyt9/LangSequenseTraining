@@ -16,7 +16,8 @@ namespace LangSequenceTraining.Tests
         private readonly AppDbContext _dbContext;
         private readonly IAppRepository _repository;
         private readonly IAppRepositoryA _repositoryA;
-        private IUserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserProvider _userProvider;
 
         public FlowTest()
         {
@@ -29,13 +30,14 @@ namespace LangSequenceTraining.Tests
             _repository = new AppRepository(_dbContext);
             _repositoryA = new AppRepositoryA(_configuration);
             _userRepository = new UserRepository(_dbContext);
+            _userProvider = new UserProvider(_userRepository);
 
             var processorProvider = new ProcessorProvider();
             var stateManager = new UserStateProviderMock();
             var gptService = new GptCheckService(_configuration);
             _telegramBot = new TelegramBotMock();
             var textToSpeech = new TextToSpeech(_configuration);
-            var learningService = new LearningService(_repository, _repositoryA, _userRepository);
+            var learningService = new LearningService(_repository, _repositoryA, _userProvider);
 
             _procMan = new ProcessorManager(processorProvider, stateManager, gptService, 
                 _telegramBot, _repository, textToSpeech, stateManager, learningService);

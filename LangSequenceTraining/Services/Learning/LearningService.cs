@@ -1,6 +1,5 @@
 ﻿
 using LangSequenceTraining.Model;
-using LangSequenceTraining.Model.Services;
 
 namespace LangSequenceTraining.Services
 {
@@ -8,13 +7,13 @@ namespace LangSequenceTraining.Services
     {
         private readonly IAppRepository _repository;
         private readonly IAppRepositoryA _repositoryA;
-        private readonly IUserRepository _userRepository;
+        private readonly IUserProvider _userProvider;
 
-        public LearningService(IAppRepository repository, IAppRepositoryA repositoryA, IUserRepository userRepository)
+        public LearningService(IAppRepository repository, IAppRepositoryA repositoryA, IUserProvider userProvider)
         {
             _repository = repository;
             _repositoryA = repositoryA;
-            _userRepository = userRepository;
+            _userProvider = userProvider;
         }
 
         public IEnumerable<Sequence> GetSequencesForRepeat(Guid userId)
@@ -47,7 +46,7 @@ namespace LangSequenceTraining.Services
         {
             var res = new List<UserSequenceProgress>();
             var map = prInfos.ToDictionary(x => x.Sequence.Id, y => y);
-            var user = _userRepository.GetUser(userId);
+            var user = _userProvider.GetUser(userId);
 
             foreach (var pr in resultInfos)
             {

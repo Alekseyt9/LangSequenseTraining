@@ -19,5 +19,10 @@ namespace LangSequenceTraining.Services
             return cacheEntry;
         }
 
+        public void Set<K, T>(K key, T value)
+        {
+            _cache.Set(key, value);
+        }
+
     }
 }

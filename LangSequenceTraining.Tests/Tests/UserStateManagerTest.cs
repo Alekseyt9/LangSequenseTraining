@@ -16,6 +16,7 @@ namespace LangSequenceTraining.Tests
         private readonly User _user;
         private readonly AppDbContext _dbContext;
         private readonly IUserRepository _userRepository;
+        private readonly IUserProvider _userProvider;
 
         public UserStateManagerTest()
         {
@@ -28,15 +29,9 @@ namespace LangSequenceTraining.Tests
             var repository = new AppRepository(_dbContext);
             _userRepository = new UserRepository(_dbContext);
             var userStateRep = new UserStateRepository(_dbContext);
-            _stateServ = new UserStateProvider(_userRepository, userStateRep);
-
-            _user = new User()
-            {
-                Id = Guid.NewGuid(),
-                Name = "test"
-            };
-            _dbContext.Users.Add(_user);
-            _dbContext.SaveChanges();
+            _userProvider = new UserProvider(_userRepository);
+            _stateServ = new UserStateProvider(_userProvider, userStateRep);
+            _user = _userProvider.GetUser("test");
         }
 
         [Fact]

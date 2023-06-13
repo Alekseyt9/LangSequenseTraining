@@ -8,5 +8,6 @@ namespace LangSequenceTraining.Model.Services
 
         User GetUser(Guid id);
 
+        void CreateUser(User user);
     }
 }

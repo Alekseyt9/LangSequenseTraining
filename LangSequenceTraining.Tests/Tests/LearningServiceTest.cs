@@ -20,6 +20,7 @@ namespace LangSequenceTraining.Tests
         private readonly AppDbContext _dbContext;
         private readonly IConfiguration _configuration;
         private readonly IUserRepository _userRepository;
+        private readonly IUserProvider _userProvider;
 
         private SequenceGroup _gr;
         private User _userNew;
@@ -35,12 +36,13 @@ namespace LangSequenceTraining.Tests
             _repository = new AppRepository(_dbContext);
             _repositoryA = new AppRepositoryA(_configuration);
             _userRepository = new UserRepository(_dbContext);
-            _learningServ = new LearningService(_repository, _repositoryA, _userRepository);
+            _userProvider = new UserProvider(_userRepository);
+            _learningServ = new LearningService(_repository, _repositoryA, _userProvider);
         }
 
         private User GetUser()
         {
-            return _userRepository.GetUser("alekseyt9");
+            return _userProvider.GetUser("alekseyt9");
         }
 
         private User NewUser()

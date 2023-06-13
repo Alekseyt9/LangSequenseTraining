@@ -5,41 +5,44 @@ using Newtonsoft.Json;
 
 namespace LangSequenceTraining.Services
 {
-    /// <summary>
-    /// todo   кэш на этом уровне, а не IUserStateRepository 
-    /// </summary>
     internal class UserStateProvider : IUserStateProvider
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserProvider _userProvider;
         private readonly IUserStateRepository _userStateRepository;
+        private readonly MemCache<Guid, UserStateModel> _stateCache = new MemCache<Guid, UserStateModel>();
 
-        public UserStateProvider(IUserRepository userRepository, IUserStateRepository userStateRepository)
+        public UserStateProvider(IUserProvider userProvider, IUserStateRepository userStateRepository)
         {
-            _userRepository = userRepository;
+            _userProvider = userProvider;
             _userStateRepository = userStateRepository;
         }
 
         public UserStateModel GetState(Guid userId)
         {
-            var state = _userStateRepository.GetUserState(userId);
-            if (state != null && !string.IsNullOrEmpty(state.State))
+            var obj = _stateCache.GetOrCreate(userId, id =>
             {
-                var jsonSerializerSettings = new JsonSerializerSettings()
+                var state = _userStateRepository.GetUserState(userId);
+                if (state != null && !string.IsNullOrEmpty(state.State))
                 {
-                    TypeNameHandling = TypeNameHandling.All
+                    var jsonSerializerSettings = new JsonSerializerSettings()
+                    {
+                        TypeNameHandling = TypeNameHandling.All
+                    };
+                    var obj = JsonConvert.DeserializeObject<UserStateModel>(state.State, jsonSerializerSettings);
+                    return obj;
+                }
+
+                var stateModel = new UserStateModel()
+                {
+                    ContextState = new ContextState(),
+                    CurrentProcessorName = "main",
+                    ProcessorStates = new Dictionary<string, ProcessorStateBase>()
                 };
-                var obj = JsonConvert.DeserializeObject<UserStateModel>(state.State, jsonSerializerSettings);
-                return obj;
-            }
 
-            var stateModel = new UserStateModel()
-            {
-                ContextState = new ContextState(),
-                CurrentProcessorName = "main",
-                ProcessorStates = new Dictionary<string, ProcessorStateBase>()
-            };
+                return stateModel;
+            });
 
-            return stateModel;
+            return obj;
         }
 
         public void SetState(Guid userId, UserStateModel state)
@@ -53,16 +56,20 @@ namespace LangSequenceTraining.Services
 
             if (st == null)
             {
-                var user = _userRepository.GetUser(userId);
+                var user = _userProvider.GetUser(userId);
                 st = new UserState()
                 {
                     Id = Guid.Empty,
                     User = user,
                 };
             }
-
             st.State = dataStr;
-            _userStateRepository.SetUserState(userId, st);
+
+            _stateCache.Set(userId, st);
+            Task.Run(() =>
+            {
+                _userStateRepository.SetUserState(userId, st);
+            });
         }
 
     }

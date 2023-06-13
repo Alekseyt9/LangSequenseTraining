@@ -32,8 +32,8 @@ namespace GptApiTest.Env
                 using var scope = servScopeFactory.CreateScope();
                 var procMan = scope.ServiceProvider.GetRequiredService<IProcessorManager>();
                 var userName = args.UserName;
-                var userRep = scope.ServiceProvider.GetRequiredService<IUserRepository>();
-                var user = userRep.GetUser(userName);
+                var userProv = scope.ServiceProvider.GetRequiredService<IUserProvider>();
+                var user = userProv.GetUser(userName);
                 await procMan.Process(user.Id, args.ChannelId, args.Message);
             };
         }
@@ -59,6 +59,7 @@ namespace GptApiTest.Env
                         .AddScoped<IProcessorManager, ProcessorManager>()
                         .AddScoped<IProcessorProvider, ProcessorProvider>()
                         .AddScoped<IUserStateProvider, UserStateProvider>()
+                        .AddScoped<IUserProvider, UserProvider>()
                         .AddScoped<IAppRepository, AppRepository>()
                         .AddScoped<IProcessorManager, ProcessorManager>()
                         .AddScoped<ILearningService, LearningService>()
