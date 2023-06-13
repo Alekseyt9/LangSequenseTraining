@@ -43,7 +43,7 @@ namespace LangSequenceTraining.Tests
                 _telegramBot, _repository, textToSpeech, stateManager, learningService);
             _telegramBot.ReceiveMessage += async (s, args) =>
             {
-                var user = _userRepository.GetUser(args.UserName);
+                var user = _userProvider.GetUser(args.UserName);
                 await _procMan.Process(user.Id, args.ChannelId, args.Message);
             };
 

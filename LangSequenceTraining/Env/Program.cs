@@ -1,7 +1,6 @@
 ﻿
 using LangSequenceTraining.DAL;
 using LangSequenceTraining.DAL.Services;
-using LangSequenceTraining.Model.Services;
 using LangSequenceTraining.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
