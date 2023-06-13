@@ -58,16 +58,23 @@ namespace LangSequenceTraining.Services
 
         public async Task DoTransition(ProcessorContext ctx, string nextProcName, TransitionMessageBase trMsg)
         {
-            var userState = _userStateProvider.GetState(ctx.State.UserId);
-            userState.CurrentProcessorName = nextProcName;
-            _userStateProvider.SetState(ctx.State.UserId, userState);
+            try
+            {
+                var userState = _userStateProvider.GetState(ctx.State.UserId);
+                userState.CurrentProcessorName = nextProcName;
+                _userStateProvider.SetState(ctx.State.UserId, userState);
 
-            var proc = _processorProvider.GetProcessor(nextProcName);
-            var nextProcState = userState != null && userState.ProcessorStates.ContainsKey(nextProcName)
-                ? (ProcessorStateBase)userState?.ProcessorStates[nextProcName]
-                : null;
-            ctx.State.CurProcState = nextProcState;
-            await proc.Process(ctx, trMsg);
+                var proc = _processorProvider.GetProcessor(nextProcName);
+                var nextProcState = userState != null && userState.ProcessorStates.ContainsKey(nextProcName)
+                    ? (ProcessorStateBase)userState?.ProcessorStates[nextProcName]
+                    : null;
+                ctx.State.CurProcState = nextProcState;
+                await proc.Process(ctx, trMsg);
+            }
+            catch (Exception ex)
+            {
+                ctx.SendMessage($"Ошибка: {ex.Message}");
+            }
         }
 
         public void SaveProcState(ProcessorContext ctx)

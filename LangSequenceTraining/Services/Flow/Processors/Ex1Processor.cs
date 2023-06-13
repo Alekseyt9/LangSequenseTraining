@@ -42,6 +42,12 @@ namespace LangSequenceTraining.Services
                 return;
             }
 
+            if (ctx.State.Message != null && (ctx.State.Message.StartsWith("/")))
+            {
+                ctx.SendMessage($"Команда {ctx.State.Message} не найдена");
+                return;
+            }
+
             if (state.StateKind == ExStateKind.Start)
             {
                 var msg = $"Начало упражнения с паттерном '{tr.Sequence.Text}'. Напишите предложение, используя этот паттерн.";

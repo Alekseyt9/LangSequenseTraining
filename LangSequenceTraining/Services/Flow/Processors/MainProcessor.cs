@@ -56,6 +56,15 @@ namespace LangSequenceTraining.Services
             if (state.StateKind == MainStateKind.InExercise)
             {
                 var hist = state.ExStates;
+
+                if (tr == null)
+                {
+                    ctx.SendMessage("Неверное состояние сессии");
+                    state.StateKind = MainStateKind.Start;
+                    await ctx.DoTransition("main", null);
+                    return;
+                }
+
                 hist.Add(new MainExState()
                 {
                     ExName = tr.ExName,
