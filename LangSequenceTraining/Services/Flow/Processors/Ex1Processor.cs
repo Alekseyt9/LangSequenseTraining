@@ -1,5 +1,7 @@
 ﻿
 
+using LangSequenceTraining.Services.Gpt;
+
 namespace LangSequenceTraining.Services
 {
     [Processor("ex1")]
@@ -23,10 +25,21 @@ namespace LangSequenceTraining.Services
 
             if (state == null)
             {
-                state = new Ex1ProcessorState()
+                state = new Ex1ProcessorState(ExStateKind.Start, tr.Sequence);
+                ctx.State.CurProcState = state;
+            }
+
+            // todo commandParser
+            if (ctx.State.Message != null && (ctx.State.Message.StartsWith("/r") || ctx.State.Message.StartsWith("/tr")))
+            {
+                ctx.State.CurProcState = null;
+                ctx.State.Message = null;
+                await ctx.DoTransition("main", new MainTransitionMessage()
                 {
-                    StateKind = ExStateKind.Start
-                };
+                    IsReset = true
+                });
+
+                return;
             }
 
             if (state.StateKind == ExStateKind.Start)
@@ -62,6 +75,7 @@ namespace LangSequenceTraining.Services
                 await ctx.DoTransition("main", new MainTransitionMessage()
                 {
                     ExName = "ex1",
+                    Sequence = state.Sequence,
                     CheckResult = checkResult.IsCorrect
                 });
 

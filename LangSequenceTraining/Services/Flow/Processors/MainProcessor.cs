@@ -21,9 +21,15 @@ namespace LangSequenceTraining.Services
                 ctx.State.CurProcState = state;
             }
 
+            var tr = (MainTransitionMessage)trMsg;
+            if (tr != null && tr.IsReset)
+            {
+                state.StateKind = MainStateKind.Start;
+            }
+
             if (state.StateKind == MainStateKind.Start)
             {
-                if (ctx.State.Message.StartsWith("/start"))
+                if (ctx.State.Message == null || ctx.State.Message.StartsWith("/start"))
                 {
                     var msg = CreateStartMessage(ctx);
                     ctx.SendMessage(msg);
@@ -49,7 +55,6 @@ namespace LangSequenceTraining.Services
 
             if (state.StateKind == MainStateKind.InExercise)
             {
-                var tr = (MainTransitionMessage)trMsg;
                 var hist = state.ExStates;
                 hist.Add(new MainExState()
                 {
@@ -153,6 +158,7 @@ namespace LangSequenceTraining.Services
             var state = (MainProcessorState)ctx.State.CurProcState;
             state.CurSequences = new List<Sequence>(GetSequencesForTrNew(ctx, gr));
             var nextCh = ExChoiceHelper.GetNextEx(state.ExStates, state.CurSequences, new List<string>() { "ex1" });
+            state.StateKind = MainStateKind.InExercise;
 
             await ctx.DoTransition(nextCh.ExName, new ExtTransitionMessage()
             {
@@ -210,8 +216,8 @@ namespace LangSequenceTraining.Services
         private void StatisticsMessage(ProcessorContext ctx, StringBuilder sb)
         {
             sb.AppendLine("=Ваша статистика=");
-            sb.AppendLine($"паттернов выучено: {0}");
-            sb.AppendLine($"паттернов в ожидании: {0}");
+            sb.AppendLine($"Паттернов выучено: {0}");
+            sb.AppendLine($"Паттернов в ожидании: {0}");
         }
 
     }

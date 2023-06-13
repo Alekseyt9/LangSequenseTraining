@@ -12,5 +12,7 @@ namespace LangSequenceTraining.Services
 
         public Sequence Sequence { get; set; }
 
+        public bool IsReset { get; set; }
+
     }
 }

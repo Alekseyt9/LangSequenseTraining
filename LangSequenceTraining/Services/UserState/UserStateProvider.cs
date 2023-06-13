@@ -66,10 +66,14 @@ namespace LangSequenceTraining.Services
             st.State = dataStr;
 
             _stateCache.Set(userId, st);
-            Task.Run(() =>
+            _userStateRepository.SetUserState(userId, st);
+            
+            /*
+            Task.Run( () =>
             {
                 _userStateRepository.SetUserState(userId, st);
             });
+            */
         }
 
     }
