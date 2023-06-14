@@ -3,7 +3,7 @@ using LangSequenceTraining.Model;
 
 namespace LangSequenceTraining.Services
 {
-    internal interface ILearningService
+    public interface ILearningService
     {
         IEnumerable<Sequence> GetSequencesForRepeat(Guid userId);
 

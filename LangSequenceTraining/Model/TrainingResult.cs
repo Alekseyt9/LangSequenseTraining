@@ -2,7 +2,7 @@
 
 namespace LangSequenceTraining.Model
 {
-    internal class TrainingResult
+    public class TrainingResult
     {
         public bool IsSuccess { get; set; }
 

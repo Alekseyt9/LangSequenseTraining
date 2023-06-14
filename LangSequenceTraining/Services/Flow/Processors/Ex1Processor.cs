@@ -1,7 +1,5 @@
 ﻿
 
-using LangSequenceTraining.Services.Gpt;
-
 namespace LangSequenceTraining.Services
 {
     [Processor("ex1")]

@@ -79,7 +79,9 @@ namespace LangSequenceTraining.Services
                 if (nextCh.IsFinish)
                 {
                     await SendExResult(ctx, hist);
-                    SaveExResult(ctx, hist);
+
+                    ExtResultHelper.SaveExResult(ctx.Services.LearningService, ctx.State.UserId, hist);
+
                     state.StateKind = MainStateKind.Start;
                     state.CurSequences = null;
                     state.ExStatesHistoryItems = new List<MainExHistoryItem>();
@@ -94,23 +96,6 @@ namespace LangSequenceTraining.Services
                 }
             }
 
-        }
-
-        private void SaveExResult(ProcessorContext ctx, List<MainExHistoryItem> hist)
-        {
-            var resultInfos = new List<TrainingResult>();
-            var seqMap = new Dictionary<Guid, bool>();
-
-            foreach (var h in hist)
-            {
-                seqMap.TryAdd(h.Sequence.Id, true);
-                if (!h.IsCorrect)
-                {
-                    seqMap[h.Sequence.Id] = false;
-                }
-            }
-
-            ctx.Services.LearningService.SaveResult(ctx.State.UserId, resultInfos);
         }
 
         private async Task SendExResult(ProcessorContext ctx, List<MainExHistoryItem> hist)
@@ -162,6 +147,7 @@ namespace LangSequenceTraining.Services
         {
             var grNum = GetParam<int>(ctx.State.Message);
             ctx.State.Message = null;
+
             var gr = await GetGroupByNum(ctx, grNum - 1);
             if (gr == null)
             {
@@ -170,6 +156,8 @@ namespace LangSequenceTraining.Services
 
             var state = (MainProcessorState)ctx.State.CurProcState;
             state.CurSequences = new List<Sequence>(GetSequencesForTrNew(ctx, gr));
+            state.ExStatesHistoryItems = new List<MainExHistoryItem>();
+
             var nextCh = ExChoiceHelper.GetNextEx(state.ExStatesHistoryItems, state.CurSequences, new List<string>() { "ex1" });
             state.StateKind = MainStateKind.InExercise;
 

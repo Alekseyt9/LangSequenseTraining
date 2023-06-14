@@ -33,7 +33,7 @@ namespace LangSequenceTraining.Services
         public void SaveResult(Guid userId, IEnumerable<TrainingResult> resultInfos)
         {
             var idsList = resultInfos.Select(x => x.Sequence.Id);
-            var prs = _repository.GetExistedProgress(userId, idsList);
+            var prs = _repository.GetExistedProgress(userId, idsList).ToList();
 
             AddNewProgress(userId, prs, resultInfos);
             ApplyProgress(prs, resultInfos);
@@ -41,11 +41,9 @@ namespace LangSequenceTraining.Services
             _repository.SaveUserProgress(prs);
         }
 
-        private void AddNewProgress(Guid userId, 
-            IEnumerable<UserSequenceProgress> prInfos, IEnumerable<TrainingResult> resultInfos)
+        private void AddNewProgress(Guid userId, List<UserSequenceProgress> res, IEnumerable<TrainingResult> resultInfos)
         {
-            var res = new List<UserSequenceProgress>();
-            var map = prInfos.ToDictionary(x => x.Sequence.Id, y => y);
+            var map = res.ToDictionary(x => x.Sequence.Id, y => y);
             var user = _userProvider.GetUser(userId);
 
             foreach (var pr in resultInfos)
@@ -67,7 +65,7 @@ namespace LangSequenceTraining.Services
             var map = resultInfos.ToDictionary(x => x.Sequence.Id, y => y);
             foreach (var pr in prInfos)
             {
-                var resInfo = map[pr.Id];
+                var resInfo = map[pr.SequenceId];
                 if (resInfo.IsSuccess)
                 {
                     pr.LastSuccessTime = DateTime.Now;
