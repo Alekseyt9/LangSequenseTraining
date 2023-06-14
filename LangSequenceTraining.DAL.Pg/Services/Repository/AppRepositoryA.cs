@@ -33,12 +33,14 @@ left join ""UserSequenceProgress"" p
 join ""SequenceGroup"" g
 	on g.""Id"" = s.""SequenceGroupId""
 where 
-	p.""Id"" is null
+    g.""Id"" = @grId
+	and p.""Id"" is null
 	and g.""IsHide"" != true
 order by s.""Order""
 limit 3
 "
                 );
+            command.Parameters.Add(new NpgsqlParameter("grId", groupId));
             using var reader = command.ExecuteReader();
 
             var res = new List<Sequence>();

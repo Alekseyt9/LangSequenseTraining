@@ -73,7 +73,7 @@ namespace LangSequenceTraining.Services
             }
             catch (Exception ex)
             {
-                await ctx.SendMessage($"Ошибка: {ex.Message}");
+                await ctx.SendMessage($"Ошибка: {ex.Message} {ex.InnerException?.Message}");
             }
         }
 

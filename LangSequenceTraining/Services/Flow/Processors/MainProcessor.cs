@@ -118,7 +118,7 @@ namespace LangSequenceTraining.Services
 
             foreach (var pair in errMap)
             {
-                var errStr = pair.Value > 0 ? $"{pair.Value} ошибки" : "верно";
+                var errStr = pair.Value > 0 ? $"{pair.Value} {GrammarHelper.Declination(pair.Value)}" : "верно";
                 sb.AppendLine($"   {seqMap[pair.Key].Text}: {errStr}");
             }
 

@@ -35,6 +35,9 @@ namespace LangSequenceTraining.DAL.Services
             {
                 if (pr.Id == Guid.Empty)
                 {
+                    pr.Id = Guid.NewGuid();
+                    pr.SequenceId = pr.Sequence.Id;
+                    pr.Sequence = null;
                     _ctx.UserSequenceProgress.Add(pr);
                 }
                 else
@@ -42,6 +45,7 @@ namespace LangSequenceTraining.DAL.Services
                     _ctx.UserSequenceProgress.Update(pr);
                 }
             }
+            _ctx.SaveChanges();
         }
 
         public IEnumerable<UserSequenceProgress> GetExistedProgress(Guid userId, IEnumerable<Guid> idsList)

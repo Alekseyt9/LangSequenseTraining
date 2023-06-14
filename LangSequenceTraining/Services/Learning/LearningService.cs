@@ -65,17 +65,17 @@ namespace LangSequenceTraining.Services
             var map = resultInfos.ToDictionary(x => x.Sequence.Id, y => y);
             foreach (var pr in prInfos)
             {
-                var resInfo = map[pr.SequenceId];
+                var resInfo = map[pr.Sequence.Id];
+
+                pr.LastUpdateTime = DateTime.Now.ToUniversalTime();
+                pr.StartTime = DateTime.Now.ToUniversalTime();
+
                 if (resInfo.IsSuccess)
                 {
-                    pr.LastSuccessTime = DateTime.Now;
-                    pr.LastUpdateTime = DateTime.Now;
+                    pr.LastSuccessTime = DateTime.Now.ToUniversalTime();
                     pr.Stage = GetNextStage(pr.Stage);
                 }
-                else
-                {
-                    pr.LastUpdateTime = DateTime.Now;
-                }
+
             }
         }
 

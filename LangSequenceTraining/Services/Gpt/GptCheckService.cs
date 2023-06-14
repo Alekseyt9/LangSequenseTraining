@@ -35,6 +35,8 @@ namespace LangSequenceTraining.Services
             }
 
             _conversation.AppendMessage(new ChatMessage(ChatMessageRole.Assistant, msg));
+
+            // todo сделать таймаут
             var ans = await _conversation.GetResponseFromChatbotAsync();
             var res = new CheckResult();
             if (ans.ToLower().StartsWith("ok"))
