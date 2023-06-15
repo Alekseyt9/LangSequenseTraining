@@ -7,6 +7,6 @@ namespace LangSequenceTraining.Services
     {
         IEnumerable<Sequence> GetSequences(string groupName);
 
-        IEnumerable<Sequence> GetSequence(Guid id);
+        Sequence GetSequence(Guid id);
     }
 }

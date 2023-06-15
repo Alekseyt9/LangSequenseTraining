@@ -11,11 +11,11 @@ namespace LangSequenceTraining.Helpers
             if (span.Value.Days < 1)
                 return "в течении суток";
             if (span.Value.Days > 1 && span.Value.Days < 7)
-                return $"{span.Value.Days} {GrammarHelper.NumDeclination(span.Value.Days, new[] { "день", "дня", "дней" })}";
+                return $"через {span.Value.Days} {GrammarHelper.NumDeclination(span.Value.Days, new[] { "день", "дня", "дней" })}";
             if (span.Value.Days > 7 && span.Value.Days < 30)
-                return $"{span.Value.Days / 7} {GrammarHelper.NumDeclination(span.Value.Days / 7, new[] { "неделя", "недели", "недель" })}";
+                return $"через {span.Value.Days / 7} {GrammarHelper.NumDeclination(span.Value.Days / 7, new[] { "неделя", "недели", "недель" })}";
             if (span.Value.Days > 30)
-                return $"{span.Value.Days / 30} {GrammarHelper.NumDeclination(span.Value.Days / 30, new[] { "месяц", "месяца", "месяцев" })}";
+                return $"через {span.Value.Days / 30} {GrammarHelper.NumDeclination(span.Value.Days / 30, new[] { "месяц", "месяца", "месяцев" })}";
 
             throw new ArgumentException();
         }

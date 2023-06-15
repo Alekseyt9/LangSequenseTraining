@@ -115,19 +115,19 @@ namespace LangSequenceTraining.Services
                 var rItems = ExRepeatHelper.GetRepItems(items);
                 var wItems = items.Except(rItems).ToList();
 
-                sb.AppendLine($"Паттерны, которые нужно повторить сейчас");
+                sb.AppendLine($"Паттерны, которые нужно повторить сейчас:");
                 foreach (var item in rItems)
                 {
-                    var seq = ctx.Services.Repository.GetSequences().First();
+                    var seq = ctx.Services.SequenceProvider.GetSequence(item.SequenceId);
                     sb.AppendLine($"   {seq.Text} ");
                 }
 
                 sb.AppendLine();
-                sb.AppendLine($"Паттерны, которые нужно повторить позже");
+                sb.AppendLine($"Паттерны, которые нужно повторить позже:");
                 foreach (var item in wItems)
                 {
-                    var seq = ctx.Services.Repository.GetSequences().First();
-                    sb.AppendLine($"   {seq.Text} (повторить через {ExRepeatHelper.GetRepeatTimeText(DateTime.Now - item.LastUpdateTime)}) ");
+                    var seq = ctx.Services.SequenceProvider.GetSequence(item.SequenceId);
+                    sb.AppendLine($"   {seq.Text} (повторить {ExRepeatHelper.GetRepeatTimeText(DateTime.Now - item.LastUpdateTime)}) ");
                 }
 
                 ctx.SendMessage(sb.ToString());
