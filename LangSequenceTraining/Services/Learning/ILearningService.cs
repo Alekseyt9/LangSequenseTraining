@@ -1,5 +1,6 @@
 ﻿
 using LangSequenceTraining.Model;
+using LangSequenceTraining.Services.Learning;
 
 namespace LangSequenceTraining.Services
 {
@@ -10,5 +11,10 @@ namespace LangSequenceTraining.Services
         IEnumerable<Sequence> GetSequencesNew(Guid userId, Guid groupId);
 
         void SaveResult(Guid userId, IEnumerable<TrainingResult> resultInfos);
+
+        StatInfo GetUserStat(Guid userId);
+
+        IEnumerable<UserSequenceProgress> GetWaitingItems(Guid userId);
+
     }
 }

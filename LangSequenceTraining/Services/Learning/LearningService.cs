@@ -1,10 +1,18 @@
 ﻿
+using LangSequenceTraining.Helpers;
 using LangSequenceTraining.Model;
+using LangSequenceTraining.Services.Learning;
 
 namespace LangSequenceTraining.Services
 {
     internal class LearningService : ILearningService
     {
+        private class WaitingStat
+        {
+            public int RepeatCount { get; set; }
+            public int WaitingCount { get; set; }
+        }
+
         private readonly IAppRepository _repository;
         private readonly IAppRepositoryA _repositoryA;
         private readonly IUserProvider _userProvider;
@@ -41,6 +49,36 @@ namespace LangSequenceTraining.Services
             _repository.SaveUserProgress(prs);
         }
 
+        public StatInfo GetUserStat(Guid userId)
+        {
+            var infos = _repositoryA.GetWaitingItems(userId);
+            var wStat = GetWaitingStat(infos);
+
+            return new StatInfo()
+            {
+                FinishCount = _repositoryA.GetFinishCount(userId),
+                NewCount = _repositoryA.GetNewCount(userId),
+                WaitingCount = wStat.WaitingCount,
+                Repeat = wStat.RepeatCount
+            };
+        }
+
+        public IEnumerable<UserSequenceProgress> GetWaitingItems(Guid userId)
+        {
+            return _repositoryA.GetWaitingItems(userId);
+        }
+
+        private WaitingStat GetWaitingStat(IEnumerable<UserSequenceProgress> items)
+        {
+            var repItems = ExRepeatHelper.GetRepItems(items);
+
+            return new WaitingStat()
+            {
+                RepeatCount = repItems.Count,
+                WaitingCount = items.Count() - repItems.Count
+            };
+        }
+
         private void AddNewProgress(Guid userId, List<UserSequenceProgress> res, IEnumerable<TrainingResult> resultInfos)
         {
             var map = res.ToDictionary(x => x.Sequence.Id, y => y);
@@ -69,10 +107,10 @@ namespace LangSequenceTraining.Services
 
                 pr.LastUpdateTime = DateTime.Now.ToUniversalTime();
                 pr.StartTime = DateTime.Now.ToUniversalTime();
+                pr.LastSuccess = resInfo.IsSuccess;
 
                 if (resInfo.IsSuccess)
                 {
-                    pr.LastSuccessTime = DateTime.Now.ToUniversalTime();
                     pr.Stage = GetNextStage(pr.Stage);
                 }
 

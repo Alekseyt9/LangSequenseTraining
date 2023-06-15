@@ -10,6 +10,9 @@ namespace LangSequenceTraining.Services
         private readonly IProcessorManager _processorManager;
         private readonly ITextToSpeech _textToSpeech;
         private readonly ILearningService _learningService;
+        private readonly ISequenceProvider _sequenceProvider;
+
+        public ISequenceProvider SequenceProvider => _sequenceProvider;
 
         public IGptCheckService GptCheckService => _gptCheckService;
 
@@ -26,7 +29,8 @@ namespace LangSequenceTraining.Services
         public ContextServices(
             IGptCheckService gptCheckService, ITelegramBot telegramBot, 
             IAppRepository repository, IProcessorManager processorManager, 
-            ITextToSpeech textToSpeech, ILearningService learningService)
+            ITextToSpeech textToSpeech, ILearningService learningService,
+            ISequenceProvider sequenceProvider)
         {
             _gptCheckService = gptCheckService;
             _telegramBot = telegramBot;
@@ -34,6 +38,7 @@ namespace LangSequenceTraining.Services
             _processorManager = processorManager;
             _textToSpeech = textToSpeech;
             _learningService = learningService;
+            _sequenceProvider = sequenceProvider;
         }
 
     }

@@ -53,6 +53,12 @@ namespace LangSequenceTraining.Services
                     return;
                 }
 
+                if (ctx.State.Message.StartsWith("/stat"))
+                {
+                    await ProcessStat(ctx);
+                    ctx.State.Message = null;
+                    return;
+                }
             }
 
             if (state.StateKind == MainStateKind.InExercise)
@@ -95,7 +101,41 @@ namespace LangSequenceTraining.Services
                     });
                 }
             }
+        }
 
+        private async Task ProcessStat(ProcessorContext ctx)
+        {
+            var par = GetParam<string>(ctx.State.Message);
+            ctx.State.Message = null;
+
+            if (par == "w")
+            {
+                var sb = new StringBuilder();
+                var items = ctx.Services.LearningService.GetWaitingItems(ctx.State.UserId);
+                var rItems = ExRepeatHelper.GetRepItems(items);
+                var wItems = items.Except(rItems).ToList();
+
+                sb.AppendLine($"Паттерны, которые нужно повторить сейчас");
+                foreach (var item in rItems)
+                {
+                    var seq = ctx.Services.Repository.GetSequences().First();
+                    sb.AppendLine($"   {seq.Text} ");
+                }
+
+                sb.AppendLine();
+                sb.AppendLine($"Паттерны, которые нужно повторить позже");
+                foreach (var item in wItems)
+                {
+                    var seq = ctx.Services.Repository.GetSequences().First();
+                    sb.AppendLine($"   {seq.Text} (повторить через {ExRepeatHelper.GetRepeatTimeText(DateTime.Now - item.LastUpdateTime)}) ");
+                }
+
+                ctx.SendMessage(sb.ToString());
+            }
+            else
+            {
+                await ctx.SendMessage($"Неверный параметр {par} для команды /stat");
+            }
         }
 
         private async Task SendExResult(ProcessorContext ctx, List<MainExHistoryItem> hist)
@@ -118,7 +158,8 @@ namespace LangSequenceTraining.Services
 
             foreach (var pair in errMap)
             {
-                var errStr = pair.Value > 0 ? $"{pair.Value} {GrammarHelper.Declination(pair.Value)}" : "верно";
+                var dWords = new string[] { "ошибка", "ошибки", "ошибок" };
+                var errStr = pair.Value > 0 ? $"{pair.Value} {GrammarHelper.NumDeclination(pair.Value, dWords)}" : "верно";
                 sb.AppendLine($"   {seqMap[pair.Key].Text}: {errStr}");
             }
 
@@ -130,17 +171,21 @@ namespace LangSequenceTraining.Services
             var groups = ctx.Services.Repository.GetGroups();
             var i = 1;
 
+            var sb = new StringBuilder();
             foreach (var group in groups)
             {
-                await ctx.SendMessage($"[{i++}] {group.Name} ({group.Description})");
-                var seqs = ctx.Services.Repository.GetSequences(group.Name);
+                sb.AppendLine($"[{i++}] {group.Name} ({group.Description})");
+                var seqs = ctx.Services.SequenceProvider.GetSequences(group.Name);
                 var j = 1;
 
                 foreach (var seq in seqs)
                 {
-                    await ctx.SendMessage($"\t {seq.Text}");
+                    sb.AppendLine($"* {seq.Text}");
                 }
+
+                sb.AppendLine();
             }
+            await ctx.SendMessage(sb.ToString());
         }
 
         private async Task ProcessStartTr(ProcessorContext ctx)
@@ -191,6 +236,10 @@ namespace LangSequenceTraining.Services
             {
                 return (T)Convert.ChangeType(int.Parse(par), TypeCode.Int32);
             }
+            if (typeof(T) == typeof(string))
+            {
+                return (T)(object)par.Trim();
+            }
             throw new NotImplementedException();
         }
 
@@ -207,18 +256,24 @@ namespace LangSequenceTraining.Services
             {
                 sb.AppendLine($"\t [{i++}] {group.Name}");
             }
+            sb.AppendLine("Чтобы узнать описание каждой группы, введите команду '/grinfo'");
 
-            sb.AppendLine("Чтобы начать тренировку новых паттернов введите команду /tr номер_группы. Пример: /tr 1");
-            sb.AppendLine("Чтобы узнать описание каждой группы введите коменду /grinfo");
+            sb.AppendLine();
+            sb.AppendLine("Чтобы начать тренировку новых паттернов, введите команду '/tr <номер_группы>'. Пример: /tr 1");
+            
 
             return sb.ToString();
         }
 
         private void StatisticsMessage(ProcessorContext ctx, StringBuilder sb)
         {
+            var userStat = ctx.Services.LearningService.GetUserStat(ctx.State.UserId);
             sb.AppendLine("=Ваша статистика=");
-            sb.AppendLine($"Паттернов выучено: {0}");
-            sb.AppendLine($"Паттернов в ожидании: {0}");
+            sb.AppendLine($"Новых паттернов: {userStat.NewCount}");
+            sb.AppendLine($"Паттернов нужно повторить: {userStat.Repeat}");
+            sb.AppendLine($"Паттернов в ожидании: {userStat.WaitingCount}");
+            sb.AppendLine($"Паттернов выучено: {userStat.FinishCount}");
+            sb.AppendLine($"Чтобы получить подробную информацию по паттернам, которые ожидают повторения, введите команду '/stat w'");
         }
 
     }

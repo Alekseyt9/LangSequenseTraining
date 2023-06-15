@@ -19,7 +19,8 @@ namespace LangSequenseTraining.DAL
 
             builder.Property(x => x.StartTime).IsRequired();
             builder.Property(x => x.LastUpdateTime);
-            builder.Property(x => x.LastSuccessTime);
+            //builder.Property(x => x.LastSuccessTime);
+            builder.Property(x => x.LastSuccess);
             builder.Property(x => x.Stage);
         }
     }

@@ -48,9 +48,9 @@ namespace LangSequenceTraining.Services
 
             if (state.StateKind == ExStateKind.Start)
             {
-                var msg = $"Начало упражнения с паттерном '{tr.Sequence.Text}'. Напишите предложение, используя этот паттерн.";
-                await ctx.SendMessage(msg);
                 await ctx.SendMessage(tr.Sequence.Description);
+                var msg = $"Начало упражнения с паттерном '{tr.Sequence.Text}'. Напишите предложение, используя этот паттерн. Чтобы выйти из упражнений без сохранения результата, введите команду /r";
+                await ctx.SendMessage(msg);
 
                 state.StateKind = ExStateKind.Check;
                 ctx.State.CurProcState = state;

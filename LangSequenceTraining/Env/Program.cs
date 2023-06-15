@@ -62,6 +62,7 @@ namespace GptApiTest.Env
                         .AddScoped<IAppRepository, AppRepository>()
                         .AddScoped<IProcessorManager, ProcessorManager>()
                         .AddScoped<ILearningService, LearningService>()
+                        .AddScoped<ISequenceProvider, SequenceProvider>()
                         .RegisterPersistence(configuration)
                         .RegisterPersistenceA(configuration)
                         ;

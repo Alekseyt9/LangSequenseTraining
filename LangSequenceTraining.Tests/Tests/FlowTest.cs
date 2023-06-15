@@ -38,9 +38,10 @@ namespace LangSequenceTraining.Tests
             _telegramBot = new TelegramBotMock();
             var textToSpeech = new TextToSpeech(_configuration);
             var learningService = new LearningService(_repository, _repositoryA, _userProvider);
+            var sequenceProvider = new SequenceProvider(_repository);
 
             _procMan = new ProcessorManager(processorProvider, stateManager, gptService, 
-                _telegramBot, _repository, textToSpeech, stateManager, learningService);
+                _telegramBot, _repository, textToSpeech, stateManager, learningService, sequenceProvider);
             _telegramBot.ReceiveMessage += async (s, args) =>
             {
                 var user = _userProvider.GetUser(args.UserName);

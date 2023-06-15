@@ -7,7 +7,7 @@ namespace LangSequenceTraining.Services
     {
         IEnumerable<SequenceGroup> GetGroups();
 
-        IEnumerable<Sequence> GetSequences(string groupName);
+        IEnumerable<Sequence> GetSequences();
 
         IEnumerable<UserSequenceProgress> GetProgressData(Guid userId);
 

@@ -4,7 +4,7 @@ namespace LangSequenceTraining.Helpers
 {
     public static class GrammarHelper
     {
-        public static string Declination(int num)
+        public static string NumDeclination(int num, string[] words)
         {
             if (num > 100)
             {
@@ -14,19 +14,19 @@ namespace LangSequenceTraining.Helpers
             {
                 if (num == 0)
                 {
-                    return "ошибок";
+                    return words[2];
                 }
                 else if (num == 1)
                 {
-                    return "ошибка";
+                    return words[0];
                 }
                 else if (num >= 2 && num <= 4)
                 {
-                    return "ошибки";
+                    return words[1];
                 }
                 else if (num >= 5 && num <= 20)
                 {
-                    return "ошибок";
+                    return words[2];
                 }
             }
             else if (num > 20)
@@ -37,19 +37,19 @@ namespace LangSequenceTraining.Helpers
                 int m = Convert.ToInt32(n);
                 if (m == 0)
                 {
-                    return "ошибок";
+                    return words[2];
                 }
                 else if (m == 1)
                 {
-                    return "ошибка";
+                    return words[0];
                 }
                 else if (m >= 2 && m <= 4)
                 {
-                    return "ошибки";
+                    return words[1];
                 }
                 else
                 {
-                    return "ошибок";
+                    return words[2];
                 }
             }
             return null;

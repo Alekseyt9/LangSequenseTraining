@@ -18,7 +18,7 @@ namespace LangSequenceTraining.Model
 
         public DateTime? LastUpdateTime { get; set; }
 
-        public DateTime? LastSuccessTime { get; set; }
+        public bool LastSuccess { get; set; }
 
         public ProgressStage Stage { get; set; }
 
