@@ -93,7 +93,7 @@ namespace LangSequenceTraining.Services
                     res.Add(new UserSequenceProgress()
                     {
                         Sequence = pr.Sequence,
-                        Stage = ProgressStage.Start,
+                        Stage = ProgressStage.OneDay,
                         User = user
                     });
                 }

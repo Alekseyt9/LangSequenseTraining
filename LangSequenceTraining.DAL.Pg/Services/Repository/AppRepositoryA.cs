@@ -84,11 +84,10 @@ SELECT count(*)
 FROM public.""UserSequenceProgress""
 where 
 	""UserId"" = @userId
-	and ""Stage"" not in (@stageStart, @stageFinish)
+	and ""Stage"" not in (@stageFinish)
 "
             );
             command.Parameters.Add(new NpgsqlParameter("userId", userId));
-            command.Parameters.Add(new NpgsqlParameter("stageStart", (object)(int)ProgressStage.Start));
             command.Parameters.Add(new NpgsqlParameter("stageFinish", (object)(int)ProgressStage.Finish));
             return Convert.ToInt32(command.ExecuteScalar());
         }
@@ -106,11 +105,10 @@ left join (select * from public.""UserSequenceProgress"" where ""UserId"" = @use
 	on p.""SequenceId"" = s.""Id""
 where 
 	g.""IsHide"" != true
-    and (p.""Id"" is null or p.""Stage"" = @stageStart)
+    and (p.""Id"" is null)
 "
             );
             command.Parameters.Add(new NpgsqlParameter("userId", userId));
-            command.Parameters.Add(new NpgsqlParameter("stageStart", (object)(int)ProgressStage.Start));
 
             return Convert.ToInt32(command.ExecuteScalar());
         }
@@ -124,12 +122,11 @@ SELECT *
 FROM public.""UserSequenceProgress""
 where 
 	""UserId"" = @userId
-	and ""Stage"" not in (@stageStart, @stageFinish)
+	and ""Stage"" not in (@stageFinish)
 "
             );
 
             command.Parameters.Add(new NpgsqlParameter("userId", userId));
-            command.Parameters.Add(new NpgsqlParameter("stageStart", (object)(int)ProgressStage.Start));
             command.Parameters.Add(new NpgsqlParameter("stageFinish", (object)(int)ProgressStage.Finish));
 
             using var reader = command.ExecuteReader();

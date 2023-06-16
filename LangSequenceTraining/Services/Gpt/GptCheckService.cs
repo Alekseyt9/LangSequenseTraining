@@ -15,9 +15,11 @@ namespace LangSequenceTraining.Services
         public GptCheckService(IConfiguration config)
         {
             var apiKey = config["GPT_API_key"];
-            _api = new OpenAIAPI(apiKey);
+            _api = new OpenAIAPI(apiKey)
+            {
+                HttpClientFactory = new HttpClientFactory()
+            };
             _config = config;
-            //Task.Run(async () => { await Init(); });
         }
 
         private async Task Init()
