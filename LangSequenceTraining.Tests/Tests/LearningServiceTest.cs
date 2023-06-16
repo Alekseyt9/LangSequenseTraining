@@ -37,7 +37,8 @@ namespace LangSequenceTraining.Tests
             _repositoryA = new AppRepositoryA(_configuration);
             _userRepository = new UserRepository(_dbContext);
             _userProvider = new UserProvider(_userRepository);
-            _learningServ = new LearningService(_repository, _repositoryA, _userProvider);
+            var seqProv = new SequenceProvider(_repository);
+            _learningServ = new LearningService(_repository, _repositoryA, _userProvider, seqProv);
         }
 
         private User GetUser()

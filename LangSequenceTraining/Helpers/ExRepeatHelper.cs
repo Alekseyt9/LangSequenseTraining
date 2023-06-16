@@ -6,16 +6,16 @@ namespace LangSequenceTraining.Helpers
     public static class ExRepeatHelper
     {
 
-        public static string GetRepeatTimeText(TimeSpan? span)
+        public static string GetRepeatTimeText(TimeSpan span)
         {
-            if (span.Value.Days < 1)
+            if (span.Days < 1)
                 return "в течении суток";
-            if (span.Value.Days > 1 && span.Value.Days < 7)
-                return $"через {span.Value.Days} {GrammarHelper.NumDeclination(span.Value.Days, new[] { "день", "дня", "дней" })}";
-            if (span.Value.Days > 7 && span.Value.Days < 30)
-                return $"через {span.Value.Days / 7} {GrammarHelper.NumDeclination(span.Value.Days / 7, new[] { "неделя", "недели", "недель" })}";
-            if (span.Value.Days > 30)
-                return $"через {span.Value.Days / 30} {GrammarHelper.NumDeclination(span.Value.Days / 30, new[] { "месяц", "месяца", "месяцев" })}";
+            if (span.Days > 1 && span.Days < 7)
+                return $"через {span.Days} {GrammarHelper.NumDeclination(span.Days, new[] { "день", "дня", "дней" })}";
+            if (span.Days > 7 && span.Days < 30)
+                return $"через {span.Days / 7} {GrammarHelper.NumDeclination(span.Days / 7, new[] { "неделя", "недели", "недель" })}";
+            if (span.Days > 30)
+                return $"через {span.Days / 30} {GrammarHelper.NumDeclination(span.Days / 30, new[] { "месяц", "месяца", "месяцев" })}";
 
             throw new ArgumentException();
         }
@@ -50,7 +50,7 @@ namespace LangSequenceTraining.Helpers
                 else
                 {
                     // повтор через сутки
-                    return DateTime.Now - x.LastUpdateTime >= new TimeSpan(1, 0, 0);
+                    return DateTime.Now - x.LastUpdateTime >= new TimeSpan(1, 0, 0, 0);
                 }
             }).ToList();
         }

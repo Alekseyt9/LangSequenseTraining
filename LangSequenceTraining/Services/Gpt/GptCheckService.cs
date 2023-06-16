@@ -39,7 +39,7 @@ namespace LangSequenceTraining.Services
             // todo сделать таймаут
             var ans = await _conversation.GetResponseFromChatbotAsync();
             var res = new CheckResult();
-            if (ans.ToLower().StartsWith("ok"))
+            if (ans.ToLower().Contains("ok$ok"))
             {
                 res.IsCorrect = true;
                 return res;

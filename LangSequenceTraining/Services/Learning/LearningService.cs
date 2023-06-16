@@ -16,20 +16,22 @@ namespace LangSequenceTraining.Services
         private readonly IAppRepository _repository;
         private readonly IAppRepositoryA _repositoryA;
         private readonly IUserProvider _userProvider;
+        private readonly ISequenceProvider _sequenceProvider;
 
-        public LearningService(IAppRepository repository, IAppRepositoryA repositoryA, IUserProvider userProvider)
+        public LearningService(IAppRepository repository, IAppRepositoryA repositoryA, 
+            IUserProvider userProvider, ISequenceProvider sequenceProvider)
         {
             _repository = repository;
             _repositoryA = repositoryA;
             _userProvider = userProvider;
+            _sequenceProvider = sequenceProvider;
         }
 
         public IEnumerable<Sequence> GetSequencesForRepeat(Guid userId)
         {
-            var progresses = _repository.GetProgressData(userId).Where(x => x.Stage != ProgressStage.Finish);
-            // todo второй фильтр - по времени
-
-            return progresses.Select(x => x.Sequence).ToList();
+            var items = _repositoryA.GetWaitingItems(userId);
+            var repItems = ExRepeatHelper.GetRepItems(items).OrderByDescending(x => x.LastUpdateTime).ToList();
+            return repItems.Select(x => _sequenceProvider.GetSequence(x.SequenceId)).ToList();
         }
 
         public IEnumerable<Sequence> GetSequencesNew(Guid userId, Guid groupId)
@@ -106,7 +108,10 @@ namespace LangSequenceTraining.Services
                 var resInfo = map[pr.Sequence.Id];
 
                 pr.LastUpdateTime = DateTime.Now.ToUniversalTime();
-                pr.StartTime = DateTime.Now.ToUniversalTime();
+                if (!pr.StartTime.HasValue)
+                {
+                    pr.StartTime = DateTime.Now.ToUniversalTime();
+                }
                 pr.LastSuccess = resInfo.IsSuccess;
 
                 if (resInfo.IsSuccess)

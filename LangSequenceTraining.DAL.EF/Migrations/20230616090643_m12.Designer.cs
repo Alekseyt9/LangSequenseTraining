@@ -3,6 +3,7 @@ using System;
 using LangSequenceTraining.DAL.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace LangSequenceTraining.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230616090643_m12")]
+    partial class m12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,7 +52,7 @@ namespace LangSequenceTraining.Migrations
                     b.HasIndex("Text")
                         .IsUnique();
 
-                    b.ToTable("Sequences", (string)null);
+                    b.ToTable("Sequences");
                 });
 
             modelBuilder.Entity("LangSequenceTraining.Model.SequenceGroup", b =>
@@ -77,7 +80,7 @@ namespace LangSequenceTraining.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("SequenceGroup", (string)null);
+                    b.ToTable("SequenceGroup");
                 });
 
             modelBuilder.Entity("LangSequenceTraining.Model.User", b =>
@@ -95,7 +98,7 @@ namespace LangSequenceTraining.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("LangSequenceTraining.Model.UserSequenceProgress", b =>
@@ -128,7 +131,7 @@ namespace LangSequenceTraining.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserSequenceProgress", (string)null);
+                    b.ToTable("UserSequenceProgress");
                 });
 
             modelBuilder.Entity("LangSequenceTraining.Model.UserState", b =>
@@ -149,7 +152,7 @@ namespace LangSequenceTraining.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("UserState", (string)null);
+                    b.ToTable("UserState");
                 });
 
             modelBuilder.Entity("LangSequenceTraining.Model.Sequence", b =>

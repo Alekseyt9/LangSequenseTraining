@@ -37,7 +37,8 @@ namespace LangSequenceTraining.Tests
             var gptService = new GptCheckService(_configuration);
             _telegramBot = new TelegramBotMock();
             var textToSpeech = new TextToSpeech(_configuration);
-            var learningService = new LearningService(_repository, _repositoryA, _userProvider);
+            var seqProv = new SequenceProvider(_repository);
+            var learningService = new LearningService(_repository, _repositoryA, _userProvider, seqProv);
             var sequenceProvider = new SequenceProvider(_repository);
 
             _procMan = new ProcessorManager(processorProvider, stateManager, gptService, 

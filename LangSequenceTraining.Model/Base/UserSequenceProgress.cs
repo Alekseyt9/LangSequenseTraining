@@ -14,7 +14,7 @@ namespace LangSequenceTraining.Model
 
         public User User { get; set; }
 
-        public DateTime StartTime { get; set; }
+        public DateTime? StartTime { get; set; }
 
         public DateTime? LastUpdateTime { get; set; }
 

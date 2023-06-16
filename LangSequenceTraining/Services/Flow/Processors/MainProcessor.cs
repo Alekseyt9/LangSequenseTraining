@@ -46,6 +46,13 @@ namespace LangSequenceTraining.Services
                     return;
                 }
 
+                if (ctx.State.Message.StartsWith("/rep"))
+                {
+                    await ProcessStartRep(ctx);
+                    ctx.State.Message = null;
+                    return;
+                }
+
                 if (ctx.State.Message.StartsWith("/grinfo"))
                 {
                     await ProcessGrInfo(ctx);
@@ -53,7 +60,7 @@ namespace LangSequenceTraining.Services
                     return;
                 }
 
-                if (ctx.State.Message.StartsWith("/stat"))
+                if (ctx.State.Message.StartsWith("/statw"))
                 {
                     await ProcessStat(ctx);
                     ctx.State.Message = null;
@@ -105,37 +112,32 @@ namespace LangSequenceTraining.Services
 
         private async Task ProcessStat(ProcessorContext ctx)
         {
-            var par = GetParam<string>(ctx.State.Message);
             ctx.State.Message = null;
 
-            if (par == "w")
+            var sb = new StringBuilder();
+            var items = ctx.Services.LearningService.GetWaitingItems(ctx.State.UserId);
+            var rItems = ExRepeatHelper.GetRepItems(items);
+            var wItems = items.Except(rItems).ToList();
+
+            sb.AppendLine($"Паттерны, которые нужно повторить сейчас:");
+            foreach (var item in rItems)
             {
-                var sb = new StringBuilder();
-                var items = ctx.Services.LearningService.GetWaitingItems(ctx.State.UserId);
-                var rItems = ExRepeatHelper.GetRepItems(items);
-                var wItems = items.Except(rItems).ToList();
-
-                sb.AppendLine($"Паттерны, которые нужно повторить сейчас:");
-                foreach (var item in rItems)
-                {
-                    var seq = ctx.Services.SequenceProvider.GetSequence(item.SequenceId);
-                    sb.AppendLine($"   {seq.Text} ");
-                }
-
-                sb.AppendLine();
-                sb.AppendLine($"Паттерны, которые нужно повторить позже:");
-                foreach (var item in wItems)
-                {
-                    var seq = ctx.Services.SequenceProvider.GetSequence(item.SequenceId);
-                    sb.AppendLine($"   {seq.Text} (повторить {ExRepeatHelper.GetRepeatTimeText(DateTime.Now - item.LastUpdateTime)}) ");
-                }
-
-                ctx.SendMessage(sb.ToString());
+                var seq = ctx.Services.SequenceProvider.GetSequence(item.SequenceId);
+                sb.AppendLine($"   {seq.Text} ");
             }
-            else
+
+            sb.AppendLine();
+            sb.AppendLine($"Паттерны, которые нужно повторить позже:");
+            foreach (var item in wItems)
             {
-                await ctx.SendMessage($"Неверный параметр {par} для команды /stat");
+                var seq = ctx.Services.SequenceProvider.GetSequence(item.SequenceId);
+                sb.AppendLine(
+                    $"   {seq.Text} ({
+                        ExRepeatHelper.GetRepeatTimeText(item.LastUpdateTime.Value + ExRepeatHelper.StageToTimeSpan(item.Stage) - DateTime.Now)
+                    }) ");
             }
+
+            await ctx.SendMessage(sb.ToString());
         }
 
         private async Task SendExResult(ProcessorContext ctx, List<MainExHistoryItem> hist)
@@ -188,6 +190,22 @@ namespace LangSequenceTraining.Services
             await ctx.SendMessage(sb.ToString());
         }
 
+        private async Task ProcessStartRep(ProcessorContext ctx)
+        {
+            ctx.State.Message = null;
+            var state = (MainProcessorState)ctx.State.CurProcState;
+            state.CurSequences = new List<Sequence>(GetSequencesForRep(ctx));
+            state.ExStatesHistoryItems = new List<MainExHistoryItem>();
+
+            var nextCh = ExChoiceHelper.GetNextEx(state.ExStatesHistoryItems, state.CurSequences, new List<string>() { "ex1" });
+            state.StateKind = MainStateKind.InExercise;
+
+            await ctx.DoTransition(nextCh.ExName, new ExtTransitionMessage()
+            {
+                Sequence = nextCh.Sequence
+            });
+        }
+
         private async Task ProcessStartTr(ProcessorContext ctx)
         {
             var grNum = GetParam<int>(ctx.State.Message);
@@ -210,6 +228,11 @@ namespace LangSequenceTraining.Services
             {
                 Sequence = nextCh.Sequence
             });
+        }
+
+        private IEnumerable<Sequence> GetSequencesForRep(ProcessorContext ctx)
+        {
+            return ctx.Services.LearningService.GetSequencesForRepeat(ctx.State.UserId);
         }
 
         private IEnumerable<Sequence> GetSequencesForTrNew(ProcessorContext ctx, SequenceGroup gr)
@@ -259,8 +282,8 @@ namespace LangSequenceTraining.Services
             sb.AppendLine("Чтобы узнать описание каждой группы, введите команду '/grinfo'");
 
             sb.AppendLine();
-            sb.AppendLine("Чтобы начать тренировку новых паттернов, введите команду '/tr <номер_группы>'. Пример: /tr 1");
-            
+            sb.AppendLine("Чтобы начать тренировку новых паттернов, введите команду '/tr номер_группы'. Пример: /tr 1");
+            sb.AppendLine("Чтобы начать повторение уже пройденных паттернов, которые готовы к повторению, введите команду '/rep'");
 
             return sb.ToString();
         }
@@ -270,7 +293,7 @@ namespace LangSequenceTraining.Services
             var userStat = ctx.Services.LearningService.GetUserStat(ctx.State.UserId);
             sb.AppendLine("=Ваша статистика=");
             sb.AppendLine($"Новых паттернов: {userStat.NewCount}");
-            sb.AppendLine($"Паттернов нужно повторить: {userStat.Repeat}");
+            sb.AppendLine($"Паттернов повторить: {userStat.Repeat}");
             sb.AppendLine($"Паттернов в ожидании: {userStat.WaitingCount}");
             sb.AppendLine($"Паттернов выучено: {userStat.FinishCount}");
             sb.AppendLine($"Чтобы получить подробную информацию по паттернам, которые ожидают повторения, введите команду '/stat w'");
