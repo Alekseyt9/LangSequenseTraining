@@ -17,13 +17,14 @@ namespace LangSequenceTraining.Services
             var apiKey = config["GPT_API_key"];
             _api = new OpenAIAPI(apiKey);
             _config = config;
+            //Task.Run(async () => { await Init(); });
         }
 
         private async Task Init()
         {
             var firstPhrase = _config["firstPhrase"];
             _conversation = _api.Chat.CreateConversation();
-            _conversation.AppendMessage(new ChatMessage(ChatMessageRole.Assistant, firstPhrase));
+            _conversation.AppendMessage(new ChatMessage(ChatMessageRole.System, firstPhrase));
             var ans = await _conversation.GetResponseFromChatbotAsync();
         }
 
@@ -39,7 +40,7 @@ namespace LangSequenceTraining.Services
             // todo сделать таймаут
             var ans = await _conversation.GetResponseFromChatbotAsync();
             var res = new CheckResult();
-            if (ans.ToLower().Contains("ok$ok"))
+            if (ans.ToLower().Contains("ok_ok"))
             {
                 res.IsCorrect = true;
                 return res;

@@ -98,7 +98,11 @@ namespace LangSequenceTraining.Services
                     state.StateKind = MainStateKind.Start;
                     state.CurSequences = null;
                     state.ExStatesHistoryItems = new List<MainExHistoryItem>();
-                    await ctx.DoTransition("main", null);
+                    ctx.State.Message = null;
+                    await ctx.DoTransition("main", new MainTransitionMessage()
+                    {
+                        IsReset = true
+                    });
                 }
                 else
                 {
@@ -296,7 +300,7 @@ namespace LangSequenceTraining.Services
             sb.AppendLine($"Паттернов повторить: {userStat.Repeat}");
             sb.AppendLine($"Паттернов в ожидании: {userStat.WaitingCount}");
             sb.AppendLine($"Паттернов выучено: {userStat.FinishCount}");
-            sb.AppendLine($"Чтобы получить подробную информацию по паттернам, которые ожидают повторения, введите команду '/stat w'");
+            sb.AppendLine($"Чтобы получить подробную информацию по паттернам, которые ожидают повторения, введите команду '/statw'");
         }
 
     }
