@@ -46,6 +46,11 @@ namespace LangSequenceTraining.Services
                 };
             }
 
+            if (string.IsNullOrEmpty(state.CurrentProcessorName))
+            {
+                state.CurrentProcessorName = "main";
+            }
+
             state.ContextState = new ContextState()
             {
                 Message = msg,

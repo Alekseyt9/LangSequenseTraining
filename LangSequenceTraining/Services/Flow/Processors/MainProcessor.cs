@@ -198,7 +198,15 @@ namespace LangSequenceTraining.Services
         {
             ctx.State.Message = null;
             var state = (MainProcessorState)ctx.State.CurProcState;
-            state.CurSequences = new List<Sequence>(GetSequencesForRep(ctx));
+            var repItems = new List<Sequence>(GetSequencesForRep(ctx)).ToList();
+
+            if (repItems.Count == 0)
+            {
+                await ctx.SendMessage("В данный момент нет паттернов для повторения");
+                return;
+            }
+
+            state.CurSequences = new List<Sequence>(repItems);
             state.ExStatesHistoryItems = new List<MainExHistoryItem>();
 
             var nextCh = ExChoiceHelper.GetNextEx(state.ExStatesHistoryItems, state.CurSequences, new List<string>() { "ex1" });
@@ -258,14 +266,16 @@ namespace LangSequenceTraining.Services
 
         private T GetParam<T>(string str)
         {
-            var par = str.Split(' ')[1];
+            var arr = str.Split(' ');
+            var par = arr.Where(x => !string.IsNullOrEmpty(x)).Last().Trim();
+
             if (typeof(T) == typeof(int))
             {
                 return (T)Convert.ChangeType(int.Parse(par), TypeCode.Int32);
             }
             if (typeof(T) == typeof(string))
             {
-                return (T)(object)par.Trim();
+                return (T)(object)par;
             }
             throw new NotImplementedException();
         }
@@ -295,7 +305,7 @@ namespace LangSequenceTraining.Services
         private void StatisticsMessage(ProcessorContext ctx, StringBuilder sb)
         {
             var userStat = ctx.Services.LearningService.GetUserStat(ctx.State.UserId);
-            sb.AppendLine("=Ваша статистика=");
+            sb.AppendLine("=Статистика=");
             sb.AppendLine($"Новых паттернов: {userStat.NewCount}");
             sb.AppendLine($"Паттернов повторить: {userStat.Repeat}");
             sb.AppendLine($"Паттернов в ожидании: {userStat.WaitingCount}");

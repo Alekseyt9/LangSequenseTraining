@@ -60,6 +60,9 @@ namespace LangSequenceTraining.Services
 
             if (state.StateKind == ExStateKind.Check)
             {
+                ctx.SendMessage(
+                    "Предложение принято для проверки. Проверка может занимать некоторое время, возможно больше 5 секунд.");
+
                 var msg = ctx.State.Message;
                 var checkResult = await ctx.Services.GptCheckService.Check(msg);
                 if (checkResult.IsCorrect)
