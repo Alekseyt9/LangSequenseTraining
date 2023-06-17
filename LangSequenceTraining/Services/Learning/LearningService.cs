@@ -30,7 +30,7 @@ namespace LangSequenceTraining.Services
         public IEnumerable<Sequence> GetSequencesForRepeat(Guid userId)
         {
             var items = _repositoryA.GetWaitingItems(userId);
-            var repItems = ExRepeatHelper.GetRepItems(items).OrderByDescending(x => x.LastUpdateTime).ToList();
+            var repItems = ExRepeatHelper.GetRepItems(items).OrderByDescending(x => x.LastUpdateTime).Take(3).ToList();
             return repItems.Select(x => _sequenceProvider.GetSequence(x.SequenceId)).ToList();
         }
 

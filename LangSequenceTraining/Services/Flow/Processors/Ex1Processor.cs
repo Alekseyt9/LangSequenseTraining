@@ -5,30 +5,24 @@ namespace LangSequenceTraining.Services
     [Processor("ex1")]
     internal class Ex1Processor : IProcessor
     {
-        /*
-        public void Start(ProcessorContext ctx)
-        {
-            ctx.Send(
-@"Упражнение 'Предложение' на тему 'Образование'.
-Фраза (1 из 5): i am going to 
-Составьте предложение с данной фразой (1 из 3). 
-Для подробного описания упражнения введите /help.");
-        }
-        */
 
         public async Task Process(ProcessorContext ctx, TransitionMessageBase trMsg)
         {
             var state = (Ex1ProcessorState)ctx.State.CurProcState;
             var tr = (ExtTransitionMessage)trMsg;
 
-            if (state == null)
-            {
-                state = new Ex1ProcessorState(ExStateKind.Start, tr.Sequence);
-                ctx.State.CurProcState = state;
-            }
-
             // todo commandParser
-            if (ctx.State.Message != null && (ctx.State.Message.StartsWith("/r") || ctx.State.Message.StartsWith("/tr")))
+            var needReset = false;
+            if (ctx.State.Message != null
+                && (ctx.State.Message.StartsWith("/r") || ctx.State.Message.StartsWith("/tr")))
+            {
+                needReset = true;
+            }
+            /*if (tr == null)
+            {
+                needReset = true;
+            }*/
+            if (needReset)
             {
                 ctx.State.CurProcState = null;
                 ctx.State.Message = null;
@@ -38,6 +32,12 @@ namespace LangSequenceTraining.Services
                 });
 
                 return;
+            }
+
+            if (state == null)
+            {
+                state = new Ex1ProcessorState(ExStateKind.Start, tr.Sequence);
+                ctx.State.CurProcState = state;
             }
 
             if (ctx.State.Message != null && (ctx.State.Message.StartsWith("/")))
@@ -60,11 +60,28 @@ namespace LangSequenceTraining.Services
 
             if (state.StateKind == ExStateKind.Check)
             {
-                ctx.SendMessage(
-                    "Предложение принято для проверки. Проверка может занимать некоторое время, возможно больше 5 секунд.");
+                ctx.SendMessage("Предложение принято для проверки. Проверка может занимать некоторое время, возможно больше 5 секунд.");
 
+                var i = 0;
+                while (!await Check(ctx, state) || i > 4)
+                {
+                    i++;
+                }
+
+                if (i > 4)
+                {
+                    ctx.SendMessage("Не удалось выполнить проверку, сервис недоступен. Попробуйте позже.");
+                }
+            }
+        }
+
+        private async Task<bool> Check(ProcessorContext ctx, Ex1ProcessorState state)
+        {
+            try
+            {
                 var msg = ctx.State.Message;
                 var checkResult = await ctx.Services.GptCheckService.Check(msg);
+
                 if (checkResult.IsCorrect)
                 {
                     await ctx.SendMessage("Предложение написано верно!");
@@ -87,9 +104,13 @@ namespace LangSequenceTraining.Services
                     Sequence = state.Sequence,
                     CheckResult = checkResult.IsCorrect
                 });
-
+                return true;
             }
-
+            catch (Exception ex)
+            {
+                ctx.SendMessage($"Ощибка {ex.Message}. Повторяем попытку.");
+                return false;
+            }
         }
 
     }
