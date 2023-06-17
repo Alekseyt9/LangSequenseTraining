@@ -1,5 +1,4 @@
 ﻿
-
 using LangSequenceTraining.Model;
 
 namespace LangSequenceTraining.Services
@@ -15,6 +14,10 @@ namespace LangSequenceTraining.Services
         public ExStateKind StateKind { get; set; }
 
         public Sequence Sequence { get; set; }
+
+        public bool? IsCorrect { get; set; }
+
+        public string UserMsg { get; set; }
 
     }
 }

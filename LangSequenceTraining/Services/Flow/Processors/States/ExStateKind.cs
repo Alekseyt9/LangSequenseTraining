@@ -5,7 +5,8 @@ namespace LangSequenceTraining.Services
     internal enum ExStateKind
     {
         Start,
-        Check
+        Check,
+        UserChoice
     }
 
 }

@@ -17,9 +17,21 @@ namespace LangSequenceTraining.Services
             _services = services;
         }
 
-        public async Task SendMessage(string msg, FileData file = null)
+        public async Task SendMessage(string msg, FileData file = null, ButtonInfo[] buttons = null)
         {
-            await _services.TelegramBot.SendMessage(_state.ChannelId, msg, file);
+            if (file != null)
+            {
+                await _services.TelegramBot.SendMessage(_state.ChannelId, msg, file);
+                return;
+            }
+
+            if (buttons != null)
+            {
+                await _services.TelegramBot.SendMessage(_state.ChannelId, msg, buttons);
+                return; 
+            }
+
+            _services.TelegramBot.SendMessage(_state.ChannelId, msg);
         }
 
         public async Task DoTransition(string procName, TransitionMessageBase trMsg)

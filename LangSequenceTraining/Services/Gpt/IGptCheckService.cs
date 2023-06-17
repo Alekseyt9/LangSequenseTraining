@@ -5,6 +5,6 @@ namespace LangSequenceTraining.Services
 {
     internal interface IGptCheckService
     {
-        Task<CheckResult> Check(string msg);
+        Task<CheckResult> Check(string msg, bool reset);
     }
 }

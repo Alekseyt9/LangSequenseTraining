@@ -30,9 +30,9 @@ namespace LangSequenceTraining.Services
             var ans = await _conversation.GetResponseFromChatbotAsync();
         }
 
-        public async Task<CheckResult> Check(string msg)
+        public async Task<CheckResult> Check(string msg, bool reset)
         {
-            if (_conversation == null)
+            if (_conversation == null || reset)
             {
                 await Init();
             }

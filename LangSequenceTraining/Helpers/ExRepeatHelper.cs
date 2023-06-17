@@ -9,13 +9,21 @@ namespace LangSequenceTraining.Helpers
         public static string GetRepeatTimeText(TimeSpan span)
         {
             if (span.Days < 1)
+            {
                 return "в течении суток";
-            if (span.Days > 1 && span.Days < 7)
+            }
+            if (span.Days >= 1 && span.Days < 7)
+            {
                 return $"через {span.Days} {GrammarHelper.NumDeclination(span.Days, new[] { "день", "дня", "дней" })}";
-            if (span.Days > 7 && span.Days < 30)
+            }
+            if (span.Days >= 7 && span.Days < 30)
+            {
                 return $"через {span.Days / 7} {GrammarHelper.NumDeclination(span.Days / 7, new[] { "неделя", "недели", "недель" })}";
-            if (span.Days > 30)
+            }
+            if (span.Days >= 30)
+            {
                 return $"через {span.Days / 30} {GrammarHelper.NumDeclination(span.Days / 30, new[] { "месяц", "месяца", "месяцев" })}";
+            }
 
             throw new ArgumentException();
         }

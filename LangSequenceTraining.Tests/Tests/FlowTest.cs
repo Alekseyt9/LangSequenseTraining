@@ -43,7 +43,7 @@ namespace LangSequenceTraining.Tests
 
             _procMan = new ProcessorManager(processorProvider, stateManager, gptService, 
                 _telegramBot, _repository, textToSpeech, stateManager, learningService, sequenceProvider);
-            _telegramBot.ReceiveMessage += async (s, args) =>
+            _telegramBot.ReceiveAnswer += async (s, args) =>
             {
                 var user = _userProvider.GetUser(args.UserName);
                 await _procMan.Process(user.Id, args.ChannelId, args.Message);

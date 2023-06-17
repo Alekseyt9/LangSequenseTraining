@@ -25,7 +25,7 @@ namespace GptApiTest.Env
         static async Task StartInCons(IHost host)
         {
             var bot = host.Services.GetRequiredService<ITelegramBot>();
-            bot.ReceiveMessage += async (sender, args) =>
+            bot.ReceiveAnswer += async (sender, args) =>
             {
                 var servScopeFactory = host.Services.GetRequiredService<IServiceScopeFactory>();
                 using var scope = servScopeFactory.CreateScope();

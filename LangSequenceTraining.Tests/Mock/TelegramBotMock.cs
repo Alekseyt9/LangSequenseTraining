@@ -8,20 +8,30 @@ namespace LangSequenceTraining.Tests
         private string _lastSendedMsg;
         private string _lastReceivedMsg;
 
-        public event ITelegramBot.AsyncEventHandler? ReceiveMessage;
+        public event ITelegramBot.AsyncEventHandler? ReceiveAnswer;
 
-        public Task SendMessage(long channelId, string msg, FileData file = null)
+        public Task SendMessage(long channelId, string msg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendMessage(long channelId, string msg, FileData file)
         {
             _lastSendedMsg = msg;
             return Task.CompletedTask;
         }
 
+        public Task SendMessage(long channelId, string msg, ButtonInfo[] buttons)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task UserMessageTest(string msg, string userName)
         {
             _lastReceivedMsg = msg;
-            if (ReceiveMessage != null)
+            if (ReceiveAnswer != null)
             {
-                await ReceiveMessage(this, new TelegramMessageEventArgs()
+                await ReceiveAnswer(this, new TelegramAnswerEventArgs()
                 {
                     Message = msg,
                     UserName = userName
