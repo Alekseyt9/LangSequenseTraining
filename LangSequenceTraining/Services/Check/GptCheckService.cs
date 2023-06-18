@@ -6,7 +6,7 @@ using OpenAI_API.Chat;
 
 namespace LangSequenceTraining.Services
 {
-    internal class GptCheckService : IGptCheckService
+    internal class GptCheckService : ICheckService
     {
         private readonly OpenAIAPI _api;
         private readonly IConfiguration _config;
@@ -27,6 +27,7 @@ namespace LangSequenceTraining.Services
             var firstPhrase = _config["firstPhrase"];
             _conversation = _api.Chat.CreateConversation();
             _conversation.AppendMessage(new ChatMessage(ChatMessageRole.System, firstPhrase));
+            //_conversation.AppendMessage(new ChatMessage(ChatMessageRole.Assistant, firstPhrase));
             var ans = await _conversation.GetResponseFromChatbotAsync();
         }
 
@@ -37,7 +38,7 @@ namespace LangSequenceTraining.Services
                 await Init();
             }
 
-            _conversation.AppendMessage(new ChatMessage(ChatMessageRole.Assistant, msg));
+            _conversation.AppendMessage(new ChatMessage(ChatMessageRole.User, "проверь: " +msg));
 
             var ans = await _conversation.GetResponseFromChatbotAsync();
             var res = new CheckResult();

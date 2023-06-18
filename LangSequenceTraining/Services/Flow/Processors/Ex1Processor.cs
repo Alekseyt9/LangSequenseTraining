@@ -74,6 +74,8 @@ namespace LangSequenceTraining.Services
                     if (ctx.State.Message == "/user_check_rep")
                     {
                         await CheckRepeat(ctx, state, state.UserMsg, true);
+                        ctx.State.CurProcState = state;
+                        ctx.End();
                     }
 
                     return;
@@ -105,7 +107,8 @@ namespace LangSequenceTraining.Services
         {
             try
             {
-                var checkResult = await ctx.Services.GptCheckService.Check(msg, checkReset);
+                var checkService = ctx.Services.CheckServiceProvider.Get(ctx.State.UserId);
+                var checkResult = await checkService.Check(msg, checkReset);
                 state.IsCorrect = checkResult.IsCorrect;
                 state.UserMsg = msg;
 

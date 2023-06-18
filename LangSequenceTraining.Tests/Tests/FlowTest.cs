@@ -34,14 +34,14 @@ namespace LangSequenceTraining.Tests
 
             var processorProvider = new ProcessorProvider();
             var stateManager = new UserStateProviderMock();
-            var gptService = new GptCheckService(_configuration);
+            var checkServiceProvider = new CheckServiceProvider(_configuration);
             _telegramBot = new TelegramBotMock();
             var textToSpeech = new TextToSpeech(_configuration);
             var seqProv = new SequenceProvider(_repository);
             var learningService = new LearningService(_repository, _repositoryA, _userProvider, seqProv);
             var sequenceProvider = new SequenceProvider(_repository);
 
-            _procMan = new ProcessorManager(processorProvider, stateManager, gptService, 
+            _procMan = new ProcessorManager(processorProvider, stateManager, checkServiceProvider, 
                 _telegramBot, _repository, textToSpeech, stateManager, learningService, sequenceProvider);
             _telegramBot.ReceiveAnswer += async (s, args) =>
             {

@@ -3,7 +3,7 @@ using LangSequenceTraining.Services.Gpt;
 
 namespace LangSequenceTraining.Services
 {
-    internal interface IGptCheckService
+    public interface ICheckService
     {
         Task<CheckResult> Check(string msg, bool reset);
     }

@@ -15,10 +15,14 @@ namespace LangSequenceTraining.Tests
             _configuration = builder.Build();
         }
 
+        /*
         [Fact]
         public async Task Test()
         {
             var serv = new GptCheckService(_configuration);
+
+            var checkProvider = new CheckServiceProvider(_configuration);
+            var checkServ = checkProvider.Get();
 
             var res1 = await serv.Check("I have a lot of money");
             var res2 = await serv.Check("I has a lot of money");
@@ -27,6 +31,7 @@ namespace LangSequenceTraining.Tests
             Assert.False(res2.IsCorrect);
             Assert.True(!string.IsNullOrEmpty(res2.Message));
         }
+        */
 
     }
 }

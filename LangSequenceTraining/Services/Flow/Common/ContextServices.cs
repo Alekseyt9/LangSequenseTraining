@@ -4,7 +4,7 @@ namespace LangSequenceTraining.Services
 {
     internal class ContextServices
     {
-        private readonly IGptCheckService _gptCheckService;
+        private readonly ICheckServiceProvider _checkServiceProvider;
         private readonly ITelegramBot _telegramBot;
         private readonly IAppRepository _repository;
         private readonly IProcessorManager _processorManager;
@@ -14,7 +14,7 @@ namespace LangSequenceTraining.Services
 
         public ISequenceProvider SequenceProvider => _sequenceProvider;
 
-        public IGptCheckService GptCheckService => _gptCheckService;
+        public ICheckServiceProvider CheckServiceProvider => _checkServiceProvider;
 
         public IAppRepository Repository => _repository;
 
@@ -27,12 +27,12 @@ namespace LangSequenceTraining.Services
         public ILearningService LearningService  => _learningService;
 
         public ContextServices(
-            IGptCheckService gptCheckService, ITelegramBot telegramBot, 
+            ICheckServiceProvider checkServiceProvider, ITelegramBot telegramBot, 
             IAppRepository repository, IProcessorManager processorManager, 
             ITextToSpeech textToSpeech, ILearningService learningService,
             ISequenceProvider sequenceProvider)
         {
-            _gptCheckService = gptCheckService;
+            _checkServiceProvider = checkServiceProvider;
             _telegramBot = telegramBot;
             _repository = repository;
             _processorManager = processorManager;

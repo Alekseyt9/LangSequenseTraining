@@ -7,7 +7,7 @@ namespace LangSequenceTraining.Services
     {
         private readonly IProcessorProvider _processorProvider;
         private readonly IUserStateProvider _stateProvider;
-        private readonly IGptCheckService _gptCheckService;
+        private readonly ICheckServiceProvider _checkServiceProvider;
         private readonly ITelegramBot _telegramBot;
         private readonly IAppRepository _repository;
         private readonly ITextToSpeech _textToSpeech;
@@ -17,7 +17,7 @@ namespace LangSequenceTraining.Services
 
         public ProcessorManager(
             IProcessorProvider processorProvider, IUserStateProvider stateProvider,
-            IGptCheckService gptCheckService, ITelegramBot telegramBot,
+            ICheckServiceProvider checkServiceProvider, ITelegramBot telegramBot,
             IAppRepository repository, ITextToSpeech textToSpeech,
             IUserStateProvider userStateProvider, ILearningService learningService,
             ISequenceProvider sequenceProvider
@@ -25,7 +25,7 @@ namespace LangSequenceTraining.Services
         {
             _processorProvider = processorProvider;
             _stateProvider = stateProvider;
-            _gptCheckService = gptCheckService;
+            _checkServiceProvider = checkServiceProvider;
             _telegramBot = telegramBot;
             _repository = repository;
             _textToSpeech = textToSpeech;
@@ -58,7 +58,7 @@ namespace LangSequenceTraining.Services
                 ChannelId = channelId,
             };
 
-            var ctx = new ProcessorContext(new ContextServices(_gptCheckService, _telegramBot, _repository,
+            var ctx = new ProcessorContext(new ContextServices(_checkServiceProvider, _telegramBot, _repository,
                     this, _textToSpeech, _learningService, _sequenceProvider), state.ContextState);
 
             await DoTransition(ctx, state.CurrentProcessorName, null);
