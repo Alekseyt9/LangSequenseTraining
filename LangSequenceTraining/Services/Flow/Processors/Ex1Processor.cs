@@ -93,11 +93,15 @@ namespace LangSequenceTraining.Services
         {
             await ctx.SendMessage("Предложение принято для проверки. Проверка может занимать некоторое время, возможно больше 5 секунд.");
             var i = 0;
-            while (!await Check(ctx, state, msg, checkReset) || i > 4)
+            while (!await Check(ctx, state, msg, checkReset))
             {
+                if (i > 3)
+                {
+                    break;
+                }
                 i++;
             }
-            if (i > 4)
+            if (i > 3)
             {
                 await ctx.SendMessage("Не удалось выполнить проверку, сервис недоступен. Попробуйте позже.");
             }
