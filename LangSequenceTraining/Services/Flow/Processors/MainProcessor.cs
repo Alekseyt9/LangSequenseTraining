@@ -238,7 +238,7 @@ namespace LangSequenceTraining.Services
                 return;
             }
 
-            state.CurSequences = new List<Sequence>();
+            state.CurSequences = newItems.ToList();
             state.ExStatesHistoryItems = new List<MainExHistoryItem>();
 
             var nextCh = ExChoiceHelper.GetNextEx(state.ExStatesHistoryItems, state.CurSequences, new List<string>() { "ex1" });
