@@ -10,8 +10,6 @@ namespace LangSequenceTraining.Services
 
         int GetFinishCount(Guid userId);
 
-        int GetWaitingCount(Guid userId);
-
         int GetNewCount(Guid userId);
 
         IEnumerable<UserSequenceProgress> GetWaitingItems(Guid userId);

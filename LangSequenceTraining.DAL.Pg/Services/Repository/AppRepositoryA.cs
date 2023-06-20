@@ -29,7 +29,7 @@ namespace LangSequenceTraining.DAL.Services
 select s.*
 from ""Sequences"" s
 left join ""UserSequenceProgress"" p
-	on p.""SequenceId"" = s.""Id""
+	on p.""SequenceId"" = s.""Id"" and p.""UserId"" = @userId
 join ""SequenceGroup"" g
 	on g.""Id"" = s.""SequenceGroupId""
 where 
@@ -41,6 +41,7 @@ limit 3
 "
                 );
             command.Parameters.Add(new NpgsqlParameter("grId", groupId));
+            command.Parameters.Add(new NpgsqlParameter("userId", userId));
 
             using var reader = command.ExecuteReader();
             var res = new List<Sequence>();

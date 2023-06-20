@@ -230,7 +230,15 @@ namespace LangSequenceTraining.Services
             }
 
             var state = (MainProcessorState)ctx.State.CurProcState;
-            state.CurSequences = new List<Sequence>(GetSequencesForTrNew(ctx, gr));
+            var newItems = GetSequencesForTrNew(ctx, gr);
+            if (newItems == null || !newItems.Any())
+            {
+                await ctx.SendMessage(
+                    $"В группе '{gr.Name}' отсутствуют новые паттерны для изучения. Возможно они находятся на этапе повторения.");
+                return;
+            }
+
+            state.CurSequences = new List<Sequence>();
             state.ExStatesHistoryItems = new List<MainExHistoryItem>();
 
             var nextCh = ExChoiceHelper.GetNextEx(state.ExStatesHistoryItems, state.CurSequences, new List<string>() { "ex1" });
