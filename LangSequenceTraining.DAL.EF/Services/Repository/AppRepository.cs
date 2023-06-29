@@ -15,7 +15,7 @@ namespace LangSequenceTraining.DAL.Services
 
         public IEnumerable<SequenceGroup> GetGroups()
         {
-            return _ctx.SequenceGroup.OrderBy(x => x.Name).ToList();
+            return _ctx.SequenceGroup.OrderBy(x => x.Order).ToList();
         }
 
         public IEnumerable<Sequence> GetSequences()
