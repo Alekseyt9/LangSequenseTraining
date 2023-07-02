@@ -45,7 +45,8 @@ namespace LangSequenceTraining.Services
             {
                 var msg = update.Message.Text;
                 var chatId = update.Message.Chat.Id;
-                var userId = update.Message.From.Username;
+                var user = update.Message.From;
+                var userId = user.Username ?? user.FirstName ?? user.Id.ToString();
                 if (ReceiveAnswer != null)
                 {
                     await ReceiveAnswer(this, new TelegramAnswerEventArgs()
