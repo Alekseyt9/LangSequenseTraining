@@ -47,28 +47,35 @@ namespace LangSequenceTraining.Services
                 var chatId = update.Message.Chat.Id;
                 var user = update.Message.From;
                 var userId = user.Username ?? user.FirstName ?? user.Id.ToString();
-                if (ReceiveAnswer != null)
+
+                Task.Run(async () =>
                 {
-                    await ReceiveAnswer(this, new TelegramAnswerEventArgs()
+                    if (ReceiveAnswer != null)
                     {
-                        ChannelId = chatId,
-                        Message = msg,
-                        UserName = userId,
-                    });
-                }
+                        await ReceiveAnswer(this, new TelegramAnswerEventArgs()
+                        {
+                            ChannelId = chatId,
+                            Message = msg,
+                            UserName = userId,
+                        });
+                    }
+                });
             }
 
             if (update.CallbackQuery != null)
             {
-                if (ReceiveAnswer != null)
+                Task.Run(async () =>
                 {
-                    await ReceiveAnswer(this, new TelegramAnswerEventArgs()
+                    if (ReceiveAnswer != null)
                     {
-                        ChannelId = update.CallbackQuery.Message.Chat.Id,
-                        Message = update.CallbackQuery?.Data,
-                        UserName = update.CallbackQuery.From.Username,
-                    });
-                }
+                        await ReceiveAnswer(this, new TelegramAnswerEventArgs()
+                        {
+                            ChannelId = update.CallbackQuery.Message.Chat.Id,
+                            Message = update.CallbackQuery?.Data,
+                            UserName = update.CallbackQuery.From.Username,
+                        });
+                    }
+                });
             }
 
         }
