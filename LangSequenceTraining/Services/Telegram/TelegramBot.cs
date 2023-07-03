@@ -64,6 +64,9 @@ namespace LangSequenceTraining.Services
 
             if (update.CallbackQuery != null)
             {
+                var user = update.CallbackQuery.From;
+                var userId = user.Username ?? user.FirstName ?? user.Id.ToString();
+
                 Task.Run(async () =>
                 {
                     if (ReceiveAnswer != null)
@@ -72,7 +75,7 @@ namespace LangSequenceTraining.Services
                         {
                             ChannelId = update.CallbackQuery.Message.Chat.Id,
                             Message = update.CallbackQuery?.Data,
-                            UserName = update.CallbackQuery.From.Username,
+                            UserName = userId,
                         });
                     }
                 });
