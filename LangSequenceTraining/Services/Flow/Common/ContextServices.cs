@@ -7,6 +7,7 @@ namespace LangSequenceTraining.Services
         private readonly ICheckServiceProvider _checkServiceProvider;
         private readonly ITelegramBot _telegramBot;
         private readonly IAppRepository _repository;
+        private readonly IAppRepositoryA _repositoryA;
         private readonly IProcessorManager _processorManager;
         private readonly ITextToSpeech _textToSpeech;
         private readonly ILearningService _learningService;
@@ -18,6 +19,8 @@ namespace LangSequenceTraining.Services
 
         public IAppRepository Repository => _repository;
 
+        public IAppRepositoryA RepositoryA => _repositoryA;
+
         public ITelegramBot TelegramBot => _telegramBot;
 
         public IProcessorManager ProcessorManager => _processorManager;
@@ -28,13 +31,15 @@ namespace LangSequenceTraining.Services
 
         public ContextServices(
             ICheckServiceProvider checkServiceProvider, ITelegramBot telegramBot, 
-            IAppRepository repository, IProcessorManager processorManager, 
+            IAppRepository repository, IAppRepositoryA repositoryA,
+            IProcessorManager processorManager, 
             ITextToSpeech textToSpeech, ILearningService learningService,
             ISequenceProvider sequenceProvider)
         {
             _checkServiceProvider = checkServiceProvider;
             _telegramBot = telegramBot;
             _repository = repository;
+            _repositoryA = repositoryA;
             _processorManager = processorManager;
             _textToSpeech = textToSpeech;
             _learningService = learningService;
