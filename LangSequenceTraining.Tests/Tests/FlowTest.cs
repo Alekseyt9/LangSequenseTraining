@@ -42,7 +42,7 @@ namespace LangSequenceTraining.Tests
             var sequenceProvider = new SequenceProvider(_repository);
 
             _procMan = new ProcessorManager(processorProvider, stateManager, checkServiceProvider, 
-                _telegramBot, _repository, textToSpeech, stateManager, learningService, sequenceProvider);
+                _telegramBot, _repository, _repositoryA, textToSpeech, stateManager, learningService, sequenceProvider);
             _telegramBot.ReceiveAnswer += async (s, args) =>
             {
                 var user = _userProvider.GetUser(args.UserName);

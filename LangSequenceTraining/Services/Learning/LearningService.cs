@@ -107,10 +107,10 @@ namespace LangSequenceTraining.Services
             {
                 var resInfo = map[pr.Sequence.Id];
 
-                pr.LastUpdateTime = DateTime.Now.ToUniversalTime();
+                pr.LastUpdateTime = DateTime.UtcNow;
                 if (!pr.StartTime.HasValue)
                 {
-                    pr.StartTime = DateTime.Now.ToUniversalTime();
+                    pr.StartTime = DateTime.UtcNow;
                 }
                 pr.LastSuccess = resInfo.IsSuccess;
 

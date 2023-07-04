@@ -53,12 +53,23 @@ namespace LangSequenceTraining.Helpers
             {
                 if (x.LastSuccess)
                 {
-                    return DateTime.Now - x.LastUpdateTime >= ExRepeatHelper.StageToTimeSpan(x.Stage);
+                    var res = DateTime.Now - x.LastUpdateTime >= ExRepeatHelper.StageToTimeSpan(x.Stage);
+                    if (res)
+                    {
+
+                    }
+
+                    return res;
                 }
                 else
                 {
+                    var res = DateTime.Now - x.LastUpdateTime >= new TimeSpan(1, 0, 0, 0);
+                    if (res)
+                    {
+
+                    }
                     // повтор через сутки
-                    return DateTime.Now - x.LastUpdateTime >= new TimeSpan(1, 0, 0, 0);
+                    return res;
                 }
             }).ToList();
         }

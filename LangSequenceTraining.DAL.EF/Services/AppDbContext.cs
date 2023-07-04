@@ -1,5 +1,7 @@
 ﻿
+using LangSequenceTraining.DAL.EF.EntityConfigurations;
 using LangSequenceTraining.Model;
+using LangSequenceTraining.Model.Tests;
 using LangSequenseTraining.DAL;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +20,8 @@ namespace LangSequenceTraining.DAL.Services
 
         public DbSet<UserState> UserState { get; set; }
 
+        public DbSet<TimeTest> TimeTest { get; set; }
+
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
@@ -30,6 +34,8 @@ namespace LangSequenceTraining.DAL.Services
             modelBuilder.ApplyConfiguration(new UserConfig());
             modelBuilder.ApplyConfiguration(new UserSequenceProgressConfig());
             modelBuilder.ApplyConfiguration(new UserStateConfig());
+
+            modelBuilder.ApplyConfiguration(new TimeTestConfig());
 
             base.OnModelCreating(modelBuilder);
         }
