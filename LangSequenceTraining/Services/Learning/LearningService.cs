@@ -1,7 +1,6 @@
 ﻿
 using LangSequenceTraining.Helpers;
 using LangSequenceTraining.Model;
-using LangSequenceTraining.Services.Learning;
 
 namespace LangSequenceTraining.Services
 {
@@ -49,20 +48,6 @@ namespace LangSequenceTraining.Services
             ApplyProgress(prs, resultInfos);
 
             _repository.SaveUserProgress(prs);
-        }
-
-        public StatInfo GetUserStat(Guid userId)
-        {
-            var infos = _repositoryA.GetWaitingItems(userId);
-            var wStat = GetWaitingStat(infos);
-
-            return new StatInfo()
-            {
-                FinishCount = _repositoryA.GetFinishCount(userId),
-                NewCount = _repositoryA.GetNewCount(userId),
-                WaitingCount = wStat.WaitingCount,
-                Repeat = wStat.RepeatCount
-            };
         }
 
         public IEnumerable<UserSequenceProgress> GetWaitingItems(Guid userId)

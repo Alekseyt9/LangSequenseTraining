@@ -12,8 +12,6 @@ namespace LangSequenceTraining.Services
 
         void SaveResult(Guid userId, IEnumerable<TrainingResult> resultInfos);
 
-        StatInfo GetUserStat(Guid userId);
-
         IEnumerable<UserSequenceProgress> GetWaitingItems(Guid userId);
 
     }

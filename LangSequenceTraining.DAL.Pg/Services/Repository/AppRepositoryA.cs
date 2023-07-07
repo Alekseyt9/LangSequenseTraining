@@ -59,61 +59,6 @@ limit 3
             return res;
         }
 
-        public int GetFinishCount(Guid userId)
-        {
-            using var dataSource = GetDataSource();
-            using var command = dataSource.CreateCommand(
-                @"
-SELECT count(*)
-FROM public.""UserSequenceProgress""
-where 
-	""UserId"" = @userId
-	and ""Stage"" = @stageFinish
-"
-            );
-            command.Parameters.Add(new NpgsqlParameter("userId", userId));
-            command.Parameters.Add(new NpgsqlParameter("stageFinish", (object)(int)ProgressStage.Finish));
-            return Convert.ToInt32(command.ExecuteScalar());
-        }
-
-        public int GetWaitingCount(Guid userId)
-        {
-            using var dataSource = GetDataSource();
-            using var command = dataSource.CreateCommand(
-                @"
-SELECT count(*)
-FROM public.""UserSequenceProgress""
-where 
-	""UserId"" = @userId
-	and ""Stage"" not in (@stageFinish)
-"
-            );
-            command.Parameters.Add(new NpgsqlParameter("userId", userId));
-            command.Parameters.Add(new NpgsqlParameter("stageFinish", (object)(int)ProgressStage.Finish));
-            return Convert.ToInt32(command.ExecuteScalar());
-        }
-
-        public int GetNewCount(Guid userId)
-        {
-            using var dataSource = GetDataSource();
-            using var command = dataSource.CreateCommand(
-                @"
-SELECT count(*)
-from ""Sequences"" s
-join ""SequenceGroup"" g
-	on g.""Id"" = s.""SequenceGroupId""
-left join (select * from public.""UserSequenceProgress"" where ""UserId"" = @userId) p
-	on p.""SequenceId"" = s.""Id""
-where 
-	g.""IsHide"" != true
-    and (p.""Id"" is null)
-"
-            );
-            command.Parameters.Add(new NpgsqlParameter("userId", userId));
-
-            return Convert.ToInt32(command.ExecuteScalar());
-        }
-
         public IEnumerable<UserSequenceProgress> GetWaitingItems(Guid userId)
         {
             using var dataSource = GetDataSource();
@@ -222,6 +167,7 @@ select
 			and ""Stage"" = 6)
    
 from ""SequenceGroup"" gr
+where not gr.""IsHide""
 "
             );
 

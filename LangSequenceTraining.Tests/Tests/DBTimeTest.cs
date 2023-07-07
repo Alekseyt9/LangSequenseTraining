@@ -1,12 +1,9 @@
 ﻿
-using System;
-using System.Data;
 using LangSequenceTraining.DAL.Services;
 using LangSequenceTraining.Model.Tests;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
-using NpgsqlTypes;
 using Xunit;
 
 namespace LangSequenceTraining.Tests.Tests
