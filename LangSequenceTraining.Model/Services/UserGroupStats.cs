@@ -8,6 +8,8 @@ namespace LangSequenceTraining.Model
 
         public string Name { get; set; }
 
+        public int GroupOrder { get; set; }
+
         public int NewCount { get; set; }
 
         public int Repeat { get; set; }

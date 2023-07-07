@@ -102,6 +102,7 @@ where
 select 
       gr.""Id"",
       gr.""Name"",
+      gr.""Order"",
 	  (
 	    select count(*)
 		from ""Sequences"" s
@@ -116,7 +117,7 @@ select
 		where 
 			g.""IsHide"" != true
 	  		and g.""Id"" = gr.""Id""
-			and (p.""Id"" is null)),  
+			and (p.""Id"" is null)) as NewCount,  
 	  (
 		select count(*)	
 		from public.""UserSequenceProgress"" p
@@ -136,7 +137,7 @@ select
 																				 end) 																			 
 				else now() - p.""LastUpdateTime"" > interval '1 day'
 				end	
-	  ),  
+	  ) as Repeat,  
 	  (
 		select count(*)	
 		from public.""UserSequenceProgress"" p
@@ -156,7 +157,7 @@ select
 																				 end) 																			 
 				else now() - p.""LastUpdateTime"" > interval '1 day'
 				end	
-	  ),  
+	  ) as WaitingCount,  
 	  (select count(*)
 		from public.""UserSequenceProgress"" p
 	    join public.""Sequences"" g
@@ -164,7 +165,7 @@ select
 		where 
 			""UserId"" = @userId
 	   		and g.""SequenceGroupId"" = gr.""Id""
-			and ""Stage"" = 6)
+			and ""Stage"" = 6) as FinishCount 
    
 from ""SequenceGroup"" gr
 where not gr.""IsHide""
@@ -179,12 +180,13 @@ where not gr.""IsHide""
             {
                 res.Add(new UserGroupStats
                 {
-                    Id = reader.GetGuid(0),
-                    Name = reader.GetString(1),
-                    NewCount = reader.GetInt32(2),
-                    Repeat = reader.GetInt32(3),
-                    WaitingCount = reader.GetInt32(4),
-                    FinishCount = reader.GetInt32(5)
+                    Id = reader.GetGuid(reader.GetOrdinal("Id")),
+                    Name = reader.GetString(reader.GetOrdinal("Name")),
+                    GroupOrder = reader.GetInt32(reader.GetOrdinal("Order")),
+                    NewCount = reader.GetInt32(reader.GetOrdinal("NewCount")),
+                    Repeat = reader.GetInt32(reader.GetOrdinal("Repeat")),
+                    WaitingCount = reader.GetInt32(reader.GetOrdinal("WaitingCount")),
+                    FinishCount = reader.GetInt32(reader.GetOrdinal("FinishCount"))
                 });
             }
 
