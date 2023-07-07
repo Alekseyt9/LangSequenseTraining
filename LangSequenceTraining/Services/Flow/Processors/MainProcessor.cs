@@ -295,7 +295,7 @@ namespace LangSequenceTraining.Services
 
             StatisticsMessage(sb, grStats);
             sb.AppendLine();
-            sb.AppendLine(@"Группы паттернов для тренировки:");
+            sb.AppendLine(@"<b>Группы паттернов для тренировки:</b>");
             sb.AppendLine(@"(новых/повторить/в ожидании/выучено)");
 
             var i = 1;
@@ -303,23 +303,24 @@ namespace LangSequenceTraining.Services
             {
                 sb.AppendLine($"\t [{i++}] {gStat.Name} ({gStat.NewCount}/{gStat.Repeat}/{gStat.WaitingCount}/{gStat.FinishCount})");
             }
-            sb.AppendLine("Чтобы узнать описание каждой группы, введите команду '/grinfo'");
 
             sb.AppendLine();
-            sb.AppendLine("Чтобы начать тренировку новых паттернов, введите команду '/tr номер_группы'. Пример: /tr 1");
-            sb.AppendLine("Чтобы начать повторение уже пройденных паттернов, которые готовы к повторению, введите команду '/rep'");
+            sb.AppendLine("    • Чтобы начать <b>тренировку новых паттернов</b>, введите команду '/tr номер_группы'. Пример: /tr 1");
+            sb.AppendLine("    • Чтобы начать <b>повторение паттернов</b>, которые готовы к повторению, введите команду '/rep'");
+            sb.AppendLine("    • Чтобы узнать описание каждой группы паттернов, введите команду '/grinfo'");
+            sb.AppendLine("    • Чтобы получить подробную информацию по паттернам, которые ожидают повторения, введите команду '/statw'");
 
             return sb.ToString();
         }
 
         private void StatisticsMessage(StringBuilder sb, IEnumerable<UserGroupStats> stats)
         {
-            sb.AppendLine("=Статистика=");
+            sb.AppendLine("<b>Статистика</b>");
             sb.AppendLine($"Новых паттернов: {stats.Sum(x => x.NewCount)}");
             sb.AppendLine($"Паттернов повторить: {stats.Sum(x => x.Repeat)}");
             sb.AppendLine($"Паттернов в ожидании: {stats.Sum(x => x.WaitingCount)}");
             sb.AppendLine($"Паттернов выучено: {stats.Sum(x => x.FinishCount)}");
-            sb.AppendLine($"Чтобы получить подробную информацию по паттернам, которые ожидают повторения, введите команду '/statw'");
+            
         }
 
     }

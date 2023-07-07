@@ -23,11 +23,6 @@ namespace LangSequenceTraining.DAL.Services
             return _ctx.Sequences;
         }
 
-        public IEnumerable<UserSequenceProgress> GetProgressData(Guid userId)
-        {
-            return _ctx.UserSequenceProgress.Where(x => x.UserId == userId).ToList();
-        }
-
         public void SaveUserProgress(IEnumerable<UserSequenceProgress> prs)
         {
             foreach (var pr in prs)
