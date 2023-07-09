@@ -319,7 +319,7 @@ namespace LangSequenceTraining.Services
             var i = 1;
             foreach (var gStat in grStats.OrderBy(x => x.GroupOrder))
             {
-                sb.AppendLine($"\t [{i}] {gStat.Name} ({gStat.NewCount}/{gStat.Repeat}/{gStat.WaitingCount}/{gStat.FinishCount})     /grinfo{i}     /tr{i}");
+                sb.AppendLine($"\t [{i}] {gStat.Name} ({gStat.NewCount}/{gStat.Repeat}/{gStat.WaitingCount}/{gStat.FinishCount})   /tr{i}");
                 i++;
             }
 
