@@ -319,7 +319,7 @@ namespace LangSequenceTraining.Services
             var i = 1;
             foreach (var gStat in grStats.OrderBy(x => x.GroupOrder))
             {
-                sb.AppendLine($"\t [{i}] {gStat.Name} ({gStat.NewCount}/{gStat.Repeat}/{gStat.WaitingCount}/{gStat.FinishCount})   /tr{i}");
+                sb.AppendLine($"\t [{i}] {gStat.Name} ({gStat.NewCount}/{gStat.Repeat}/{gStat.WaitingCount}/{gStat.FinishCount})    /grinfo{i}      /tr{i}");
                 i++;
             }
 
@@ -336,7 +336,7 @@ namespace LangSequenceTraining.Services
         {
             sb.AppendLine("<b>Статистика</b>");
             sb.AppendLine($"Новых паттернов: {stats.Sum(x => x.NewCount)}");
-            sb.AppendLine($"Паттернов повторить: {stats.Sum(x => x.Repeat)}");
+            sb.AppendLine($"Паттернов повторить: {stats.Sum(x => x.Repeat)}     /rep ");
             sb.AppendLine($"Паттернов в ожидании: {stats.Sum(x => x.WaitingCount)}");
             sb.AppendLine($"Паттернов выучено: {stats.Sum(x => x.FinishCount)}");
             
