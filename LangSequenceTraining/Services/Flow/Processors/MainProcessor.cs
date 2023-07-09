@@ -174,11 +174,20 @@ namespace LangSequenceTraining.Services
 
         private async Task ProcessGrInfo(ProcessorContext ctx)
         {
-            var groups = ctx.Services.Repository.GetGroups();
+            var grNum = GetParam<int>(ctx.State.Message, "/grinfo");
+            ctx.State.Message = null;
+
+            var gr = await GetGroupByNum(ctx, grNum - 1);
+            if (gr == null)
+            {
+                return;
+            }
+
+            //var groups = ctx.Services.Repository.GetGroups();
             var i = 1;
 
             var sb = new StringBuilder();
-            foreach (var group in groups)
+            foreach (var group in new []{gr})
             {
                 sb.AppendLine($"[{i++}] {group.Name} ({group.Description})");
                 var seqs = ctx.Services.SequenceProvider.GetSequences(group.Name);
@@ -220,7 +229,7 @@ namespace LangSequenceTraining.Services
 
         private async Task ProcessStartTr(ProcessorContext ctx)
         {
-            var grNum = GetParam<int>(ctx.State.Message);
+            var grNum = GetParam<int>(ctx.State.Message, "/tr");
             ctx.State.Message = null;
 
             var gr = await GetGroupByNum(ctx, grNum - 1);
@@ -272,10 +281,19 @@ namespace LangSequenceTraining.Services
             return groups.ElementAt(num);
         }
 
-        private T GetParam<T>(string str)
+        private T GetParam<T>(string str, string cmd)
         {
             var arr = str.Split(' ');
-            var par = arr.Where(x => !string.IsNullOrEmpty(x)).Last().Trim();
+
+            string par;
+            if (arr.Length > 1)
+            {
+                par = arr.Where(x => !string.IsNullOrEmpty(x)).Last().Trim();
+            }
+            else
+            {
+                par = str.Substring(cmd.Length, str.Length - cmd.Length);
+            }
 
             if (typeof(T) == typeof(int))
             {
@@ -301,13 +319,14 @@ namespace LangSequenceTraining.Services
             var i = 1;
             foreach (var gStat in grStats.OrderBy(x => x.GroupOrder))
             {
-                sb.AppendLine($"\t [{i++}] {gStat.Name} ({gStat.NewCount}/{gStat.Repeat}/{gStat.WaitingCount}/{gStat.FinishCount})");
+                sb.AppendLine($"\t [{i}] {gStat.Name} ({gStat.NewCount}/{gStat.Repeat}/{gStat.WaitingCount}/{gStat.FinishCount})   /tr{i}");
+                i++;
             }
 
             sb.AppendLine();
             sb.AppendLine("    • Чтобы начать <b>тренировку новых паттернов</b>, введите команду '/tr номер_группы'. Пример: /tr 1");
             sb.AppendLine("    • Чтобы начать <b>повторение паттернов</b>, которые готовы к повторению, введите команду '/rep'");
-            sb.AppendLine("    • Чтобы узнать описание каждой группы паттернов, введите команду '/grinfo'");
+            sb.AppendLine("    • Чтобы узнать состав группы паттернов, введите команду '/grinfo номер_группы'. Пример: /grinfo 1");
             sb.AppendLine("    • Чтобы получить подробную информацию по паттернам, которые ожидают повторения, введите команду '/statw'");
 
             return sb.ToString();
