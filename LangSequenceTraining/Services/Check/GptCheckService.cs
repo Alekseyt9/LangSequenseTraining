@@ -42,7 +42,7 @@ namespace LangSequenceTraining.Services
 
             var ans = await _conversation.GetResponseFromChatbotAsync();
             var res = new CheckResult();
-            if (ans.ToLower().Contains("ok_ok"))
+            if (CheckAnswerCorrect(ans))
             {
                 res.IsCorrect = true;
                 return res;
@@ -51,6 +51,28 @@ namespace LangSequenceTraining.Services
             res.IsCorrect = false;
             res.Message = ans;
             return res;
+        }
+
+        private bool CheckAnswerCorrect(string msg)
+        {
+            msg = msg.ToLower().TrimEnd('.');
+
+            if (msg.Contains("ok_ok"))
+            {
+                return true;
+            }
+
+            if (msg.EndsWith("ок"))
+            {
+                return true;
+            }
+
+            if (msg.Contains("ошибок нет"))
+            {
+                return true;
+            }
+
+            return false;
         }
 
     }
