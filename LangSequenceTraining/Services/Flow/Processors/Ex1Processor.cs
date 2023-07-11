@@ -113,6 +113,12 @@ namespace LangSequenceTraining.Services
             {
                 var checkService = ctx.Services.CheckServiceProvider.Get(ctx.State.UserId);
                 var checkResult = await checkService.Check(msg, checkReset);
+
+                if (checkResult == null)
+                {
+                    return false;
+                }
+
                 state.IsCorrect = checkResult.IsCorrect;
                 state.UserMsg = msg;
 
@@ -123,11 +129,19 @@ namespace LangSequenceTraining.Services
                 };
                 if (checkResult.IsCorrect)
                 {
-                    await ctx.SendMessage("Предложение написано верно!", null, buttons);
+                    await ctx.SendMessage(
+                        "Предложение написано <b>верно</b>!"
+                        + Environment.NewLine 
+                        + $"<b>Перевод</b>: {checkResult.Translate}", 
+                        null, buttons);
                 }
                 else
                 {
-                    await ctx.SendMessage($"Предложение написано c ошибками. {checkResult.Message}", null, buttons);
+                    await ctx.SendMessage($"Предложение написано <b>c ошибками</b>"
+                                          + Environment.NewLine + checkResult.ErrorsMessage
+                                          + Environment.NewLine + $"<b>Правильный вариант</b>: {checkResult.Corrected}"
+                                          + Environment.NewLine + $"<b>Перевод</b>: {checkResult.Translate}",
+                        null, buttons);
                 }
                 state.StateKind = ExStateKind.UserChoice;
 

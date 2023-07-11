@@ -1,6 +1,8 @@
 ﻿
+using LangSequenceTraining.Services.Check;
 using LangSequenceTraining.Services.Gpt;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using OpenAI_API;
 using OpenAI_API.Chat;
 
@@ -38,18 +40,24 @@ namespace LangSequenceTraining.Services
                 await Init();
             }
 
-            _conversation.AppendMessage(new ChatMessage(ChatMessageRole.User, "проверь: " +msg));
+            _conversation.AppendMessage(new ChatMessage(ChatMessageRole.User, msg));
 
             var ans = await _conversation.GetResponseFromChatbotAsync();
+
             var res = new CheckResult();
-            if (CheckAnswerCorrect(ans))
+            try
             {
-                res.IsCorrect = true;
-                return res;
+                var gptRes = JsonConvert.DeserializeObject<GptCheckResult>(ans);
+                res.IsCorrect = gptRes.Correct == "y";
+                res.ErrorsMessage = gptRes.Errors;
+                res.Translate = gptRes.Translate;
+                res.Corrected = gptRes.Right;
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
 
-            res.IsCorrect = false;
-            res.Message = ans;
             return res;
         }
 
